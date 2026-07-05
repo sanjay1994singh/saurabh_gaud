@@ -53,17 +53,24 @@
     if (!isMobile || !paperImage) {
       document.documentElement.style.removeProperty("--patrika-reader-page-height");
       document.documentElement.style.removeProperty("--patrika-reader-page-width");
+      document.documentElement.style.removeProperty("--patrika-site-header-height");
+      document.documentElement.style.removeProperty("--patrika-toolbar-height");
+      document.documentElement.style.removeProperty("--patrika-pager-height");
       return;
     }
 
-    const shellTop = document.querySelector(".patrika-reader-shell")?.getBoundingClientRect().top || 0;
+    const siteHeaderHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+    const toolbarHeight = document.querySelector(".patrika-toolbar")?.getBoundingClientRect().height || 0;
     const viewportHeight = window.visualViewport?.height || window.innerHeight;
     const pagerHeight = document.querySelector(".patrika-bottom-pager")?.getBoundingClientRect().height || 42;
-    const availableHeight = Math.max(260, viewportHeight - shellTop - pagerHeight - 18);
+    const availableHeight = Math.max(260, viewportHeight - siteHeaderHeight - toolbarHeight - pagerHeight - 22);
     const ratio = paperImage.naturalWidth && paperImage.naturalHeight
       ? paperImage.naturalWidth / paperImage.naturalHeight
       : 0.68;
     const pageWidth = Math.max(200, Math.min(window.innerWidth * 0.96, availableHeight * ratio));
+    document.documentElement.style.setProperty("--patrika-site-header-height", `${siteHeaderHeight}px`);
+    document.documentElement.style.setProperty("--patrika-toolbar-height", `${toolbarHeight}px`);
+    document.documentElement.style.setProperty("--patrika-pager-height", `${pagerHeight}px`);
     document.documentElement.style.setProperty("--patrika-reader-page-height", `${availableHeight}px`);
     document.documentElement.style.setProperty("--patrika-reader-page-width", `${pageWidth}px`);
   }
