@@ -17,6 +17,11 @@ def patrika_cover_upload_to(instance, filename):
     return f"patrika/covers/{uuid4().hex}{suffix}"
 
 
+def patrika_page_upload_to(instance, filename):
+    suffix = Path(filename).suffix.lower() or ".png"
+    return f"patrika/pages/{uuid4().hex}{suffix}"
+
+
 class Patrika(models.Model):
     title = models.CharField(max_length=220)
     issue_name = models.CharField(max_length=120, blank=True)
@@ -68,6 +73,10 @@ class Patrika(models.Model):
             return self.published_date.strftime("%d %b %Y")
         return "Latest issue"
 
+    @property
+    def page_count(self):
+        return self.pages.count()
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.cover_image:
@@ -86,3 +95,17 @@ class Patrika(models.Model):
             if image_format == "JPEG":
                 save_kwargs["quality"] = 90
             image.save(image_path, image_format, **save_kwargs)
+
+
+class PatrikaPage(models.Model):
+    patrika = models.ForeignKey(Patrika, related_name="pages", on_delete=models.CASCADE)
+    number = models.PositiveIntegerField()
+    image = models.FileField(upload_to=patrika_page_upload_to)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("number",)
+        unique_together = ("patrika", "number")
+
+    def __str__(self):
+        return f"{self.patrika} page {self.number:02d}"

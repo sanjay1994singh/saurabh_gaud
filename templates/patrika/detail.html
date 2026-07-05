@@ -4,124 +4,155 @@
 {% block title %}{{ patrika.title }}{% endblock %}
 
 {% block content %}
-  <article class="detail-page detail-page-with-sidebar patrika-detail-page">
-    <div class="detail-shell">
-      <div class="detail-primary">
-        <div class="patrika-reader-header">
-          <p class="eyebrow">Patrika</p>
-          <h1>{{ patrika.title }}</h1>
-          <div class="detail-meta">
-            {% if patrika.issue_name %}
-              <span>{{ patrika.issue_name }}</span>
-            {% endif %}
-            <span>{{ patrika.date_label }}</span>
-            {% if patrika.file_size_label %}
-              <span>{{ patrika.file_size_label }}</span>
-            {% endif %}
-          </div>
-          {% if patrika.short_description %}
-            <p class="lead">{{ patrika.short_description }}</p>
+  <article class="patrika-reader-page" data-patrika-reader data-patrika-id="{{ patrika.pk }}">
+    <header class="patrika-reader-top">
+      <div>
+        <p class="eyebrow">Patrika E-Paper</p>
+        <h1>{{ patrika.title }}</h1>
+        <div class="detail-meta">
+          {% if patrika.issue_name %}
+            <span>{{ patrika.issue_name }}</span>
           {% endif %}
-          <div class="detail-actions">
-            <a class="primary-action" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
-            <a class="secondary-action" href="{{ patrika.pdf.url }}" download>Download PDF</a>
-            <a class="section-link" href="{% url 'patrika:index' %}">All Patrika</a>
-          </div>
+          <span>{{ patrika.date_label }}</span>
+          {% if patrika.file_size_label %}
+            <span>{{ patrika.file_size_label }}</span>
+          {% endif %}
         </div>
+      </div>
+      <div class="patrika-reader-actions">
+        <a href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
+        <a href="{{ patrika.pdf.url }}" download>Download</a>
+        <a href="{% url 'patrika:index' %}">All Patrika</a>
+      </div>
+    </header>
 
-        <div
-          class="pdf-reader"
-          data-pdf-url="{{ patrika.pdf.url }}"
-          data-pdf-title="{{ patrika.title }}"
-        >
-          <div class="pdf-reader-toolbar" aria-label="PDF reader controls">
-            <div class="pdf-toolbar-group">
-              <button class="pdf-tool-button" type="button" data-pdf-prev>Prev</button>
-              <label class="pdf-page-jump">
-                <span>Page</span>
-                <input type="number" min="1" value="1" data-pdf-page>
-                <span data-pdf-total>/ 1</span>
-              </label>
-              <button class="pdf-tool-button" type="button" data-pdf-next>Next</button>
-            </div>
+    {% if initial_page %}
+      <header class="patrika-toolbar" aria-label="Patrika reader toolbar">
+        <button class="patrika-tool menu-button" type="button" data-patrika-action="menu">Menu</button>
+        <button class="patrika-tool" type="button" data-patrika-action="zoom-in">Zoom</button>
+        <button class="patrika-icon-tool" type="button" data-patrika-action="zoom-out" aria-label="Zoom out">-</button>
+        <button class="patrika-icon-tool" type="button" data-patrika-action="fit" aria-label="Fit page">Fit</button>
+        <button class="patrika-icon-tool" type="button" data-patrika-action="bookmark" aria-label="Bookmark page">Save</button>
+        <button class="patrika-tool" type="button" data-patrika-action="clip">Clip</button>
+        <button class="patrika-icon-tool" type="button" data-patrika-action="print" aria-label="Print">Print</button>
+        <button class="patrika-icon-tool" type="button" data-patrika-action="fullscreen" aria-label="Fullscreen">Full</button>
+        <button class="patrika-share whatsapp" type="button" data-patrika-action="share-whatsapp" aria-label="Share on WhatsApp">WA</button>
+        <button class="patrika-share facebook" type="button" data-patrika-action="share-facebook" aria-label="Share on Facebook">f</button>
+        <button class="patrika-share x" type="button" data-patrika-action="share-x" aria-label="Share on X">X</button>
+        <button class="patrika-share copy" type="button" data-patrika-action="copy-link" aria-label="Copy link">Link</button>
+      </header>
 
-            <div class="pdf-toolbar-group">
-              <button class="pdf-tool-button" type="button" data-pdf-zoom-out>-</button>
-              <span class="pdf-zoom-label" data-pdf-zoom>100%</span>
-              <button class="pdf-tool-button" type="button" data-pdf-zoom-in>+</button>
-              <button class="pdf-tool-button" type="button" data-pdf-fit>Fit width</button>
-            </div>
+      <div class="patrika-reader-shell">
+        <button class="patrika-side-nav patrika-side-nav-prev" type="button" data-patrika-action="previous" aria-label="Previous page">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="patrika-side-nav patrika-side-nav-next" type="button" data-patrika-action="next" aria-label="Next page">
+          <span aria-hidden="true"></span>
+        </button>
 
-            <div class="pdf-toolbar-group">
-              <button class="pdf-tool-button is-active" type="button" data-pdf-single>Single page</button>
-              <button class="pdf-tool-button" type="button" data-pdf-spread>Newspaper spread</button>
-            </div>
-
-            <div class="pdf-toolbar-group">
-              <button class="pdf-tool-button" type="button" data-pdf-print>Print</button>
-              <button class="pdf-tool-button" type="button" data-pdf-fullscreen>Fullscreen</button>
-              <a class="pdf-tool-link" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open</a>
-              <a class="pdf-tool-link" href="{{ patrika.pdf.url }}" download>Download</a>
-            </div>
+        <section class="patrika-page-stage" aria-label="Patrika page viewer">
+          <div class="patrika-paper-frame" id="patrikaPaperFrame">
+            <img id="patrikaPaperImage" src="{{ initial_page.image }}" alt="{{ initial_page.title }} patrika page">
+            <div class="patrika-clip-box" id="patrikaClipBox" hidden></div>
           </div>
+        </section>
 
-          <div class="pdf-reader-status" data-pdf-status>Loading PDF...</div>
-          <div class="pdf-newspaper-shell">
-            <aside class="pdf-thumbnail-rail" aria-label="PDF page thumbnails" data-pdf-thumbnails></aside>
-            <div class="pdf-page-stage" data-pdf-stage>
-              <div class="pdf-paper-spread" data-pdf-spread-stage>
-                <figure class="pdf-paper-page">
-                  <canvas data-pdf-canvas-primary></canvas>
-                  <figcaption data-pdf-caption-primary>Page 1</figcaption>
-                </figure>
-                <figure class="pdf-paper-page pdf-paper-page-secondary" data-pdf-secondary-page hidden>
-                  <canvas data-pdf-canvas-secondary></canvas>
-                  <figcaption data-pdf-caption-secondary>Page 2</figcaption>
-                </figure>
-              </div>
-            </div>
-          </div>
-
-          <noscript>
-            <div class="pdf-fallback">
-              <p>JavaScript is required for page by page reading.</p>
-              <a class="primary-action" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
-            </div>
-          </noscript>
-        </div>
-
-        {% if patrika.description %}
-          <div class="detail-content patrika-description">
-            <div class="rich-text">
-              {{ patrika.description|linebreaks }}
-            </div>
-          </div>
-        {% endif %}
+        <nav class="patrika-bottom-pager" aria-label="Page navigation">
+          <button type="button" class="patrika-pager-command" data-patrika-action="pages">All Pages</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="first" aria-label="First page">|<</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="previous" aria-label="Previous page"><</button>
+          <label class="patrika-page-select">
+            <span>Page</span>
+            <select id="patrikaPageSelect">
+              {% for page in pages %}
+                <option value="{{ forloop.counter0 }}">{{ page.number|stringformat:"02d" }}</option>
+              {% endfor %}
+            </select>
+            <span>of {{ pages|length }}</span>
+          </label>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="next" aria-label="Next page">></button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="last" aria-label="Last page">>|</button>
+          <button type="button" class="patrika-pager-command" data-patrika-action="clip">Crop</button>
+        </nav>
       </div>
 
-      <aside class="detail-sidebar">
-        {% if patrika.cover_image %}
-          <img class="patrika-sidebar-cover" src="{{ patrika.cover_image.url }}" alt="{{ patrika.title }}">
-        {% else %}
-          <div class="patrika-sidebar-placeholder">PDF</div>
-        {% endif %}
-        <h2>More Patrika</h2>
-        <div class="sidebar-list">
-          {% for item in more_patrikas %}
-            <a href="{{ item.get_absolute_url }}">
-              <strong>{{ item.title }}</strong>
-              <span>{{ item.date_label }}</span>
-            </a>
-          {% empty %}
-            <p>No other patrika issues yet.</p>
+      <aside class="patrika-pages-drawer" id="patrikaPagesDrawer" aria-label="All pages" hidden>
+        <div class="drawer-header">
+          <h2>All Pages</h2>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-pages" aria-label="Close pages">x</button>
+        </div>
+        <div class="patrika-thumbnail-grid">
+          {% for page in pages %}
+            <button class="patrika-thumbnail" type="button" data-patrika-thumbnail="{{ forloop.counter0 }}">
+              <img src="{{ page.image }}" alt="{{ page.title }} thumbnail">
+              <span>{{ page.title }}</span>
+            </button>
           {% endfor %}
         </div>
       </aside>
-    </div>
+
+      <aside class="patrika-menu-drawer" id="patrikaMenuDrawer" aria-label="Reader menu" hidden>
+        <div class="drawer-header">
+          <h2>Reader Tools</h2>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-menu" aria-label="Close menu">x</button>
+        </div>
+        <dl class="patrika-summary">
+          <div>
+            <dt>Issue</dt>
+            <dd>{{ patrika.issue_name|default:patrika.title }}</dd>
+          </div>
+          <div>
+            <dt>Date</dt>
+            <dd>{{ patrika.date_label }}</dd>
+          </div>
+          <div>
+            <dt>Pages</dt>
+            <dd>{{ pages|length }}</dd>
+          </div>
+        </dl>
+        <div class="patrika-bookmark-list" id="patrikaBookmarkList">
+          <h3>Bookmarks</h3>
+          <p>No bookmarked pages yet.</p>
+        </div>
+      </aside>
+
+      <aside class="patrika-crop-result" id="patrikaCropResult" aria-label="Cropped page" hidden>
+        <div class="drawer-header">
+          <h2>Cropped Page</h2>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-crop" aria-label="Close crop">x</button>
+        </div>
+        <img id="patrikaCropPreview" alt="Cropped patrika page">
+        <div class="patrika-crop-actions">
+          <button type="button" data-patrika-action="download-crop">Download</button>
+          <button type="button" data-patrika-action="share-crop">Share</button>
+          <button type="button" data-patrika-action="new-crop">Crop Again</button>
+        </div>
+      </aside>
+
+      <div class="patrika-reader-toast" id="patrikaReaderToast" role="status" aria-live="polite" hidden></div>
+    {% else %}
+      <section class="patrika-empty-reader">
+        <h2>Page images are not generated yet.</h2>
+        <p>Open this patrika in admin and save it once, or use the Regenerate page images action.</p>
+        <div class="detail-actions">
+          <a class="primary-action" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
+          <a class="secondary-action" href="{{ patrika.pdf.url }}" download>Download PDF</a>
+        </div>
+      </section>
+    {% endif %}
+
+    {% if patrika.description %}
+      <section class="detail-content patrika-description">
+        <div class="rich-text">
+          {{ patrika.description|linebreaks }}
+        </div>
+      </section>
+    {% endif %}
+
+    {{ pages|json_script:"patrikaPagesData" }}
   </article>
 {% endblock %}
 
 {% block scripts %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="{% static 'js/pdf-reader.js' %}"></script>
+  <script src="{% static 'js/patrika-reader.js' %}"></script>
 {% endblock %}
