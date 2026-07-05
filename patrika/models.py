@@ -1,9 +1,20 @@
 from pathlib import Path
+from uuid import uuid4
 
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from PIL import Image, ImageOps
+
+
+def patrika_pdf_upload_to(instance, filename):
+    suffix = Path(filename).suffix.lower() or ".pdf"
+    return f"patrika/pdfs/{uuid4().hex}{suffix}"
+
+
+def patrika_cover_upload_to(instance, filename):
+    suffix = Path(filename).suffix.lower() or ".jpg"
+    return f"patrika/covers/{uuid4().hex}{suffix}"
 
 
 class Patrika(models.Model):
@@ -12,11 +23,11 @@ class Patrika(models.Model):
     short_description = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
     pdf = models.FileField(
-        upload_to="patrika/pdfs/",
+        upload_to=patrika_pdf_upload_to,
         validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
         help_text="Upload PDF patrika file.",
     )
-    cover_image = models.ImageField(upload_to="patrika/covers/", blank=True, null=True)
+    cover_image = models.ImageField(upload_to=patrika_cover_upload_to, blank=True, null=True)
     published_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
@@ -75,4 +86,3 @@ class Patrika(models.Model):
             if image_format == "JPEG":
                 save_kwargs["quality"] = 90
             image.save(image_path, image_format, **save_kwargs)
-

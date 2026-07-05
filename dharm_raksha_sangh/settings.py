@@ -78,6 +78,10 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD", "Hello12345678#$@"),
         "HOST": os.environ.get("DB_HOST", "103.168.19.9"),
         "PORT": os.environ.get("DB_PORT", "3306"),
+        "OPTIONS": {
+            "charset": "utf8mb4",
+            "init_command": "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+        },
     }
 }
 
