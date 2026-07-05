@@ -1124,12 +1124,12 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 24px;
   min-height: 70px;
   background:
     linear-gradient(90deg, #10251d 0%, #1f3a2f 58%, #263f35 100%);
   color: #fff;
-  padding: 10px 22px;
+  padding: 12px clamp(28px, 4vw, 70px);
   box-shadow: 0 8px 22px rgba(45, 34, 25, 0.18);
 }
 
@@ -1137,9 +1137,10 @@ p {
   display: flex;
   flex: 1 1 auto;
   min-width: 0;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px 18px;
 }
 
 .patrika-toolbar-title strong {
@@ -1162,6 +1163,7 @@ p {
 
 .patrika-year-picker {
   display: inline-flex;
+  flex: 0 0 auto;
   width: fit-content;
   max-width: 100%;
   align-items: center;
@@ -1204,10 +1206,11 @@ p {
 
 .patrika-toolbar-actions {
   display: flex;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 7px;
+  gap: 10px;
 }
 
 .patrika-toolbar .patrika-tool,
@@ -2127,9 +2130,9 @@ p {
 
   .patrika-toolbar {
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     min-height: 0;
-    padding: 8px 10px;
+    padding: 9px 14px;
     overflow: visible;
     scrollbar-width: none;
   }
@@ -2152,10 +2155,15 @@ p {
     flex: 1 0 100%;
     min-width: 0;
     min-height: 0;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 10px;
     padding: 0;
   }
 
   .patrika-toolbar-title strong {
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: 18px;
   }
 
@@ -2164,6 +2172,7 @@ p {
   }
 
   .patrika-year-picker {
+    flex: 0 0 auto;
     gap: 6px;
     font-size: 12px;
   }
@@ -2178,9 +2187,9 @@ p {
   .patrika-toolbar-actions {
     width: 100%;
     justify-content: flex-start;
-    gap: 6px;
+    gap: 8px;
     overflow-x: auto;
-    padding-bottom: 2px;
+    padding-bottom: 3px;
     scrollbar-width: none;
   }
 
@@ -2198,7 +2207,7 @@ p {
     flex: 0 0 auto;
     min-height: 36px;
     min-width: 50px;
-    padding: 0 9px;
+    padding: 0 11px;
     font-size: 12px;
   }
 
@@ -2458,15 +2467,19 @@ p {
   }
 
   .patrika-toolbar-title {
-    padding-inline: 10px;
+    padding-inline: 0;
   }
 
   .patrika-toolbar-title strong {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .patrika-year-picker select {
-    width: 82px;
+    width: 78px;
+  }
+
+  .patrika-year-picker {
+    font-size: 11px;
   }
 
   .patrika-bottom-pager {
