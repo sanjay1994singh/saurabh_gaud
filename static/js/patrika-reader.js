@@ -34,6 +34,8 @@
   let swipeStart = null;
   let pinchStartDistance = 0;
   let pinchStartZoom = 1;
+  let mobilePageWidth = 0;
+  let mobilePageHeight = 0;
   let croppedImageUrl = "";
 
   function showToast(message) {
@@ -59,6 +61,9 @@
       document.documentElement.style.removeProperty("--patrika-site-header-height");
       document.documentElement.style.removeProperty("--patrika-toolbar-height");
       document.documentElement.style.removeProperty("--patrika-pager-height");
+      mobilePageWidth = 0;
+      mobilePageHeight = 0;
+      window.requestAnimationFrame(applyZoomLayout);
       return;
     }
 
@@ -71,12 +76,14 @@
       ? paperImage.naturalWidth / paperImage.naturalHeight
       : 0.68;
     const pageWidth = Math.max(200, Math.min(window.innerWidth * 0.96, availableHeight * ratio));
+    mobilePageWidth = pageWidth;
+    mobilePageHeight = availableHeight;
     document.documentElement.style.setProperty("--patrika-site-header-height", `${siteHeaderHeight}px`);
     document.documentElement.style.setProperty("--patrika-toolbar-height", `${toolbarHeight}px`);
     document.documentElement.style.setProperty("--patrika-pager-height", `${pagerHeight}px`);
     document.documentElement.style.setProperty("--patrika-reader-page-height", `${availableHeight}px`);
     document.documentElement.style.setProperty("--patrika-reader-page-width", `${pageWidth}px`);
-    window.requestAnimationFrame(updateZoomScrollSpace);
+    window.requestAnimationFrame(applyZoomLayout);
   }
 
   function getBookmarks() {
@@ -135,7 +142,7 @@
     });
     hideClipBox();
     closeCropResult();
-    window.requestAnimationFrame(updateZoomScrollSpace);
+    window.requestAnimationFrame(applyZoomLayout);
   }
 
   function setPage(nextIndex) {
@@ -148,29 +155,30 @@
 
   function setZoom(nextZoom, announce) {
     zoom = Math.max(0.65, Math.min(2.4, nextZoom));
-    paperFrame.style.transform = `scale(${zoom})`;
-    updateZoomScrollSpace();
+    applyZoomLayout();
     if (announce !== false) {
       showToast(`Zoom ${Math.round(zoom * 100)}%`);
     }
   }
 
-  function updateZoomScrollSpace() {
-    if (!pageStage || !paperFrame) {
+  function applyZoomLayout() {
+    if (!pageStage || !paperFrame || !paperImage) {
       return;
     }
 
     const isMobileReader = document.body.classList.contains("patrika-reader-mobile");
-    if (!isMobileReader || zoom <= 1) {
-      paperFrame.style.marginRight = "";
-      paperFrame.style.marginBottom = "";
+    if (!isMobileReader) {
+      paperFrame.style.width = "";
+      paperFrame.style.transform = `scale(${zoom})`;
+      paperImage.style.maxHeight = "";
       return;
     }
 
-    const frameWidth = paperFrame.offsetWidth;
-    const frameHeight = paperFrame.offsetHeight;
-    paperFrame.style.marginRight = `${Math.ceil(frameWidth * (zoom - 1))}px`;
-    paperFrame.style.marginBottom = `${Math.ceil(frameHeight * (zoom - 1))}px`;
+    const baseWidth = mobilePageWidth || paperFrame.offsetWidth || window.innerWidth * 0.96;
+    const baseHeight = mobilePageHeight || pageStage.clientHeight || window.innerHeight * 0.6;
+    paperFrame.style.transform = "";
+    paperFrame.style.width = `${Math.ceil(baseWidth * zoom)}px`;
+    paperImage.style.maxHeight = `${Math.ceil(baseHeight * zoom)}px`;
   }
 
   function getTouchDistance(touches) {
