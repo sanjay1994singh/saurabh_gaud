@@ -74,8 +74,8 @@ DATABASES = {
         "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.mysql"),
         "NAME": os.environ.get("DB_NAME", "dharm_raksha_sangh"),
         "USER": os.environ.get("DB_USER", "saurabh_gaud"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-        "HOST": os.environ.get("DB_HOST", "localhost"),
+        "PASSWORD": os.environ.get("DB_PASSWORD", "Hello12345678#$@"),
+        "HOST": os.environ.get("DB_HOST", "103.168.19.9"),
         "PORT": os.environ.get("DB_PORT", "3306"),
     }
 }
