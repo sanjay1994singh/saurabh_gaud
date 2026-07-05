@@ -2155,15 +2155,19 @@ p {
     flex: 1 0 100%;
     min-width: 0;
     min-height: 0;
+    flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: space-between;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     padding: 0;
+    text-align: center;
   }
 
   .patrika-toolbar-title strong {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
+    max-width: 100%;
     font-size: 18px;
   }
 
@@ -2185,12 +2189,14 @@ p {
   }
 
   .patrika-toolbar-actions {
-    width: 100%;
+    width: calc(100% - 8px);
     justify-content: flex-start;
-    gap: 8px;
+    gap: clamp(8px, 2.5vw, 14px);
     overflow-x: auto;
-    padding-bottom: 3px;
+    margin: 0 auto;
+    padding: 0 4px 3px;
     scrollbar-width: none;
+    scroll-padding-inline: 12px;
   }
 
   .patrika-toolbar-actions::-webkit-scrollbar {
@@ -2206,8 +2212,8 @@ p {
   .patrika-toolbar .patrika-share {
     flex: 0 0 auto;
     min-height: 36px;
-    min-width: 50px;
-    padding: 0 11px;
+    min-width: 58px;
+    padding: 0 12px;
     font-size: 12px;
   }
 
@@ -2463,7 +2469,7 @@ p {
   .patrika-toolbar .patrika-tool,
   .patrika-toolbar .patrika-icon-tool,
   .patrika-toolbar .patrika-share {
-    min-width: 50px;
+    min-width: 56px;
   }
 
   .patrika-toolbar-title {
@@ -2480,6 +2486,11 @@ p {
 
   .patrika-year-picker {
     font-size: 11px;
+  }
+
+  .patrika-toolbar-actions {
+    gap: 8px;
+    padding-inline: 2px;
   }
 
   .patrika-bottom-pager {

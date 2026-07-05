@@ -371,6 +371,8 @@
       setPage(0);
     } else if (action === "last") {
       setPage(pages.length - 1);
+    } else if (action === "reload") {
+      window.location.reload();
     } else if (action === "zoom-in") {
       setZoom(zoom + 0.15);
     } else if (action === "zoom-out") {
