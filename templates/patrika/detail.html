@@ -5,26 +5,6 @@
 
 {% block content %}
   <article class="patrika-reader-page" data-patrika-reader data-patrika-id="{{ patrika.pk }}">
-    <header class="patrika-reader-top">
-      <div>
-        <p class="eyebrow">Patrika E-Paper</p>
-        <h1>{{ patrika.title }}</h1>
-        <div class="detail-meta">
-          {% if patrika.issue_name %}
-            <span>{{ patrika.issue_name }}</span>
-          {% endif %}
-          <span>{{ patrika.date_label }}</span>
-          {% if patrika.file_size_label %}
-            <span>{{ patrika.file_size_label }}</span>
-          {% endif %}
-        </div>
-      </div>
-      <div class="patrika-reader-actions">
-        <a href="{{ patrika.pdf.url }}" download>Download</a>
-        <a href="{% url 'patrika:index' %}">All Patrika</a>
-      </div>
-    </header>
-
     {% if initial_page %}
       <header class="patrika-toolbar" aria-label="Patrika reader toolbar">
         <button class="patrika-tool menu-button" type="button" data-patrika-action="menu">Menu</button>
@@ -92,8 +72,25 @@
 
       <aside class="patrika-menu-drawer" id="patrikaMenuDrawer" aria-label="Reader menu" hidden>
         <div class="drawer-header">
-          <h2>Reader Tools</h2>
+          <h2>E-Paper Menu</h2>
           <button type="button" class="patrika-icon-tool" data-patrika-action="close-menu" aria-label="Close menu">x</button>
+        </div>
+        <div class="patrika-menu-title">
+          <p class="eyebrow">Patrika E-Paper</p>
+          <h1>{{ patrika.title }}</h1>
+          <div class="detail-meta">
+            {% if patrika.issue_name %}
+              <span>{{ patrika.issue_name }}</span>
+            {% endif %}
+            <span>{{ patrika.date_label }}</span>
+            {% if patrika.file_size_label %}
+              <span>{{ patrika.file_size_label }}</span>
+            {% endif %}
+          </div>
+          <div class="patrika-menu-actions">
+            <a href="{{ patrika.pdf.url }}" download>Download</a>
+            <a href="{% url 'patrika:index' %}">All Patrika</a>
+          </div>
         </div>
         <dl class="patrika-summary">
           <div>

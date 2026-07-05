@@ -1084,30 +1084,7 @@ p {
     linear-gradient(180deg, #fffaf2 0, #f1ebe0 260px, #e9eee8 100%);
 }
 
-.patrika-reader-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 22px;
-  width: min(1180px, calc(100% - 44px));
-  margin: 0 auto;
-  padding: 30px 0 22px;
-}
-
-.patrika-reader-top h1 {
-  margin-bottom: 12px;
-  font-size: 40px;
-  line-height: 1.12;
-}
-
-.patrika-reader-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.patrika-reader-actions a,
+.patrika-menu-actions a,
 .patrika-tool,
 .patrika-icon-tool,
 .patrika-share {
@@ -1126,7 +1103,7 @@ p {
   cursor: pointer;
 }
 
-.patrika-reader-actions a:hover,
+.patrika-menu-actions a:hover,
 .patrika-tool:hover,
 .patrika-icon-tool:hover,
 .patrika-share:hover {
@@ -1340,6 +1317,25 @@ p {
 
 .patrika-menu-drawer {
   left: 0;
+}
+
+.patrika-menu-title {
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 18px;
+}
+
+.patrika-menu-title h1 {
+  margin-bottom: 12px;
+  font-size: 30px;
+  line-height: 1.12;
+}
+
+.patrika-menu-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .patrika-thumbnail-grid {
@@ -1941,20 +1937,6 @@ p {
 
   .patrika-reader-header {
     padding: 24px 20px 20px;
-  }
-
-  .patrika-reader-top {
-    flex-direction: column;
-    width: min(100% - 32px, 1180px);
-    padding: 24px 0 16px;
-  }
-
-  .patrika-reader-top h1 {
-    font-size: 30px;
-  }
-
-  .patrika-reader-actions {
-    justify-content: flex-start;
   }
 
   .patrika-toolbar {
