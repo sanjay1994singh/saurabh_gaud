@@ -14,6 +14,7 @@
   const paperFrame = document.getElementById("patrikaPaperFrame");
   const paperImage = document.getElementById("patrikaPaperImage");
   const readerShell = document.querySelector(".patrika-reader-shell");
+  const pageStage = document.querySelector(".patrika-page-stage");
   const pageSelect = document.getElementById("patrikaPageSelect");
   const yearPicker = document.getElementById("patrikaYearPicker");
   const pagesDrawer = document.getElementById("patrikaPagesDrawer");
@@ -31,6 +32,8 @@
   let clipMode = false;
   let clipStart = null;
   let swipeStart = null;
+  let pinchStartDistance = 0;
+  let pinchStartZoom = 1;
   let croppedImageUrl = "";
 
   function showToast(message) {
@@ -147,6 +150,42 @@
     if (announce !== false) {
       showToast(`Zoom ${Math.round(zoom * 100)}%`);
     }
+  }
+
+  function getTouchDistance(touches) {
+    const deltaX = touches[0].clientX - touches[1].clientX;
+    const deltaY = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(deltaX, deltaY);
+  }
+
+  function startPagePinch(event) {
+    if (clipMode || event.touches.length !== 2) {
+      return;
+    }
+    event.preventDefault();
+    swipeStart = null;
+    pinchStartDistance = getTouchDistance(event.touches);
+    pinchStartZoom = zoom;
+  }
+
+  function movePagePinch(event) {
+    if (!pinchStartDistance || event.touches.length !== 2) {
+      return;
+    }
+    event.preventDefault();
+    const nextDistance = getTouchDistance(event.touches);
+    setZoom(pinchStartZoom * (nextDistance / pinchStartDistance), false);
+  }
+
+  function endPagePinch(event) {
+    if (event.touches.length < 2) {
+      pinchStartDistance = 0;
+      pinchStartZoom = zoom;
+    }
+  }
+
+  function preventBrowserGesture(event) {
+    event.preventDefault();
   }
 
   function fitPage() {
@@ -474,6 +513,12 @@
   readerShell?.addEventListener("touchcancel", function () {
     swipeStart = null;
   }, { passive: true });
+  pageStage?.addEventListener("touchstart", startPagePinch, { passive: false });
+  pageStage?.addEventListener("touchmove", movePagePinch, { passive: false });
+  pageStage?.addEventListener("touchend", endPagePinch, { passive: true });
+  pageStage?.addEventListener("touchcancel", endPagePinch, { passive: true });
+  pageStage?.addEventListener("gesturestart", preventBrowserGesture);
+  pageStage?.addEventListener("gesturechange", preventBrowserGesture);
 
   document.addEventListener("keydown", function (event) {
     if (event.key === "ArrowLeft") {

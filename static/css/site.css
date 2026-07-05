@@ -1256,6 +1256,7 @@ p {
   width: min(1664px, calc(100vw - 128px));
   margin: 0 auto;
   overflow-x: auto;
+  touch-action: pan-x pan-y;
 }
 
 .patrika-paper-frame {
@@ -2344,6 +2345,7 @@ p {
     height: var(--patrika-reader-page-height, 60vh);
     overflow: auto;
     overscroll-behavior: contain;
+    touch-action: none;
   }
 
   body.patrika-reader-mobile .patrika-bottom-pager {
