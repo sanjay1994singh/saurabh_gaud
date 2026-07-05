@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ patrika.title }}{% endblock %}
 
@@ -28,8 +29,48 @@
           </div>
         </div>
 
-        <div class="pdf-viewer">
-          <iframe src="{{ patrika.pdf.url }}#toolbar=1&navpanes=0" title="{{ patrika.title }}"></iframe>
+        <div
+          class="pdf-reader"
+          data-pdf-url="{{ patrika.pdf.url }}"
+          data-pdf-title="{{ patrika.title }}"
+        >
+          <div class="pdf-reader-toolbar" aria-label="PDF reader controls">
+            <div class="pdf-toolbar-group">
+              <button class="pdf-tool-button" type="button" data-pdf-prev>Prev</button>
+              <label class="pdf-page-jump">
+                <span>Page</span>
+                <input type="number" min="1" value="1" data-pdf-page>
+                <span data-pdf-total>/ 1</span>
+              </label>
+              <button class="pdf-tool-button" type="button" data-pdf-next>Next</button>
+            </div>
+
+            <div class="pdf-toolbar-group">
+              <button class="pdf-tool-button" type="button" data-pdf-zoom-out>-</button>
+              <span class="pdf-zoom-label" data-pdf-zoom>100%</span>
+              <button class="pdf-tool-button" type="button" data-pdf-zoom-in>+</button>
+              <button class="pdf-tool-button" type="button" data-pdf-fit>Fit width</button>
+            </div>
+
+            <div class="pdf-toolbar-group">
+              <button class="pdf-tool-button" type="button" data-pdf-print>Print</button>
+              <button class="pdf-tool-button" type="button" data-pdf-fullscreen>Fullscreen</button>
+              <a class="pdf-tool-link" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open</a>
+              <a class="pdf-tool-link" href="{{ patrika.pdf.url }}" download>Download</a>
+            </div>
+          </div>
+
+          <div class="pdf-reader-status" data-pdf-status>Loading PDF...</div>
+          <div class="pdf-page-stage" data-pdf-stage>
+            <canvas data-pdf-canvas></canvas>
+          </div>
+
+          <noscript>
+            <div class="pdf-fallback">
+              <p>JavaScript is required for page by page reading.</p>
+              <a class="primary-action" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
+            </div>
+          </noscript>
         </div>
 
         {% if patrika.description %}
@@ -61,4 +102,9 @@
       </aside>
     </div>
   </article>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="{% static 'js/pdf-reader.js' %}"></script>
 {% endblock %}
