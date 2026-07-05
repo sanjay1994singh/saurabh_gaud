@@ -154,7 +154,7 @@
   }
 
   function setZoom(nextZoom, announce) {
-    zoom = Math.max(0.65, Math.min(2.4, nextZoom));
+    zoom = Math.max(1, Math.min(2.4, nextZoom));
     applyZoomLayout();
     if (announce !== false) {
       showToast(`Zoom ${Math.round(zoom * 100)}%`);
