@@ -183,6 +183,9 @@
     zoom = Math.max(1, Math.min(2.4, nextZoom));
     applyZoomLayout();
     restorePageStageAnchor(anchor);
+    window.requestAnimationFrame(function () {
+      restorePageStageAnchor(anchor);
+    });
     if (announce !== false) {
       showToast(`Zoom ${Math.round(zoom * 100)}%`);
     }
