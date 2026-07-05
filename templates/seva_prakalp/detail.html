@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ seva_prakalp.name }}{% endblock %}
+
+{% block content %}
+  <article class="detail-page">
+    <div class="detail-shell">
+      {% if seva_prakalp.image %}
+        <img class="detail-hero" src="{{ seva_prakalp.image.url }}" alt="{{ seva_prakalp.name }}">
+      {% endif %}
+
+      <div class="detail-content">
+        <p class="eyebrow">Seva Prakalp</p>
+        <h1>{{ seva_prakalp.name }}</h1>
+
+        <div class="detail-meta">
+          {% if seva_prakalp.location %}
+            <span>{{ seva_prakalp.location }}</span>
+          {% endif %}
+          {% if seva_prakalp.start_date %}
+            <span>{{ seva_prakalp.start_date|date:"F j, Y" }}</span>
+          {% endif %}
+        </div>
+
+        {% if seva_prakalp.short_description %}
+          <p class="lead">{{ seva_prakalp.short_description }}</p>
+        {% endif %}
+        <div class="rich-text">
+          {{ seva_prakalp.content|linebreaks }}
+        </div>
+        <div class="detail-actions">
+          <a class="secondary-action" href="{% url 'seva_prakalp:index' %}">Back to Seva Prakalp</a>
+          <a class="primary-action" href="{% url 'home:index' %}">Home</a>
+        </div>
+      </div>
+    </div>
+  </article>
+{% endblock %}

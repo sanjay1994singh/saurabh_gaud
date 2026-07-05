@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Seva Prakalp{% endblock %}
+
+{% block content %}
+  <section class="page-intro">
+    <p class="eyebrow">Our Work</p>
+    <h1>Seva Prakalp</h1>
+    <p>Explore the active seva initiatives of Dharm Raksha Sangh.</p>
+  </section>
+
+  <section class="section section-compact">
+    <div class="prakalp-grid">
+      {% for seva_prakalp in seva_prakalps %}
+        <article class="prakalp-card">
+          <a class="card-media" href="{{ seva_prakalp.get_absolute_url }}">
+            {% if seva_prakalp.image %}
+              <img src="{{ seva_prakalp.image.url }}" alt="{{ seva_prakalp.name }}">
+            {% else %}
+              <span>{{ seva_prakalp.name|slice:":1" }}</span>
+            {% endif %}
+          </a>
+          <div class="card-body">
+            <div class="card-meta">
+              {% if seva_prakalp.location %}
+                <span>{{ seva_prakalp.location }}</span>
+              {% endif %}
+              {% if seva_prakalp.start_date %}
+                <span>{{ seva_prakalp.start_date|date:"M Y" }}</span>
+              {% endif %}
+            </div>
+            <h2><a href="{{ seva_prakalp.get_absolute_url }}">{{ seva_prakalp.name }}</a></h2>
+            <p>{{ seva_prakalp.short_description|default:seva_prakalp.content|truncatewords:24 }}</p>
+            <a class="text-link" href="{{ seva_prakalp.get_absolute_url }}">Read details</a>
+          </div>
+        </article>
+      {% empty %}
+        <p class="empty-state">No seva prakalp entries are available yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

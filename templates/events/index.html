@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+  <section class="page-intro">
+    <p class="eyebrow">Events</p>
+    <h1>Events</h1>
+    <p>Permanent, present, featured, and past events of Dharm Raksha Sangh.</p>
+  </section>
+
+  {% if featured_events %}
+    <section class="section section-compact">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Featured</p>
+          <h2>Featured Events</h2>
+        </div>
+      </div>
+      <div class="event-grid event-featured-grid">
+        {% for event in featured_events %}
+          {% include "events/partials/event_card.html" with event=event %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="section section-compact">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Any Time</p>
+        <h2>Permanent Events</h2>
+      </div>
+    </div>
+    <div class="event-grid">
+      {% for event in permanent_events %}
+        {% include "events/partials/event_card.html" with event=event %}
+      {% empty %}
+        <p class="empty-state">No permanent events are available yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section section-compact">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Present</p>
+        <h2>Present Events</h2>
+      </div>
+    </div>
+    <div class="event-grid">
+      {% for event in present_events %}
+        {% include "events/partials/event_card.html" with event=event %}
+      {% empty %}
+        <p class="empty-state">No present events are available yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section section-compact">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Past</p>
+        <h2>Past Events</h2>
+      </div>
+    </div>
+    <div class="event-grid">
+      {% for event in past_events %}
+        {% include "events/partials/event_card.html" with event=event %}
+      {% empty %}
+        <p class="empty-state">No past events are available yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

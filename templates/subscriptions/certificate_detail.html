@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Certificate {{ certificate.certificate_number }}{% endblock %}
+
+{% block content %}
+  <section class="certificate-page">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Membership Certificate</p>
+        <h1>{{ certificate.certificate_number }}</h1>
+      </div>
+      <div class="certificate-actions">
+        <a class="section-link" href="{% url 'accounts:profile' %}">Back to profile</a>
+        <a class="primary-action" href="{% url 'subscriptions:certificate_download' certificate.pk %}">Download</a>
+      </div>
+    </div>
+
+    <div class="certificate-preview">
+      {{ certificate_svg|safe }}
+    </div>
+  </section>
+{% endblock %}

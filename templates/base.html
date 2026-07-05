@@ -1,0 +1,73 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Dharm Raksha Sangh{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav">
+      <a class="brand" href="{% url 'home:index' %}">
+        <span class="brand-mark">D</span>
+        <span>Dharm Raksha Sangh</span>
+      </a>
+      <div class="nav-links">
+        <a href="{% url 'home:index' %}">Home</a>
+        <a href="{% url 'home:about' %}">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="{% url 'events:index' %}">Events</a>
+        <a href="{% url 'seva_prakalp:index' %}">Seva Prakalp</a>
+        <a href="{% url 'hamare_stambh:index' %}">Hamare Stambh</a>
+        <a href="{% url 'subscriptions:plans' %}">Membership</a>
+        <a class="donate-nav" href="/donate/">Donate Now</a>
+        {% if user.is_authenticated %}
+          <a class="user-chip" href="{% url 'accounts:profile' %}">{{ user.get_username }}</a>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="link-button" type="submit">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'accounts:register' %}">Join</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="message message-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <a class="brand footer-brand" href="{% url 'home:index' %}">
+          <span class="brand-mark">D</span>
+          <span>Dharm Raksha Sangh</span>
+        </a>
+        <p>Serving society through organized seva prakalp, cultural values, and community action.</p>
+      </div>
+      <div class="footer-links">
+        <a href="{% url 'home:index' %}">Home</a>
+        <a href="{% url 'home:about' %}">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="{% url 'events:index' %}">Events</a>
+        <a href="{% url 'seva_prakalp:index' %}">Seva Prakalp</a>
+        <a href="{% url 'hamare_stambh:index' %}">Hamare Stambh</a>
+        <a href="{% url 'subscriptions:plans' %}">Membership</a>
+        <a href="/donate/">Donate Now</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

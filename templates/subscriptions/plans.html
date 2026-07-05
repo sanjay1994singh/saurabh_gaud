@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Membership Plans{% endblock %}
+
+{% block content %}
+  <section class="page-intro">
+    <p class="eyebrow">Membership</p>
+    <h1>Choose your subscription</h1>
+    <p>Create an account or login first, then join a free or paid membership and download your certificate from profile.</p>
+  </section>
+
+  <section class="section section-compact">
+    <div class="plan-grid">
+      {% for plan in plan_list %}
+        <article class="plan-card">
+          <div>
+            <p class="eyebrow">{{ plan.get_plan_type_display }}</p>
+            <h2>{{ plan.name }}</h2>
+            <p>{{ plan.description|default:"Membership for Dharm Raksha Sangh members." }}</p>
+          </div>
+          <div>
+            <strong class="plan-price">
+              {% if plan.is_free %}
+                Free
+              {% else %}
+                Rs. {{ plan.amount }}
+              {% endif %}
+            </strong>
+            <span class="plan-duration">{{ plan.duration_days }} days validity</span>
+            <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'login' %}?next={{ plan.get_absolute_url }}{% endif %}">
+              {% if user.is_authenticated %}Join now{% else %}Login to buy{% endif %}
+            </a>
+          </div>
+        </article>
+      {% empty %}
+        <p class="empty-state">No membership plans are available yet. Add plans from Django admin.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

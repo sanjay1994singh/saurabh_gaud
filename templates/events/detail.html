@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+  <section class="detail-page">
+    <div class="detail-shell">
+      {% if event.image %}
+        <img class="detail-hero" src="{{ event.image.url }}" alt="{{ event.title }}">
+      {% endif %}
+      <div class="detail-content">
+        <p class="eyebrow">{{ event.status_label }}</p>
+        <h1>{{ event.title }}</h1>
+        <div class="detail-meta">
+          <span>{{ event.date_label }}</span>
+          {% if event.end_date %}
+            <span>to {{ event.end_date|date:"d M Y" }}</span>
+          {% endif %}
+          {% if event.start_time %}
+            <span>{{ event.start_time|time:"g:i A" }}</span>
+          {% endif %}
+          {% if event.venue %}
+            <span>{{ event.venue }}</span>
+          {% endif %}
+        </div>
+        {% if event.short_description %}
+          <p class="lead">{{ event.short_description }}</p>
+        {% endif %}
+        <div class="rich-text">
+          {{ event.description|linebreaks }}
+        </div>
+        <div class="detail-actions">
+          <a class="secondary-action" href="{% url 'events:index' %}">Back to Events</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ stambh.name }}{% endblock %}
+
+{% block content %}
+  <article class="detail-page">
+    <div class="detail-shell stambh-detail-shell">
+      {% if stambh.image %}
+        <img class="detail-hero stambh-detail-image" src="{{ stambh.image.url }}" alt="{{ stambh.name }}">
+      {% endif %}
+
+      <div class="detail-content">
+        <p class="eyebrow">Hamare Stambh</p>
+        <h1>{{ stambh.name }}</h1>
+
+        <div class="detail-meta">
+          {% if stambh.designation %}
+            <span>{{ stambh.designation }}</span>
+          {% endif %}
+          {% if stambh.email %}
+            <span>{{ stambh.email }}</span>
+          {% endif %}
+          {% if stambh.phone %}
+            <span>{{ stambh.phone }}</span>
+          {% endif %}
+        </div>
+
+        {% if stambh.short_description %}
+          <p class="lead">{{ stambh.short_description }}</p>
+        {% endif %}
+        <div class="rich-text">
+          {{ stambh.content|linebreaks }}
+        </div>
+        <div class="detail-actions">
+          <a class="secondary-action" href="{% url 'hamare_stambh:index' %}">Back to Hamare Stambh</a>
+          <a class="primary-action" href="{% url 'home:index' %}">Home</a>
+        </div>
+      </div>
+    </div>
+  </article>
+{% endblock %}

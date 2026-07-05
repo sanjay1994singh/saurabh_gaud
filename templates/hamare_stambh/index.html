@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Hamare Stambh{% endblock %}
+
+{% block content %}
+  <section class="page-intro stambh-intro">
+    <p class="eyebrow">Our Pillars</p>
+    <h1>Hamare Stambh</h1>
+    <p>The people who guide, serve, and strengthen Dharm Raksha Sangh.</p>
+  </section>
+
+  <section class="section section-compact">
+    <div class="prakalp-grid stambh-grid">
+      {% for stambh in stambh_list %}
+        <article class="prakalp-card stambh-card">
+          <a class="card-media stambh-media" href="{{ stambh.get_absolute_url }}">
+            {% if stambh.image %}
+              <img src="{{ stambh.image.url }}" alt="{{ stambh.name }}">
+            {% else %}
+              <span>{{ stambh.name|slice:":1" }}</span>
+            {% endif %}
+          </a>
+          <div class="card-body">
+            <div class="card-meta">
+              {% if stambh.designation %}
+                <span>{{ stambh.designation }}</span>
+              {% endif %}
+              {% if stambh.is_featured %}
+                <span>Featured</span>
+              {% endif %}
+            </div>
+            <h2><a href="{{ stambh.get_absolute_url }}">{{ stambh.name }}</a></h2>
+            <p>{{ stambh.short_description|default:stambh.content|truncatewords:24 }}</p>
+            <a class="text-link" href="{{ stambh.get_absolute_url }}">Read details</a>
+          </div>
+        </article>
+      {% empty %}
+        <p class="empty-state">No hamare stambh entries are available yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

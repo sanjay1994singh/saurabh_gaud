@@ -1,0 +1,43 @@
+{% if banners or show_placeholder %}
+  <section class="banner-slot banner-slot-{{ placement }}{% if not banners %} banner-slot-empty{% endif %}">
+    {% if banners %}
+    {% for banner in banners %}
+      <article class="site-banner">
+        {% if banner.link_url %}
+          <a href="{{ banner.link_url }}" target="_blank" rel="noopener">
+        {% endif %}
+        {% if banner.image %}
+          <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+        {% elif show_placeholder %}
+          <div class="banner-placeholder banner-placeholder-inline">
+            <span>{{ slot_info.label }}</span>
+            <strong>{{ slot_info.size }}</strong>
+            <em>{{ slot_info.note }}</em>
+          </div>
+        {% endif %}
+        {% if banner.text or banner.link_label %}
+          <div class="site-banner-copy">
+            {% if banner.text %}
+              <strong>{{ banner.text }}</strong>
+            {% endif %}
+            {% if banner.link_label %}
+              <span>{{ banner.link_label }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if banner.link_url %}
+          </a>
+        {% endif %}
+      </article>
+    {% endfor %}
+    {% else %}
+    {% if show_placeholder %}
+      <article class="banner-placeholder">
+        <span>{{ slot_info.label }}</span>
+        <strong>{{ slot_info.size }}</strong>
+        <em>{{ slot_info.note }}</em>
+      </article>
+    {% endif %}
+    {% endif %}
+  </section>
+{% endif %}

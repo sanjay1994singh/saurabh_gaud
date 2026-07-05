@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Donate Now | {{ site_name }}{% endblock %}
+
+{% block content %}
+  <section class="page-intro">
+    <p class="eyebrow">Seva Sahyog</p>
+    <h1>Donate Now</h1>
+    <p>धर्म रक्षा संघ के धार्मिक, सांस्कृतिक और सेवा कार्यों में सहयोग हेतु दान करें।</p>
+  </section>
+
+  <section class="section section-compact">
+    <div class="donation-layout">
+      <div class="donation-panel">
+        <p class="eyebrow">Bank Details</p>
+        <h2>Account Information</h2>
+        <dl class="bank-details">
+          <div>
+            <dt>Name</dt>
+            <dd>DHARM RAKSHA SANGH</dd>
+          </div>
+          <div>
+            <dt>Current A/c No</dt>
+            <dd>101705500235</dd>
+          </div>
+          <div>
+            <dt>Bank Name</dt>
+            <dd>ICICI Bank</dd>
+          </div>
+          <div>
+            <dt>IFSC Code</dt>
+            <dd>ICIC0001017</dd>
+          </div>
+          <div>
+            <dt>Branch</dt>
+            <dd>Vrindavan</dd>
+          </div>
+          <div>
+            <dt>PAN</dt>
+            <dd>AACTD6153H</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="donation-panel qr-panel">
+        <p class="eyebrow">Scan And Donate</p>
+        <img src="{% static 'donation/qr.png' %}" alt="Dharm Raksha Sangh donation QR code">
+      </div>
+    </div>
+
+    <div class="tax-note">
+      <strong>80-G एवं 12-A कर छूट</strong>
+      <p>
+        आयकर की धारा 80-G एवं 12-A के अंतर्गत कर राशि में छूट प्राप्त करने हेतु मान्य Vide URNO.
+        AACTD6153HE20221 Valid upto AY 2025.
+      </p>
+    </div>
+  </section>
+{% endblock %}

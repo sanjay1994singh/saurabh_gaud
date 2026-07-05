@@ -1,0 +1,14 @@
+<article class="event-card">
+  <div class="event-body">
+    <div class="card-meta">
+      <span>{{ event.status_label }}</span>
+      <span>{{ event.date_label }}</span>
+      {% if event.venue %}
+        <span>{{ event.venue }}</span>
+      {% endif %}
+    </div>
+    <h3><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></h3>
+    <p>{{ event.short_description|default:event.description|truncatewords:24 }}</p>
+    <a class="text-link" href="{{ event.get_absolute_url }}">Read details</a>
+  </div>
+</article>

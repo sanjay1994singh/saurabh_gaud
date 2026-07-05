@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+  <section class="profile-page">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Member Profile</p>
+        <h1>My profile</h1>
+      </div>
+      <a class="section-link" href="{% url 'subscriptions:plans' %}">Join subscription</a>
+    </div>
+
+    <div class="profile-layout">
+      <div class="profile-panel">
+        <h2>Update details</h2>
+        <div class="profile-photo">
+          {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="{{ user.get_full_name|default:user.username }}">
+          {% else %}
+            <span>{{ user.get_username|slice:":1" }}</span>
+          {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data" class="form-stack">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          {% for field in form %}
+            <label>
+              <span>{{ field.label }}</span>
+              {{ field }}
+              {{ field.errors }}
+            </label>
+          {% endfor %}
+          <button class="primary-action" type="submit">Save details</button>
+        </form>
+      </div>
+
+      <div class="profile-panel">
+        <h2>Subscriptions</h2>
+        <div class="membership-list">
+          {% for membership in memberships %}
+            <div class="membership-row">
+              <div>
+                <strong>{{ membership.plan.name }}</strong>
+                <span>{{ membership.get_status_display }}</span>
+                {% if membership.ends_at %}
+                  <small>Valid until {{ membership.ends_at|date:"d M Y" }}</small>
+                {% endif %}
+              </div>
+            </div>
+          {% empty %}
+            <p class="empty-state">No subscription joined yet.</p>
+          {% endfor %}
+        </div>
+
+        <h2>Certificates</h2>
+        <div class="membership-list">
+          {% for certificate in certificates %}
+            <div class="membership-row">
+              <div>
+                <strong>{{ certificate.subscription.plan.name }}</strong>
+                <span>{{ certificate.certificate_number }}</span>
+                <small>Issued {{ certificate.issued_at|date:"d M Y" }}</small>
+              </div>
+              <div class="certificate-actions">
+                <a class="section-link" href="{{ certificate.get_absolute_url }}">View</a>
+                <a class="section-link" href="{% url 'subscriptions:certificate_download' certificate.pk %}">Download</a>
+              </div>
+            </div>
+          {% empty %}
+            <p class="empty-state">Certificate will appear here after active subscription.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
