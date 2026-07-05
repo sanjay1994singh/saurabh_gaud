@@ -102,9 +102,8 @@
           </div>
           <p>{{ featured_patrika.short_description|default:featured_patrika.description|default:"Read the latest Dharm Raksha Sangh patrika."|truncatewords:30 }}</p>
           <div class="detail-actions">
-            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">Read E-Paper</a>
+            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">पत्रिका पढ़ें</a>
             <a class="secondary-action" href="{{ featured_patrika.pdf.url }}" download>Download PDF</a>
-            <a class="section-link" href="{% url 'patrika:archive' %}">All Patrika</a>
           </div>
         </div>
       </div>
