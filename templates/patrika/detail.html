@@ -11,13 +11,17 @@
           <strong>{{ patrika.title }}</strong>
           <label class="patrika-year-picker">
             <span>वर्ष</span>
-            <select id="patrikaYearPicker" aria-label="Patrika year">
-              {% for option in year_options %}
-                <option value="{{ option.year }}" {% if option.year == current_year|stringformat:"s" %}selected{% endif %}>
-                  {{ option.year }}
-                </option>
-              {% endfor %}
-            </select>
+            {% if year_options %}
+              <select id="patrikaYearPicker" aria-label="Patrika year">
+                {% for option in year_options %}
+                  <option value="{{ option.year }}" {% if option.year == current_year|stringformat:"s" %}selected{% endif %}>
+                    {{ option.year }}
+                  </option>
+                {% endfor %}
+              </select>
+            {% else %}
+              <span class="patrika-year-empty">उपलब्ध नहीं</span>
+            {% endif %}
           </label>
         </div>
         <button class="patrika-icon-tool" type="button" data-patrika-action="zoom-out" aria-label="Zoom out">-</button>

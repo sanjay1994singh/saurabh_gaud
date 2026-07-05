@@ -1,7 +1,24 @@
+import re
+
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Patrika
 from .services import convert_patrika_pdf_to_pages
+
+
+YEAR_PATTERN = re.compile(r"\b(19\d{2}|20\d{2}|21\d{2})\b")
+
+
+def get_patrika_year(patrika):
+    if patrika.published_date:
+        return str(patrika.published_date.year)
+
+    text = " ".join(
+        value for value in (patrika.title, patrika.issue_name, patrika.short_description)
+        if value
+    )
+    match = YEAR_PATTERN.search(text)
+    return match.group(1) if match else ""
 
 
 def index(request):
@@ -27,13 +44,12 @@ def archive(request):
 def detail(request, pk):
     patrika = get_object_or_404(Patrika, pk=pk, is_active=True)
     more_patrikas = Patrika.objects.filter(is_active=True).exclude(pk=patrika.pk)[:4]
-    yearly_patrikas = Patrika.objects.filter(
-        is_active=True,
-        published_date__isnull=False,
-    )
+    yearly_patrikas = Patrika.objects.filter(is_active=True)
     year_options_by_year = {}
     for item in yearly_patrikas:
-        year = str(item.published_date.year)
+        year = get_patrika_year(item)
+        if not year:
+            continue
         year_options_by_year.setdefault(year, {
             "year": year,
             "title": item.title,
@@ -69,7 +85,7 @@ def detail(request, pk):
             "more_patrikas": more_patrikas,
             "pages": pages,
             "initial_page": pages[0] if pages else None,
-            "current_year": patrika.published_date.year if patrika.published_date else "",
+            "current_year": get_patrika_year(patrika),
             "year_options": year_options,
             "conversion_error": conversion_error,
         },

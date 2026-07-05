@@ -1190,6 +1190,17 @@ p {
   outline-offset: 1px;
 }
 
+.patrika-year-empty {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  border: 1px solid rgba(246, 210, 140, 0.35);
+  border-radius: 5px;
+  color: #fffaf2;
+  padding: 3px 8px;
+  font-size: 12px;
+}
+
 .patrika-toolbar .patrika-tool,
 .patrika-toolbar .patrika-icon-tool,
 .patrika-toolbar .patrika-share {
