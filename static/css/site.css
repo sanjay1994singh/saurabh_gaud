@@ -965,6 +965,181 @@ p {
   margin-top: auto;
 }
 
+.home-patrika-section {
+  padding-bottom: 34px;
+}
+
+.patrika-feature {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fffaf2, #eef6f0);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.patrika-feature-cover,
+.patrika-cover,
+.patrika-sidebar-placeholder {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(123, 36, 53, 0.12);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #7b2435, #d87922);
+  color: #fff;
+  font-size: 38px;
+  font-weight: 900;
+}
+
+.patrika-feature-cover {
+  min-height: 360px;
+  box-shadow: 0 18px 42px rgba(45, 34, 25, 0.16);
+}
+
+.patrika-feature-cover img,
+.patrika-cover img,
+.patrika-sidebar-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.patrika-feature-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.patrika-feature-body h2 {
+  margin-bottom: 14px;
+  font-size: 38px;
+  line-height: 1.12;
+}
+
+.patrika-feature-body p:not(.eyebrow) {
+  max-width: 680px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.patrika-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.patrika-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.patrika-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 70px rgba(45, 34, 25, 0.18);
+}
+
+.patrika-cover {
+  aspect-ratio: 3 / 4;
+  border: 0;
+  border-radius: 0;
+}
+
+.patrika-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.patrika-reader-header {
+  padding: 34px 34px 24px;
+}
+
+.patrika-reader-header h1 {
+  margin-bottom: 12px;
+  font-size: 42px;
+  line-height: 1.12;
+}
+
+.pdf-viewer {
+  border-top: 1px solid var(--line);
+  background: #37332d;
+}
+
+.pdf-viewer iframe {
+  display: block;
+  width: 100%;
+  height: min(82vh, 900px);
+  min-height: 620px;
+  border: 0;
+  background: #37332d;
+}
+
+.patrika-description {
+  max-width: 860px;
+  padding-top: 30px;
+}
+
+.patrika-sidebar-cover {
+  height: 360px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 14px 32px rgba(45, 34, 25, 0.12);
+}
+
+.patrika-sidebar-placeholder {
+  height: 280px;
+  margin-bottom: 20px;
+}
+
+.detail-sidebar h2 {
+  margin: 20px 0 14px;
+  font-size: 24px;
+}
+
+.sidebar-list {
+  display: grid;
+  gap: 10px;
+}
+
+.sidebar-list a,
+.sidebar-list p {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 12px;
+}
+
+.sidebar-list a:hover strong {
+  color: var(--maroon);
+}
+
+.sidebar-list strong {
+  line-height: 1.25;
+}
+
+.sidebar-list span,
+.sidebar-list p {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .section,
 .page-intro {
   width: min(1180px, calc(100% - 44px));
@@ -1301,6 +1476,14 @@ p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .patrika-feature {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+
+  .patrika-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .event-grid,
   .event-featured-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1371,6 +1554,33 @@ p {
 
   .prakalp-grid {
     grid-template-columns: 1fr;
+  }
+
+  .patrika-feature {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .patrika-feature-cover {
+    min-height: 300px;
+  }
+
+  .patrika-feature-body h2,
+  .patrika-reader-header h1 {
+    font-size: 30px;
+  }
+
+  .patrika-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patrika-reader-header {
+    padding: 24px 20px 20px;
+  }
+
+  .pdf-viewer iframe {
+    height: 72vh;
+    min-height: 460px;
   }
 
   .event-grid,

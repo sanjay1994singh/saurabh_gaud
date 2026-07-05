@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ patrika.title }}{% endblock %}
+
+{% block content %}
+  <article class="detail-page detail-page-with-sidebar patrika-detail-page">
+    <div class="detail-shell">
+      <div class="detail-primary">
+        <div class="patrika-reader-header">
+          <p class="eyebrow">Patrika</p>
+          <h1>{{ patrika.title }}</h1>
+          <div class="detail-meta">
+            {% if patrika.issue_name %}
+              <span>{{ patrika.issue_name }}</span>
+            {% endif %}
+            <span>{{ patrika.date_label }}</span>
+            {% if patrika.file_size_label %}
+              <span>{{ patrika.file_size_label }}</span>
+            {% endif %}
+          </div>
+          {% if patrika.short_description %}
+            <p class="lead">{{ patrika.short_description }}</p>
+          {% endif %}
+          <div class="detail-actions">
+            <a class="primary-action" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
+            <a class="secondary-action" href="{{ patrika.pdf.url }}" download>Download PDF</a>
+            <a class="section-link" href="{% url 'patrika:index' %}">All Patrika</a>
+          </div>
+        </div>
+
+        <div class="pdf-viewer">
+          <iframe src="{{ patrika.pdf.url }}#toolbar=1&navpanes=0" title="{{ patrika.title }}"></iframe>
+        </div>
+
+        {% if patrika.description %}
+          <div class="detail-content patrika-description">
+            <div class="rich-text">
+              {{ patrika.description|linebreaks }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <aside class="detail-sidebar">
+        {% if patrika.cover_image %}
+          <img class="patrika-sidebar-cover" src="{{ patrika.cover_image.url }}" alt="{{ patrika.title }}">
+        {% else %}
+          <div class="patrika-sidebar-placeholder">PDF</div>
+        {% endif %}
+        <h2>More Patrika</h2>
+        <div class="sidebar-list">
+          {% for item in more_patrikas %}
+            <a href="{{ item.get_absolute_url }}">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.date_label }}</span>
+            </a>
+          {% empty %}
+            <p>No other patrika issues yet.</p>
+          {% endfor %}
+        </div>
+      </aside>
+    </div>
+  </article>
+{% endblock %}

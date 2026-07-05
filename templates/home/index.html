@@ -78,6 +78,39 @@
     </section>
   {% endif %}
 
+  {% if featured_patrika %}
+    <section class="section home-patrika-section">
+      <div class="patrika-feature">
+        <a class="patrika-feature-cover" href="{{ featured_patrika.get_absolute_url }}">
+          {% if featured_patrika.cover_image %}
+            <img src="{{ featured_patrika.cover_image.url }}" alt="{{ featured_patrika.title }}">
+          {% else %}
+            <span>PDF</span>
+          {% endif %}
+        </a>
+        <div class="patrika-feature-body">
+          <p class="eyebrow">Patrika</p>
+          <h2>{{ featured_patrika.title }}</h2>
+          <div class="card-meta">
+            {% if featured_patrika.issue_name %}
+              <span>{{ featured_patrika.issue_name }}</span>
+            {% endif %}
+            <span>{{ featured_patrika.date_label }}</span>
+            {% if featured_patrika.file_size_label %}
+              <span>{{ featured_patrika.file_size_label }}</span>
+            {% endif %}
+          </div>
+          <p>{{ featured_patrika.short_description|default:featured_patrika.description|default:"Read the latest Dharm Raksha Sangh patrika."|truncatewords:30 }}</p>
+          <div class="detail-actions">
+            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">Read Patrika</a>
+            <a class="secondary-action" href="{{ featured_patrika.pdf.url }}" download>Download PDF</a>
+            <a class="section-link" href="{% url 'patrika:index' %}">All Patrika</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
   <section class="cta-band">
     <div>
       <p class="eyebrow">Dharm Raksha Sangh</p>
