@@ -7,8 +7,10 @@
   <article class="patrika-reader-page" data-patrika-reader data-patrika-id="{{ patrika.pk }}">
     {% if initial_page %}
       <header class="patrika-toolbar" aria-label="Patrika reader toolbar">
-        <button class="patrika-tool menu-button" type="button" data-patrika-action="menu">Menu</button>
-        <button class="patrika-tool" type="button" data-patrika-action="zoom-in">Zoom</button>
+        <div class="patrika-toolbar-title">
+          <strong>{{ patrika.title }}</strong>
+          <span>कैलेंडर: {{ patrika.date_label }}</span>
+        </div>
         <button class="patrika-icon-tool" type="button" data-patrika-action="zoom-out" aria-label="Zoom out">-</button>
         <button class="patrika-icon-tool" type="button" data-patrika-action="fit" aria-label="Fit page">Fit</button>
         <button class="patrika-icon-tool" type="button" data-patrika-action="bookmark" aria-label="Bookmark page">Save</button>

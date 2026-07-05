@@ -1130,6 +1130,36 @@ p {
   box-shadow: 0 8px 22px rgba(45, 34, 25, 0.18);
 }
 
+.patrika-toolbar-title {
+  display: flex;
+  flex: 1 1 280px;
+  min-width: 230px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 18px;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  background: #172921;
+}
+
+.patrika-toolbar-title strong {
+  display: block;
+  overflow: hidden;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.patrika-toolbar-title span {
+  color: #f6d28c;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
 .patrika-toolbar .patrika-tool,
 .patrika-toolbar .patrika-icon-tool,
 .patrika-toolbar .patrika-share {
@@ -1137,11 +1167,6 @@ p {
   border-right: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0;
   background: #23372f;
-}
-
-.patrika-toolbar .menu-button {
-  min-width: 86px;
-  background: #172921;
 }
 
 .patrika-share.whatsapp {
@@ -2054,7 +2079,6 @@ p {
     display: none;
   }
 
-  .patrika-toolbar .menu-button,
   .patrika-toolbar .x,
   .patrika-toolbar .copy,
   .patrika-toolbar [data-patrika-action="zoom-out"],
@@ -2065,9 +2089,19 @@ p {
     display: none;
   }
 
-  .patrika-toolbar .menu-button {
-    display: inline-flex;
-    flex-basis: 58px;
+  .patrika-toolbar-title {
+    flex: 1 0 190px;
+    min-width: 190px;
+    min-height: 42px;
+    padding: 5px 12px;
+  }
+
+  .patrika-toolbar-title strong {
+    font-size: 13px;
+  }
+
+  .patrika-toolbar-title span {
+    font-size: 10px;
   }
 
   .patrika-toolbar .facebook {
@@ -2278,6 +2312,16 @@ p {
   .patrika-toolbar .patrika-share {
     flex-basis: 50px;
     min-width: 50px;
+  }
+
+  .patrika-toolbar-title {
+    flex-basis: 170px;
+    min-width: 170px;
+    padding-inline: 10px;
+  }
+
+  .patrika-toolbar-title strong {
+    font-size: 12px;
   }
 
   .patrika-bottom-pager {
