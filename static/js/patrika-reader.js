@@ -153,9 +153,36 @@
     renderPage();
   }
 
-  function setZoom(nextZoom, announce) {
+  function getPageStageAnchor(point) {
+    if (!pageStage || !paperFrame || !point) {
+      return null;
+    }
+
+    const stageRect = pageStage.getBoundingClientRect();
+    const offsetX = point.x - stageRect.left;
+    const offsetY = point.y - stageRect.top;
+    return {
+      offsetX,
+      offsetY,
+      baseX: (pageStage.scrollLeft + offsetX - paperFrame.offsetLeft) / zoom,
+      baseY: (pageStage.scrollTop + offsetY - paperFrame.offsetTop) / zoom,
+    };
+  }
+
+  function restorePageStageAnchor(anchor) {
+    if (!pageStage || !paperFrame || !anchor) {
+      return;
+    }
+
+    pageStage.scrollLeft = Math.max(0, paperFrame.offsetLeft + (anchor.baseX * zoom) - anchor.offsetX);
+    pageStage.scrollTop = Math.max(0, paperFrame.offsetTop + (anchor.baseY * zoom) - anchor.offsetY);
+  }
+
+  function setZoom(nextZoom, announce, anchorPoint) {
+    const anchor = getPageStageAnchor(anchorPoint);
     zoom = Math.max(1, Math.min(2.4, nextZoom));
     applyZoomLayout();
+    restorePageStageAnchor(anchor);
     if (announce !== false) {
       showToast(`Zoom ${Math.round(zoom * 100)}%`);
     }
@@ -187,6 +214,13 @@
     return Math.hypot(deltaX, deltaY);
   }
 
+  function getTouchMidpoint(touches) {
+    return {
+      x: (touches[0].clientX + touches[1].clientX) / 2,
+      y: (touches[0].clientY + touches[1].clientY) / 2,
+    };
+  }
+
   function startPagePinch(event) {
     if (clipMode || event.touches.length !== 2) {
       return;
@@ -203,7 +237,7 @@
     }
     event.preventDefault();
     const nextDistance = getTouchDistance(event.touches);
-    setZoom(pinchStartZoom * (nextDistance / pinchStartDistance), false);
+    setZoom(pinchStartZoom * (nextDistance / pinchStartDistance), false, getTouchMidpoint(event.touches));
   }
 
   function endPagePinch(event) {
