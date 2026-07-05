@@ -76,6 +76,7 @@
     document.documentElement.style.setProperty("--patrika-pager-height", `${pagerHeight}px`);
     document.documentElement.style.setProperty("--patrika-reader-page-height", `${availableHeight}px`);
     document.documentElement.style.setProperty("--patrika-reader-page-width", `${pageWidth}px`);
+    window.requestAnimationFrame(updateZoomScrollSpace);
   }
 
   function getBookmarks() {
@@ -134,6 +135,7 @@
     });
     hideClipBox();
     closeCropResult();
+    window.requestAnimationFrame(updateZoomScrollSpace);
   }
 
   function setPage(nextIndex) {
@@ -147,9 +149,28 @@
   function setZoom(nextZoom, announce) {
     zoom = Math.max(0.65, Math.min(2.4, nextZoom));
     paperFrame.style.transform = `scale(${zoom})`;
+    updateZoomScrollSpace();
     if (announce !== false) {
       showToast(`Zoom ${Math.round(zoom * 100)}%`);
     }
+  }
+
+  function updateZoomScrollSpace() {
+    if (!pageStage || !paperFrame) {
+      return;
+    }
+
+    const isMobileReader = document.body.classList.contains("patrika-reader-mobile");
+    if (!isMobileReader || zoom <= 1) {
+      paperFrame.style.marginRight = "";
+      paperFrame.style.marginBottom = "";
+      return;
+    }
+
+    const frameWidth = paperFrame.offsetWidth;
+    const frameHeight = paperFrame.offsetHeight;
+    paperFrame.style.marginRight = `${Math.ceil(frameWidth * (zoom - 1))}px`;
+    paperFrame.style.marginBottom = `${Math.ceil(frameHeight * (zoom - 1))}px`;
   }
 
   function getTouchDistance(touches) {
@@ -358,7 +379,7 @@
   }
 
   function startReaderSwipe(event) {
-    if (clipMode || event.touches.length !== 1 || shouldIgnoreSwipeTarget(event.target)) {
+    if (clipMode || zoom > 1 || event.touches.length !== 1 || shouldIgnoreSwipeTarget(event.target)) {
       swipeStart = null;
       return;
     }
@@ -372,7 +393,7 @@
   }
 
   function finishReaderSwipe(event) {
-    if (!swipeStart || clipMode || event.changedTouches.length !== 1 || shouldIgnoreSwipeTarget(event.target)) {
+    if (!swipeStart || clipMode || zoom > 1 || event.changedTouches.length !== 1 || shouldIgnoreSwipeTarget(event.target)) {
       swipeStart = null;
       return;
     }

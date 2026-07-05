@@ -2358,10 +2358,16 @@ p {
   }
 
   body.patrika-reader-mobile .patrika-page-stage {
+    display: block;
     height: var(--patrika-reader-page-height, 60vh);
     overflow: auto;
     overscroll-behavior: contain;
-    touch-action: none;
+    touch-action: pan-x pan-y;
+  }
+
+  body.patrika-reader-mobile .patrika-paper-frame {
+    transform-origin: top left;
+    transition: none;
   }
 
   body.patrika-reader-mobile .patrika-bottom-pager {
