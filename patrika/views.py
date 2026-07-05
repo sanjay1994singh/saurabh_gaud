@@ -1,10 +1,26 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Patrika
 from .services import convert_patrika_pdf_to_pages
 
 
 def index(request):
+    patrikas = Patrika.objects.filter(is_active=True)
+    featured_patrika = patrikas.filter(is_featured=True).first() or patrikas.first()
+    if featured_patrika:
+        return redirect(featured_patrika.get_absolute_url())
+
+    return render(
+        request,
+        "patrika/index.html",
+        {
+            "patrikas": patrikas,
+            "featured_patrika": featured_patrika,
+        },
+    )
+
+
+def archive(request):
     patrikas = Patrika.objects.filter(is_active=True)
     featured_patrika = patrikas.filter(is_featured=True).first() or patrikas.first()
     return render(

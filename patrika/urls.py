@@ -6,6 +6,6 @@ app_name = "patrika"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("all/", views.archive, name="archive"),
     path("<int:pk>/", views.detail, name="detail"),
 ]
-
