@@ -53,6 +53,11 @@
             </div>
 
             <div class="pdf-toolbar-group">
+              <button class="pdf-tool-button is-active" type="button" data-pdf-single>Single page</button>
+              <button class="pdf-tool-button" type="button" data-pdf-spread>Newspaper spread</button>
+            </div>
+
+            <div class="pdf-toolbar-group">
               <button class="pdf-tool-button" type="button" data-pdf-print>Print</button>
               <button class="pdf-tool-button" type="button" data-pdf-fullscreen>Fullscreen</button>
               <a class="pdf-tool-link" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open</a>
@@ -61,8 +66,20 @@
           </div>
 
           <div class="pdf-reader-status" data-pdf-status>Loading PDF...</div>
-          <div class="pdf-page-stage" data-pdf-stage>
-            <canvas data-pdf-canvas></canvas>
+          <div class="pdf-newspaper-shell">
+            <aside class="pdf-thumbnail-rail" aria-label="PDF page thumbnails" data-pdf-thumbnails></aside>
+            <div class="pdf-page-stage" data-pdf-stage>
+              <div class="pdf-paper-spread" data-pdf-spread-stage>
+                <figure class="pdf-paper-page">
+                  <canvas data-pdf-canvas-primary></canvas>
+                  <figcaption data-pdf-caption-primary>Page 1</figcaption>
+                </figure>
+                <figure class="pdf-paper-page pdf-paper-page-secondary" data-pdf-secondary-page hidden>
+                  <canvas data-pdf-canvas-secondary></canvas>
+                  <figcaption data-pdf-caption-secondary>Page 2</figcaption>
+                </figure>
+              </div>
+            </div>
           </div>
 
           <noscript>
