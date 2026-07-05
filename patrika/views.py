@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 
 from .models import Patrika
+from .services import convert_patrika_pdf_to_pages
 
 
 def index(request):
@@ -19,6 +20,14 @@ def index(request):
 def detail(request, pk):
     patrika = get_object_or_404(Patrika, pk=pk, is_active=True)
     more_patrikas = Patrika.objects.filter(is_active=True).exclude(pk=patrika.pk)[:4]
+    conversion_error = ""
+
+    if not patrika.pages.exists() and patrika.pdf:
+        try:
+            convert_patrika_pdf_to_pages(patrika)
+        except Exception as error:
+            conversion_error = str(error)
+
     page_records = list(patrika.pages.all())
     pages = [
         {
@@ -36,5 +45,6 @@ def detail(request, pk):
             "more_patrikas": more_patrikas,
             "pages": pages,
             "initial_page": pages[0] if pages else None,
+            "conversion_error": conversion_error,
         },
     )

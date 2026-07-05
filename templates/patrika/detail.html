@@ -20,7 +20,6 @@
         </div>
       </div>
       <div class="patrika-reader-actions">
-        <a href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
         <a href="{{ patrika.pdf.url }}" download>Download</a>
         <a href="{% url 'patrika:index' %}">All Patrika</a>
       </div>
@@ -133,9 +132,13 @@
     {% else %}
       <section class="patrika-empty-reader">
         <h2>Page images are not generated yet.</h2>
-        <p>Open this patrika in admin and save it once, or use the Regenerate page images action.</p>
+        {% if conversion_error %}
+          <p>Image reader could not generate pages: {{ conversion_error }}</p>
+        {% else %}
+          <p>Open this patrika in admin and save it once, or use the Regenerate page images action.</p>
+        {% endif %}
         <div class="detail-actions">
-          <a class="primary-action" href="{{ patrika.pdf.url }}" target="_blank" rel="noopener">Open PDF</a>
+          <a class="primary-action" href="{% url 'patrika:index' %}">All Patrika</a>
           <a class="secondary-action" href="{{ patrika.pdf.url }}" download>Download PDF</a>
         </div>
       </section>

@@ -33,7 +33,7 @@
           </div>
           <p>{{ featured_patrika.short_description|default:featured_patrika.description|default:"Open this issue in the browser or download it as a PDF."|truncatewords:34 }}</p>
           <div class="detail-actions">
-            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">Read Online</a>
+            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">Read E-Paper</a>
             <a class="secondary-action" href="{{ featured_patrika.pdf.url }}" download>Download PDF</a>
           </div>
         </div>
@@ -62,7 +62,7 @@
             <h2><a href="{{ patrika.get_absolute_url }}">{{ patrika.title }}</a></h2>
             <p>{{ patrika.short_description|default:patrika.description|default:"Read this patrika issue online or download the PDF."|truncatewords:22 }}</p>
             <div class="patrika-card-actions">
-              <a class="text-link" href="{{ patrika.get_absolute_url }}">Read online</a>
+              <a class="text-link" href="{{ patrika.get_absolute_url }}">Read e-paper</a>
               <a class="text-link" href="{{ patrika.pdf.url }}" download>Download</a>
             </div>
           </div>
@@ -73,4 +73,3 @@
     </div>
   </section>
 {% endblock %}
-
