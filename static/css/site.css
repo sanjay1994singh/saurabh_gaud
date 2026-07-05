@@ -2200,6 +2200,22 @@ p {
     scroll-padding-inline: 12px;
   }
 
+  .patrika-toolbar-actions .patrika-year-picker {
+    order: 1;
+  }
+
+  .patrika-toolbar-actions [data-patrika-action="reload"] {
+    order: 2;
+  }
+
+  .patrika-toolbar-actions [data-patrika-action="clip"] {
+    order: 3;
+  }
+
+  .patrika-toolbar-actions .whatsapp {
+    order: 9;
+  }
+
   .patrika-toolbar-actions::-webkit-scrollbar {
     display: none;
   }

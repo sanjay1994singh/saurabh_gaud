@@ -9,6 +9,8 @@
       <header class="patrika-toolbar" aria-label="Patrika reader toolbar">
         <div class="patrika-toolbar-title">
           <strong>{{ patrika.title }}</strong>
+        </div>
+        <div class="patrika-toolbar-actions" aria-label="Patrika tools">
           <label class="patrika-year-picker">
             <span>वर्ष</span>
             {% if year_options %}
@@ -23,8 +25,6 @@
               <span class="patrika-year-empty">उपलब्ध नहीं</span>
             {% endif %}
           </label>
-        </div>
-        <div class="patrika-toolbar-actions" aria-label="Patrika tools">
           <button class="patrika-icon-tool" type="button" data-patrika-action="reload" aria-label="Reload patrika">Reload</button>
           <button class="patrika-icon-tool" type="button" data-patrika-action="fit" aria-label="Fit page">Fit</button>
           <button class="patrika-icon-tool" type="button" data-patrika-action="bookmark" aria-label="Bookmark page">Save</button>
