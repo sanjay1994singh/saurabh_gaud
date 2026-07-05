@@ -8,6 +8,7 @@
   const pages = JSON.parse(pagesScript.textContent);
   const paperFrame = document.getElementById("patrikaPaperFrame");
   const paperImage = document.getElementById("patrikaPaperImage");
+  const readerShell = document.querySelector(".patrika-reader-shell");
   const pageSelect = document.getElementById("patrikaPageSelect");
   const pagesDrawer = document.getElementById("patrikaPagesDrawer");
   const menuDrawer = document.getElementById("patrikaMenuDrawer");
@@ -298,6 +299,36 @@
     setPage(deltaX < 0 ? pageIndex + 1 : pageIndex - 1);
   }
 
+  function shouldIgnoreSwipeTarget(target) {
+    return Boolean(target.closest(
+      "button, select, input, label, aside, .patrika-bottom-pager, .patrika-toolbar, .patrika-pages-drawer, .patrika-menu-drawer, .patrika-crop-result"
+    ));
+  }
+
+  function startReaderSwipe(event) {
+    if (clipMode || event.touches.length !== 1 || shouldIgnoreSwipeTarget(event.target)) {
+      swipeStart = null;
+      return;
+    }
+
+    const touch = event.touches[0];
+    swipeStart = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+    };
+  }
+
+  function finishReaderSwipe(event) {
+    if (!swipeStart || clipMode || event.changedTouches.length !== 1 || shouldIgnoreSwipeTarget(event.target)) {
+      swipeStart = null;
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    handleSwipe(touch.clientX, touch.clientY, Date.now() - swipeStart.time);
+  }
+
   document.addEventListener("click", function (event) {
     const bookmarkButton = event.target.closest("[data-bookmark-page]");
     if (bookmarkButton) {
@@ -408,21 +439,10 @@
     }
   });
 
-  paperFrame?.addEventListener("touchstart", function (event) {
-    if (clipMode || event.touches.length !== 1 || event.target.closest("button, select, input, label, aside")) {
-      swipeStart = null;
-      return;
-    }
-    const touch = event.touches[0];
-    swipeStart = { x: touch.clientX, y: touch.clientY, time: Date.now() };
-  }, { passive: true });
-
-  paperFrame?.addEventListener("touchend", function (event) {
-    if (!swipeStart || clipMode || event.changedTouches.length !== 1) {
-      return;
-    }
-    const touch = event.changedTouches[0];
-    handleSwipe(touch.clientX, touch.clientY, Date.now() - swipeStart.time);
+  readerShell?.addEventListener("touchstart", startReaderSwipe, { passive: true });
+  readerShell?.addEventListener("touchend", finishReaderSwipe, { passive: true });
+  readerShell?.addEventListener("touchcancel", function () {
+    swipeStart = null;
   }, { passive: true });
 
   document.addEventListener("keydown", function (event) {
