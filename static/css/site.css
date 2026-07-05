@@ -1160,7 +1160,7 @@ p {
   line-height: 1.2;
 }
 
-.patrika-date-picker {
+.patrika-year-picker {
   display: inline-flex;
   width: fit-content;
   max-width: 100%;
@@ -1172,8 +1172,8 @@ p {
   line-height: 1.2;
 }
 
-.patrika-date-picker input {
-  width: 136px;
+.patrika-year-picker select {
+  width: 96px;
   min-height: 28px;
   border: 1px solid rgba(246, 210, 140, 0.55);
   border-radius: 5px;
@@ -1185,7 +1185,7 @@ p {
   font-weight: 800;
 }
 
-.patrika-date-picker input:focus {
+.patrika-year-picker select:focus {
   outline: 2px solid var(--gold);
   outline-offset: 1px;
 }
@@ -2134,13 +2134,13 @@ p {
     font-size: 10px;
   }
 
-  .patrika-date-picker {
+  .patrika-year-picker {
     gap: 5px;
     font-size: 10px;
   }
 
-  .patrika-date-picker input {
-    width: 118px;
+  .patrika-year-picker select {
+    width: 82px;
     min-height: 24px;
     padding: 2px 5px;
     font-size: 10px;
@@ -2366,8 +2366,8 @@ p {
     font-size: 12px;
   }
 
-  .patrika-date-picker input {
-    width: 110px;
+  .patrika-year-picker select {
+    width: 78px;
   }
 
   .patrika-bottom-pager {

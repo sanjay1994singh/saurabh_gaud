@@ -27,18 +27,23 @@ def archive(request):
 def detail(request, pk):
     patrika = get_object_or_404(Patrika, pk=pk, is_active=True)
     more_patrikas = Patrika.objects.filter(is_active=True).exclude(pk=patrika.pk)[:4]
-    dated_patrikas = Patrika.objects.filter(
+    yearly_patrikas = Patrika.objects.filter(
         is_active=True,
         published_date__isnull=False,
     )
-    date_options = [
-        {
-            "date": item.published_date.isoformat(),
+    year_options_by_year = {}
+    for item in yearly_patrikas:
+        year = str(item.published_date.year)
+        year_options_by_year.setdefault(year, {
+            "year": year,
             "title": item.title,
             "url": item.get_absolute_url(),
-        }
-        for item in dated_patrikas
-    ]
+        })
+    year_options = sorted(
+        year_options_by_year.values(),
+        key=lambda option: option["year"],
+        reverse=True,
+    )
     conversion_error = ""
 
     if not patrika.pages.exists() and patrika.pdf:
@@ -64,7 +69,8 @@ def detail(request, pk):
             "more_patrikas": more_patrikas,
             "pages": pages,
             "initial_page": pages[0] if pages else None,
-            "date_options": date_options,
+            "current_year": patrika.published_date.year if patrika.published_date else "",
+            "year_options": year_options,
             "conversion_error": conversion_error,
         },
     )

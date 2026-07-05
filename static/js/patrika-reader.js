@@ -1,21 +1,21 @@
 (function () {
   const pagesScript = document.getElementById("patrikaPagesData");
-  const dateOptionsScript = document.getElementById("patrikaDateOptionsData");
+  const yearOptionsScript = document.getElementById("patrikaYearOptionsData");
   const reader = document.querySelector("[data-patrika-reader]");
   if (!pagesScript || !reader) {
     return;
   }
 
   const pages = JSON.parse(pagesScript.textContent);
-  const dateOptions = dateOptionsScript ? JSON.parse(dateOptionsScript.textContent) : [];
-  const patrikaByDate = new Map(dateOptions.map(function (option) {
-    return [option.date, option];
+  const yearOptions = yearOptionsScript ? JSON.parse(yearOptionsScript.textContent) : [];
+  const patrikaByYear = new Map(yearOptions.map(function (option) {
+    return [option.year, option];
   }));
   const paperFrame = document.getElementById("patrikaPaperFrame");
   const paperImage = document.getElementById("patrikaPaperImage");
   const readerShell = document.querySelector(".patrika-reader-shell");
   const pageSelect = document.getElementById("patrikaPageSelect");
-  const datePicker = document.getElementById("patrikaDatePicker");
+  const yearPicker = document.getElementById("patrikaYearPicker");
   const pagesDrawer = document.getElementById("patrikaPagesDrawer");
   const menuDrawer = document.getElementById("patrikaMenuDrawer");
   const toast = document.getElementById("patrikaReaderToast");
@@ -417,15 +417,15 @@
     setPage(pageSelect.selectedIndex);
   });
 
-  datePicker?.addEventListener("change", function () {
-    const selectedDate = datePicker.value;
-    if (!selectedDate) {
+  yearPicker?.addEventListener("change", function () {
+    const selectedYear = yearPicker.value;
+    if (!selectedYear) {
       return;
     }
 
-    const nextPatrika = patrikaByDate.get(selectedDate);
+    const nextPatrika = patrikaByYear.get(selectedYear);
     if (!nextPatrika) {
-      showToast("इस तारीख की पत्रिका उपलब्ध नहीं है");
+      showToast("इस वर्ष की पत्रिका उपलब्ध नहीं है");
       return;
     }
 
