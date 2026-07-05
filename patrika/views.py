@@ -27,6 +27,18 @@ def archive(request):
 def detail(request, pk):
     patrika = get_object_or_404(Patrika, pk=pk, is_active=True)
     more_patrikas = Patrika.objects.filter(is_active=True).exclude(pk=patrika.pk)[:4]
+    dated_patrikas = Patrika.objects.filter(
+        is_active=True,
+        published_date__isnull=False,
+    )
+    date_options = [
+        {
+            "date": item.published_date.isoformat(),
+            "title": item.title,
+            "url": item.get_absolute_url(),
+        }
+        for item in dated_patrikas
+    ]
     conversion_error = ""
 
     if not patrika.pages.exists() and patrika.pdf:
@@ -52,6 +64,7 @@ def detail(request, pk):
             "more_patrikas": more_patrikas,
             "pages": pages,
             "initial_page": pages[0] if pages else None,
+            "date_options": date_options,
             "conversion_error": conversion_error,
         },
     )

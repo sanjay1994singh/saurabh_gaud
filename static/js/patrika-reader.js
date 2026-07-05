@@ -1,15 +1,21 @@
 (function () {
   const pagesScript = document.getElementById("patrikaPagesData");
+  const dateOptionsScript = document.getElementById("patrikaDateOptionsData");
   const reader = document.querySelector("[data-patrika-reader]");
   if (!pagesScript || !reader) {
     return;
   }
 
   const pages = JSON.parse(pagesScript.textContent);
+  const dateOptions = dateOptionsScript ? JSON.parse(dateOptionsScript.textContent) : [];
+  const patrikaByDate = new Map(dateOptions.map(function (option) {
+    return [option.date, option];
+  }));
   const paperFrame = document.getElementById("patrikaPaperFrame");
   const paperImage = document.getElementById("patrikaPaperImage");
   const readerShell = document.querySelector(".patrika-reader-shell");
   const pageSelect = document.getElementById("patrikaPageSelect");
+  const datePicker = document.getElementById("patrikaDatePicker");
   const pagesDrawer = document.getElementById("patrikaPagesDrawer");
   const menuDrawer = document.getElementById("patrikaMenuDrawer");
   const toast = document.getElementById("patrikaReaderToast");
@@ -409,6 +415,21 @@
 
   pageSelect?.addEventListener("change", function () {
     setPage(pageSelect.selectedIndex);
+  });
+
+  datePicker?.addEventListener("change", function () {
+    const selectedDate = datePicker.value;
+    if (!selectedDate) {
+      return;
+    }
+
+    const nextPatrika = patrikaByDate.get(selectedDate);
+    if (!nextPatrika) {
+      showToast("इस तारीख की पत्रिका उपलब्ध नहीं है");
+      return;
+    }
+
+    window.location.href = nextPatrika.url;
   });
 
   paperImage?.addEventListener("pointerdown", function (event) {

@@ -9,7 +9,21 @@
       <header class="patrika-toolbar" aria-label="Patrika reader toolbar">
         <div class="patrika-toolbar-title">
           <strong>{{ patrika.title }}</strong>
-          <span>कैलेंडर: {{ patrika.date_label }}</span>
+          <label class="patrika-date-picker">
+            <span>कैलेंडर</span>
+            <input
+              id="patrikaDatePicker"
+              type="date"
+              value="{% if patrika.published_date %}{{ patrika.published_date|date:'Y-m-d' }}{% endif %}"
+              list="patrikaAvailableDates"
+              aria-label="Patrika date"
+            >
+          </label>
+          <datalist id="patrikaAvailableDates">
+            {% for option in date_options %}
+              <option value="{{ option.date }}">{{ option.title }}</option>
+            {% endfor %}
+          </datalist>
         </div>
         <button class="patrika-icon-tool" type="button" data-patrika-action="zoom-out" aria-label="Zoom out">-</button>
         <button class="patrika-icon-tool" type="button" data-patrika-action="fit" aria-label="Fit page">Fit</button>
@@ -150,6 +164,7 @@
     {% endif %}
 
     {{ pages|json_script:"patrikaPagesData" }}
+    {{ date_options|json_script:"patrikaDateOptionsData" }}
   </article>
 {% endblock %}
 

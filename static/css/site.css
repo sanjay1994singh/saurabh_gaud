@@ -1153,11 +1153,41 @@ p {
   white-space: nowrap;
 }
 
-.patrika-toolbar-title span {
+.patrika-toolbar-title > span {
   color: #f6d28c;
   font-size: 12px;
   font-weight: 800;
   line-height: 1.2;
+}
+
+.patrika-date-picker {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 8px;
+  color: #f6d28c;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.patrika-date-picker input {
+  width: 136px;
+  min-height: 28px;
+  border: 1px solid rgba(246, 210, 140, 0.55);
+  border-radius: 5px;
+  background: #fffaf2;
+  color: #172921;
+  padding: 3px 7px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.patrika-date-picker input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
 }
 
 .patrika-toolbar .patrika-tool,
@@ -2100,7 +2130,19 @@ p {
     font-size: 13px;
   }
 
-  .patrika-toolbar-title span {
+  .patrika-toolbar-title > span {
+    font-size: 10px;
+  }
+
+  .patrika-date-picker {
+    gap: 5px;
+    font-size: 10px;
+  }
+
+  .patrika-date-picker input {
+    width: 118px;
+    min-height: 24px;
+    padding: 2px 5px;
     font-size: 10px;
   }
 
@@ -2322,6 +2364,10 @@ p {
 
   .patrika-toolbar-title strong {
     font-size: 12px;
+  }
+
+  .patrika-date-picker input {
+    width: 110px;
   }
 
   .patrika-bottom-pager {
