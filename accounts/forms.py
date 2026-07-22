@@ -2,7 +2,26 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.text import slugify
 
-from .models import User
+from .models import Country, State, User
+
+
+def _india_country():
+    return Country.objects.filter(code="IN", is_active=True).first()
+
+
+def _configure_location_fields(form, selected_country=None):
+    form.fields["country"].queryset = Country.objects.filter(is_active=True)
+    form.fields["state_obj"].queryset = State.objects.none()
+    form.fields["state_obj"].required = False
+    form.fields["state_obj"].widget.attrs["data-state-select"] = "true"
+
+    if not selected_country:
+        selected_country = _india_country()
+        if selected_country:
+            form.fields["country"].initial = selected_country
+
+    if selected_country:
+        form.fields["state_obj"].queryset = State.objects.filter(country=selected_country, is_active=True)
 
 
 class RegisterForm(UserCreationForm):
@@ -16,7 +35,8 @@ class RegisterForm(UserCreationForm):
             "photo",
             "address",
             "city",
-            "state",
+            "country",
+            "state_obj",
             "password1",
             "password2",
         )
@@ -28,11 +48,20 @@ class RegisterForm(UserCreationForm):
             "photo": "फोटो / Photo",
             "address": "पूरा पता / Complete address",
             "city": "शहर / City",
-            "state": "राज्य / State",
+            "country": "देश / Country",
+            "state_obj": "राज्य / State",
         }
         widgets = {
             "address": forms.Textarea(attrs={"rows": 2}),
+            "country": forms.Select(attrs={"data-country-select": "true"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        selected_country = None
+        if self.is_bound:
+            selected_country = Country.objects.filter(pk=self.data.get("country")).first()
+        _configure_location_fields(self, selected_country)
 
     def _make_username(self):
         email = (self.cleaned_data.get("email") or "").strip()
@@ -53,6 +82,7 @@ class RegisterForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = self._make_username()
+        user.state = user.state_obj.name if user.state_obj else ""
         if commit:
             user.save()
         return user
@@ -61,7 +91,7 @@ class RegisterForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "phone", "photo", "address", "city", "state")
+        fields = ("first_name", "last_name", "email", "phone", "photo", "address", "city", "country", "state_obj")
         labels = {
             "first_name": "नाम / First name",
             "last_name": "उपनाम / Last name",
@@ -70,8 +100,26 @@ class ProfileForm(forms.ModelForm):
             "photo": "फोटो / Photo",
             "address": "पूरा पता / Complete address",
             "city": "शहर / City",
-            "state": "राज्य / State",
+            "country": "देश / Country",
+            "state_obj": "राज्य / State",
         }
         widgets = {
             "address": forms.Textarea(attrs={"rows": 3}),
+            "country": forms.Select(attrs={"data-country-select": "true"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        selected_country = None
+        if self.is_bound:
+            selected_country = Country.objects.filter(pk=self.data.get("country")).first()
+        elif self.instance and self.instance.country_id:
+            selected_country = self.instance.country
+        _configure_location_fields(self, selected_country)
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.state = user.state_obj.name if user.state_obj else ""
+        if commit:
+            user.save()
+        return user

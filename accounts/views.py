@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from .forms import ProfileForm, RegisterForm
+from .models import State
 from subscriptions.models import MembershipSubscription
 from subscriptions.views import delete_duplicate_active_plan_certificates
 
@@ -37,6 +39,12 @@ def register(request):
         form = RegisterForm()
 
     return render(request, "accounts/register.html", {"form": form, "next_url": next_url})
+
+
+def states_for_country(request):
+    country_id = request.GET.get("country")
+    states = State.objects.filter(country_id=country_id, is_active=True).values("id", "name").order_by("name")
+    return JsonResponse({"states": list(states)})
 
 
 @login_required

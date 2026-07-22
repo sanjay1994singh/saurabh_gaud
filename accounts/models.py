@@ -4,6 +4,32 @@ from django.contrib.auth.models import AbstractUser
 from dharm_raksha_sangh.image_utils import face_focused_square, optimize_image_file
 
 
+class Country(models.Model):
+    code = models.CharField(max_length=2, unique=True)
+    name = models.CharField(max_length=120, unique=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name_plural = "countries"
+
+    def __str__(self):
+        return self.name
+
+
+class State(models.Model):
+    country = models.ForeignKey(Country, related_name="states", on_delete=models.CASCADE)
+    name = models.CharField(max_length=120)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ("country__name", "name")
+        unique_together = ("country", "name")
+
+    def __str__(self):
+        return f"{self.name}, {self.country.name}"
+
+
 class User(AbstractUser):
     """
     Custom user model for the project.
@@ -17,7 +43,9 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, blank=True)
     address = models.TextField(blank=True)
     city = models.CharField(max_length=100, blank=True)
+    country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     state = models.CharField(max_length=100, blank=True)
+    state_obj = models.ForeignKey(State, blank=True, null=True, on_delete=models.SET_NULL)
     photo = models.ImageField(upload_to="members/photos/", blank=True, null=True)
 
     class Meta:
