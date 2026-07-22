@@ -28,7 +28,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user, backend="django.contrib.auth.backends.ModelBackend")
             messages.success(request, "अकाउंट बन गया है. कृपया सदस्यता चुनें.")
             if next_url:
                 return redirect(next_url)
