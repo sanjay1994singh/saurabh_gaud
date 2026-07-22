@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}भुगतान / Payment{% endblock %}
+{% block title %}{% if current_lang == "hi" %}भुगतान{% else %}Payment{% endif %}{% endblock %}
 
 {% block content %}
   <section class="auth-page">
     <div class="auth-panel">
-      <p class="eyebrow">सुरक्षित भुगतान / Secure Payment</p>
+      <p class="eyebrow">{{ ui.secure_payment }}</p>
       <h1>{{ plan.name }}</h1>
       <p class="checkout-amount">Rs. {{ plan.amount }}</p>
-      <button id="pay-button" class="primary-action" type="button">Razorpay से भुगतान करें</button>
-      <a class="secondary-action" href="{% url 'subscriptions:plans' %}">रद्द करें</a>
+      <button id="pay-button" class="primary-action" type="button">{{ ui.pay_razorpay }}</button>
+      <a class="secondary-action" href="{% url 'subscriptions:plans' %}">{{ ui.cancel }}</a>
 
       <form id="payment-form" method="post" action="{% url 'subscriptions:payment_success' %}">
         {% csrf_token %}
@@ -30,7 +30,7 @@
         key: "{{ razorpay_key_id }}",
         amount: "{{ amount_paise }}",
         currency: "INR",
-        name: "Dharm Raksha Sangh",
+        name: "{{ ui.site_name|escapejs }}",
         description: "{{ plan.name|escapejs }}",
         order_id: "{{ razorpay_order_id }}",
         prefill: {

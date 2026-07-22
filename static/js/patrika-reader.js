@@ -8,6 +8,39 @@
 
   const pages = JSON.parse(pagesScript.textContent);
   const yearOptions = yearOptionsScript ? JSON.parse(yearOptionsScript.textContent) : [];
+  const readerLanguage = reader.dataset.readerLang === "en" ? "en" : "hi";
+  const text = {
+    hi: {
+      bookmarks: "बुकमार्क",
+      noBookmarks: "अभी कोई बुकमार्क पेज नहीं है.",
+      zoom: "ज़ूम",
+      bookmarkRemoved: "बुकमार्क से हटाया गया",
+      bookmarked: "बुकमार्क किया गया",
+      clipSmall: "क्लिप क्षेत्र बहुत छोटा है",
+      cropReady: "क्रॉप तैयार है",
+      cropFirst: "कृपया पहले पेज क्रॉप करें",
+      croppedPage: "क्रॉप किया गया पत्रिका पेज",
+      cropAlt: "क्रॉप पेज",
+      linkCopied: "रीडर लिंक कॉपी हो गया",
+      cropOn: "क्रॉप करने के लिए पेज पर ड्रैग करें",
+      cropOff: "क्रॉप मोड बंद",
+    },
+    en: {
+      bookmarks: "Bookmarks",
+      noBookmarks: "No bookmarked pages yet.",
+      zoom: "Zoom",
+      bookmarkRemoved: "removed from bookmarks",
+      bookmarked: "bookmarked",
+      clipSmall: "Clip area is too small",
+      cropReady: "Crop ready",
+      cropFirst: "Please crop a page first",
+      croppedPage: "Cropped patrika page",
+      cropAlt: "Cropped page",
+      linkCopied: "Reader link copied",
+      cropOn: "Drag on the page to crop",
+      cropOff: "Crop mode off",
+    },
+  }[readerLanguage];
   const patrikaByYear = new Map(yearOptions.map(function (option) {
     return [option.year, option];
   }));
@@ -104,10 +137,10 @@
       return;
     }
     if (bookmarks.length === 0) {
-      bookmarkList.innerHTML = "<h3>बुकमार्क</h3><p>अभी कोई बुकमार्क पेज नहीं है.</p>";
+      bookmarkList.innerHTML = `<h3>${text.bookmarks}</h3><p>${text.noBookmarks}</p>`;
       return;
     }
-    bookmarkList.innerHTML = "<h3>बुकमार्क</h3>" + bookmarks.map(function (bookmark) {
+    bookmarkList.innerHTML = `<h3>${text.bookmarks}</h3>` + bookmarks.map(function (bookmark) {
       return `<button type="button" data-bookmark-page="${bookmark.index}">${bookmark.label}</button>`;
     }).join("");
   }
@@ -187,7 +220,7 @@
       restorePageStageAnchor(anchor);
     });
     if (announce !== false) {
-      showToast(`ज़ूम ${Math.round(zoom * 100)}%`);
+      showToast(`${text.zoom} ${Math.round(zoom * 100)}%`);
     }
   }
 
@@ -275,7 +308,7 @@
 
     saveBookmarks(nextBookmarks);
     renderBookmarks();
-    showToast(exists ? `${page.title} बुकमार्क से हटाया गया` : `${page.title} बुकमार्क किया गया`);
+    showToast(exists ? `${page.title} ${text.bookmarkRemoved}` : `${page.title} ${text.bookmarked}`);
   }
 
   function setClipMode(nextMode) {
@@ -316,7 +349,7 @@
     const height = Math.abs(end.y - start.y);
 
     if (width < 24 || height < 24) {
-      showToast("क्लिप क्षेत्र बहुत छोटा है");
+      showToast(text.clipSmall);
       hideClipBox();
       return "";
     }
@@ -345,12 +378,12 @@
     cropPreview.src = imageUrl;
     cropResult.hidden = false;
     setClipMode(false);
-    showToast("क्रॉप तैयार है");
+    showToast(text.cropReady);
   }
 
   function downloadCurrentCrop() {
     if (!croppedImageUrl) {
-      showToast("कृपया पहले पेज क्रॉप करें");
+      showToast(text.cropFirst);
       return;
     }
     const link = document.createElement("a");
@@ -361,7 +394,7 @@
 
   async function shareCurrentCrop() {
     if (!croppedImageUrl) {
-      showToast("कृपया पहले पेज क्रॉप करें");
+      showToast(text.cropFirst);
       return;
     }
 
@@ -370,7 +403,7 @@
       const blob = await response.blob();
       const file = new File([blob], `patrika-page-${pageIndex + 1}-clip.png`, { type: "image/png" });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ title: document.title, text: "क्रॉप किया गया पत्रिका पेज", files: [file] });
+        await navigator.share({ title: document.title, text: text.croppedPage, files: [file] });
         return;
       }
     } catch (error) {
@@ -379,7 +412,7 @@
 
     const imageWindow = window.open("", "_blank", "noopener,noreferrer");
     if (imageWindow) {
-      imageWindow.document.write(`<img src="${croppedImageUrl}" alt="क्रॉप पेज" style="max-width:100%">`);
+      imageWindow.document.write(`<img src="${croppedImageUrl}" alt="${text.cropAlt}" style="max-width:100%">`);
     }
   }
 
@@ -397,7 +430,7 @@
   async function copyReaderLink() {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      showToast("रीडर लिंक कॉपी हो गया");
+      showToast(text.linkCopied);
     } catch (error) {
       showToast(window.location.href);
     }
@@ -488,7 +521,7 @@
       toggleBookmark();
     } else if (action === "clip") {
       setClipMode(!clipMode);
-      showToast(clipMode ? "क्रॉप करने के लिए पेज पर ड्रैग करें" : "क्रॉप मोड बंद");
+      showToast(clipMode ? text.cropOn : text.cropOff);
     } else if (action === "pages") {
       pagesDrawer.hidden = false;
     } else if (action === "close-pages") {

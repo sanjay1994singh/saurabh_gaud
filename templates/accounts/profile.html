@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}मेरी प्रोफाइल / My Profile{% endblock %}
+{% block title %}{{ ui.my_profile }}{% endblock %}
 
 {% block content %}
   <section class="profile-page">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">सदस्य प्रोफाइल / Member Profile</p>
-        <h1>मेरी प्रोफाइल</h1>
+        <p class="eyebrow">{{ ui.member_profile }}</p>
+        <h1>{{ ui.my_profile }}</h1>
       </div>
-      <a class="section-link" href="{% url 'subscriptions:plans' %}">सदस्यता लें</a>
+      <a class="section-link" href="{% url 'subscriptions:plans' %}">{{ ui.choose_membership }}</a>
     </div>
 
     <div class="profile-layout">
       <div class="profile-panel">
-        <h2>विवरण अपडेट करें</h2>
+        <h2>{{ ui.update_details }}</h2>
         <div class="profile-photo">
           {% if user.photo %}
             <img src="{{ user.photo.url }}" alt="{{ user.get_full_name|default:user.username }}">
@@ -32,12 +32,12 @@
               {{ field.errors }}
             </label>
           {% endfor %}
-          <button class="primary-action" type="submit">विवरण सेव करें</button>
+          <button class="primary-action" type="submit">{{ ui.save_details }}</button>
         </form>
       </div>
 
       <div class="profile-panel">
-        <h2>सदस्यता / Subscriptions</h2>
+        <h2>{{ ui.subscriptions }}</h2>
         <div class="membership-list">
           {% for membership in memberships %}
             <div class="membership-row">
@@ -45,31 +45,31 @@
                 <strong>{{ membership.plan.name }}</strong>
                 <span>{{ membership.status_label }}</span>
                 {% if membership.ends_at %}
-                  <small>मान्य {{ membership.ends_at|date:"d M Y" }} तक</small>
+                  <small>{{ membership.ends_at|date:"d M Y" }} {{ ui.valid_until }}</small>
                 {% endif %}
               </div>
             </div>
           {% empty %}
-            <p class="empty-state">अभी कोई सदस्यता नहीं ली गई है.</p>
+            <p class="empty-state">{{ ui.no_membership }}</p>
           {% endfor %}
         </div>
 
-        <h2>प्रमाणपत्र / Certificates</h2>
+        <h2>{{ ui.certificates }}</h2>
         <div class="membership-list">
           {% for certificate in certificates %}
             <div class="membership-row">
               <div>
                 <strong>{{ certificate.subscription.plan.name }}</strong>
                 <span>{{ certificate.certificate_number }}</span>
-                <small>जारी: {{ certificate.issued_at|date:"d M Y" }}</small>
+                <small>{{ ui.issued }}: {{ certificate.issued_at|date:"d M Y" }}</small>
               </div>
               <div class="certificate-actions">
-                <a class="section-link" href="{{ certificate.get_absolute_url }}">देखें</a>
-                <a class="section-link" href="{% url 'subscriptions:certificate_download' certificate.pk %}">डाउनलोड</a>
+                <a class="section-link" href="{{ certificate.get_absolute_url }}">{{ ui.view }}</a>
+                <a class="section-link" href="{% url 'subscriptions:certificate_download' certificate.pk %}">{{ ui.download }}</a>
               </div>
             </div>
           {% empty %}
-            <p class="empty-state">सक्रिय सदस्यता के बाद प्रमाणपत्र यहां दिखाई देगा.</p>
+            <p class="empty-state">{{ ui.no_certificates }}</p>
           {% endfor %}
         </div>
       </div>

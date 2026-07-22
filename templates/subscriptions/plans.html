@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}सदस्यता प्लान / Membership Plans{% endblock %}
+{% block title %}{{ ui.membership }}{% endblock %}
 
 {% block content %}
   <section class="page-intro">
-    <p class="eyebrow">सदस्यता / Membership</p>
-    <h1>अपनी सदस्यता चुनें</h1>
-    <p>पहले अकाउंट बनाएं या लॉगिन करें, फिर निशुल्क या पेड सदस्यता लेकर प्रोफाइल से प्रमाणपत्र डाउनलोड करें.</p>
+    <p class="eyebrow">{{ ui.membership }}</p>
+    <h1>{{ ui.choose_plan }}</h1>
+    <p>{{ ui.plans_desc }}</p>
   </section>
 
   <section class="section section-compact">
@@ -16,24 +16,24 @@
           <div>
             <p class="eyebrow">{{ plan.plan_type_label }}</p>
             <h2>{{ plan.name }}</h2>
-            <p>{{ plan.description|default:"धर्म रक्षा संघ सदस्यों के लिए सदस्यता." }}</p>
+            <p>{{ plan.description|default:ui.plans_desc }}</p>
           </div>
           <div>
             <strong class="plan-price">
               {% if plan.is_free %}
-                निशुल्क
+                {{ ui.free }}
               {% else %}
                 Rs. {{ plan.amount }}
               {% endif %}
             </strong>
-            <span class="plan-duration">{{ plan.duration_days }} दिन की वैधता</span>
+            <span class="plan-duration">{{ plan.duration_days }} {{ ui.days_validity }}</span>
             <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'login' %}?next={{ plan.get_absolute_url }}{% endif %}">
-              {% if user.is_authenticated %}अभी जुड़ें{% else %}लॉगिन करके लें{% endif %}
+              {% if user.is_authenticated %}{{ ui.join_now }}{% else %}{{ ui.login_to_join }}{% endif %}
             </a>
           </div>
         </article>
       {% empty %}
-        <p class="empty-state">अभी कोई सदस्यता प्लान उपलब्ध नहीं है. Django admin से प्लान जोड़ें.</p>
+        <p class="empty-state">{{ ui.no_plans }}</p>
       {% endfor %}
     </div>
   </section>

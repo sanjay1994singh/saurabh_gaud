@@ -4,17 +4,17 @@
 {% block title %}{{ patrika.title }}{% endblock %}
 
 {% block content %}
-  <article class="patrika-reader-page" data-patrika-reader data-patrika-id="{{ patrika.pk }}">
+  <article class="patrika-reader-page" data-patrika-reader data-patrika-id="{{ patrika.pk }}" data-reader-lang="{{ current_lang }}">
     {% if initial_page %}
-      <header class="patrika-toolbar" aria-label="पत्रिका रीडर टूलबार">
+      <header class="patrika-toolbar" aria-label="{{ ui.patrika_epaper }}">
         <div class="patrika-toolbar-title">
           <strong>{{ patrika.title }}</strong>
         </div>
-        <div class="patrika-toolbar-actions" aria-label="पत्रिका टूल्स">
+        <div class="patrika-toolbar-actions" aria-label="{{ ui.patrika }}">
           <label class="patrika-year-picker">
-            <span>वर्ष</span>
+            <span>{% if current_lang == "hi" %}वर्ष{% else %}Year{% endif %}</span>
             {% if year_options %}
-              <select id="patrikaYearPicker" aria-label="पत्रिका वर्ष">
+              <select id="patrikaYearPicker" aria-label="{% if current_lang == 'hi' %}पत्रिका वर्ष{% else %}Patrika year{% endif %}">
                 {% for option in year_options %}
                   <option value="{{ option.year }}" {% if option.year == current_year|stringformat:"s" %}selected{% endif %}>
                     {{ option.year }}
@@ -22,60 +22,60 @@
                 {% endfor %}
               </select>
             {% else %}
-              <span class="patrika-year-empty">उपलब्ध नहीं</span>
+              <span class="patrika-year-empty">{% if current_lang == "hi" %}उपलब्ध नहीं{% else %}Not available{% endif %}</span>
             {% endif %}
           </label>
-          <button class="patrika-icon-tool" type="button" data-patrika-action="reload" aria-label="पत्रिका रीलोड करें">रीलोड</button>
-          <button class="patrika-icon-tool" type="button" data-patrika-action="fit" aria-label="पेज फिट करें">फिट</button>
-          <button class="patrika-icon-tool" type="button" data-patrika-action="bookmark" aria-label="पेज सेव करें">सेव</button>
-          <button class="patrika-tool" type="button" data-patrika-action="clip">क्लिप</button>
-          <button class="patrika-icon-tool" type="button" data-patrika-action="print" aria-label="प्रिंट करें">प्रिंट</button>
-          <button class="patrika-icon-tool" type="button" data-patrika-action="fullscreen" aria-label="फुल स्क्रीन">फुल</button>
-          <button class="patrika-share whatsapp" type="button" data-patrika-action="share-whatsapp" aria-label="WhatsApp पर शेयर करें">WA</button>
-          <button class="patrika-share facebook" type="button" data-patrika-action="share-facebook" aria-label="Facebook पर शेयर करें">f</button>
-          <button class="patrika-share x" type="button" data-patrika-action="share-x" aria-label="X पर शेयर करें">X</button>
-          <button class="patrika-share copy" type="button" data-patrika-action="copy-link" aria-label="लिंक कॉपी करें">लिंक</button>
+          <button class="patrika-icon-tool" type="button" data-patrika-action="reload" aria-label="{{ ui.reload }}">{{ ui.reload }}</button>
+          <button class="patrika-icon-tool" type="button" data-patrika-action="fit" aria-label="{{ ui.fit }}">{{ ui.fit }}</button>
+          <button class="patrika-icon-tool" type="button" data-patrika-action="bookmark" aria-label="{{ ui.save }}">{{ ui.save }}</button>
+          <button class="patrika-tool" type="button" data-patrika-action="clip">{{ ui.clip }}</button>
+          <button class="patrika-icon-tool" type="button" data-patrika-action="print" aria-label="{{ ui.print }}">{{ ui.print }}</button>
+          <button class="patrika-icon-tool" type="button" data-patrika-action="fullscreen" aria-label="{{ ui.full }}">{{ ui.full }}</button>
+          <button class="patrika-share whatsapp" type="button" data-patrika-action="share-whatsapp" aria-label="WhatsApp">WA</button>
+          <button class="patrika-share facebook" type="button" data-patrika-action="share-facebook" aria-label="Facebook">f</button>
+          <button class="patrika-share x" type="button" data-patrika-action="share-x" aria-label="X">X</button>
+          <button class="patrika-share copy" type="button" data-patrika-action="copy-link" aria-label="{{ ui.link }}">{{ ui.link }}</button>
         </div>
       </header>
 
       <div class="patrika-reader-shell">
-        <button class="patrika-side-nav patrika-side-nav-prev" type="button" data-patrika-action="previous" aria-label="पिछला पेज">
+        <button class="patrika-side-nav patrika-side-nav-prev" type="button" data-patrika-action="previous" aria-label="{% if current_lang == 'hi' %}पिछला पेज{% else %}Previous page{% endif %}">
           <span aria-hidden="true"></span>
         </button>
-        <button class="patrika-side-nav patrika-side-nav-next" type="button" data-patrika-action="next" aria-label="अगला पेज">
+        <button class="patrika-side-nav patrika-side-nav-next" type="button" data-patrika-action="next" aria-label="{% if current_lang == 'hi' %}अगला पेज{% else %}Next page{% endif %}">
           <span aria-hidden="true"></span>
         </button>
 
-        <section class="patrika-page-stage" aria-label="पत्रिका पेज व्यूअर">
+        <section class="patrika-page-stage" aria-label="{{ ui.patrika }}">
           <div class="patrika-paper-frame" id="patrikaPaperFrame">
             <img id="patrikaPaperImage" src="{{ initial_page.image }}" alt="{{ initial_page.title }} patrika page">
             <div class="patrika-clip-box" id="patrikaClipBox" hidden></div>
           </div>
         </section>
 
-        <nav class="patrika-bottom-pager" aria-label="पेज नेविगेशन">
-          <button type="button" class="patrika-pager-command" data-patrika-action="pages">पेज</button>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="first" aria-label="पहला पेज">|<</button>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="previous" aria-label="पिछला पेज"><</button>
+        <nav class="patrika-bottom-pager" aria-label="{{ ui.pages }}">
+          <button type="button" class="patrika-pager-command" data-patrika-action="pages">{{ ui.pages }}</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="first" aria-label="{% if current_lang == 'hi' %}पहला पेज{% else %}First page{% endif %}">|<</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="previous" aria-label="{% if current_lang == 'hi' %}पिछला पेज{% else %}Previous page{% endif %}"><</button>
           <label class="patrika-page-select">
-            <span>पेज</span>
+            <span>{{ ui.page }}</span>
             <select id="patrikaPageSelect">
               {% for page in pages %}
                 <option value="{{ forloop.counter0 }}">{{ page.number|stringformat:"02d" }}</option>
               {% endfor %}
             </select>
-            <span>कुल {{ pages|length }}</span>
+            <span>{{ ui.total }} {{ pages|length }}</span>
           </label>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="next" aria-label="अगला पेज">></button>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="last" aria-label="अंतिम पेज">>|</button>
-          <button type="button" class="patrika-pager-command" data-patrika-action="clip">क्रॉप</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="next" aria-label="{% if current_lang == 'hi' %}अगला पेज{% else %}Next page{% endif %}">></button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="last" aria-label="{% if current_lang == 'hi' %}अंतिम पेज{% else %}Last page{% endif %}">>|</button>
+          <button type="button" class="patrika-pager-command" data-patrika-action="clip">{{ ui.crop }}</button>
         </nav>
       </div>
 
-      <aside class="patrika-pages-drawer" id="patrikaPagesDrawer" aria-label="सभी पेज" hidden>
+      <aside class="patrika-pages-drawer" id="patrikaPagesDrawer" aria-label="{{ ui.all_pages }}" hidden>
         <div class="drawer-header">
-          <h2>सभी पेज</h2>
-          <button type="button" class="patrika-icon-tool" data-patrika-action="close-pages" aria-label="पेज बंद करें">x</button>
+          <h2>{{ ui.all_pages }}</h2>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-pages" aria-label="{% if current_lang == 'hi' %}बंद करें{% else %}Close{% endif %}">x</button>
         </div>
         <div class="patrika-thumbnail-grid">
           {% for page in pages %}
@@ -87,13 +87,13 @@
         </div>
       </aside>
 
-      <aside class="patrika-menu-drawer" id="patrikaMenuDrawer" aria-label="रीडर मेनू" hidden>
+      <aside class="patrika-menu-drawer" id="patrikaMenuDrawer" aria-label="{{ ui.epaper_menu }}" hidden>
         <div class="drawer-header">
-          <h2>ई-पेपर मेनू</h2>
-          <button type="button" class="patrika-icon-tool" data-patrika-action="close-menu" aria-label="मेनू बंद करें">x</button>
+          <h2>{{ ui.epaper_menu }}</h2>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-menu" aria-label="{% if current_lang == 'hi' %}बंद करें{% else %}Close{% endif %}">x</button>
         </div>
         <div class="patrika-menu-title">
-          <p class="eyebrow">पत्रिका ई-पेपर</p>
+          <p class="eyebrow">{{ ui.patrika_epaper }}</p>
           <h1>{{ patrika.title }}</h1>
           <div class="detail-meta">
             {% if patrika.issue_name %}
@@ -105,53 +105,53 @@
             {% endif %}
           </div>
           <div class="patrika-menu-actions">
-            <a href="{{ patrika.pdf.url }}" download>डाउनलोड</a>
+            <a href="{{ patrika.pdf.url }}" download>{{ ui.download }}</a>
           </div>
         </div>
         <dl class="patrika-summary">
           <div>
-            <dt>अंक</dt>
+            <dt>{{ ui.issue }}</dt>
             <dd>{{ patrika.issue_name|default:patrika.title }}</dd>
           </div>
           <div>
-            <dt>दिनांक</dt>
+            <dt>{{ ui.date }}</dt>
             <dd>{{ patrika.date_label }}</dd>
           </div>
           <div>
-            <dt>पेज</dt>
+            <dt>{{ ui.pages }}</dt>
             <dd>{{ pages|length }}</dd>
           </div>
         </dl>
         <div class="patrika-bookmark-list" id="patrikaBookmarkList">
-          <h3>बुकमार्क</h3>
-          <p>अभी कोई बुकमार्क पेज नहीं है.</p>
+          <h3>{{ ui.bookmarks }}</h3>
+          <p>{{ ui.no_bookmarks }}</p>
         </div>
       </aside>
 
-      <aside class="patrika-crop-result" id="patrikaCropResult" aria-label="क्रॉप किया गया पेज" hidden>
+      <aside class="patrika-crop-result" id="patrikaCropResult" aria-label="{{ ui.cropped_page }}" hidden>
         <div class="drawer-header">
-          <h2>क्रॉप पेज</h2>
-          <button type="button" class="patrika-icon-tool" data-patrika-action="close-crop" aria-label="क्रॉप बंद करें">x</button>
+          <h2>{{ ui.cropped_page }}</h2>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-crop" aria-label="{% if current_lang == 'hi' %}बंद करें{% else %}Close{% endif %}">x</button>
         </div>
-        <img id="patrikaCropPreview" alt="क्रॉप किया गया पत्रिका पेज">
+        <img id="patrikaCropPreview" alt="{{ ui.cropped_page }}">
         <div class="patrika-crop-actions">
-          <button type="button" data-patrika-action="download-crop">डाउनलोड</button>
-          <button type="button" data-patrika-action="share-crop">शेयर</button>
-          <button type="button" data-patrika-action="new-crop">फिर क्रॉप करें</button>
+          <button type="button" data-patrika-action="download-crop">{{ ui.download }}</button>
+          <button type="button" data-patrika-action="share-crop">{{ ui.share }}</button>
+          <button type="button" data-patrika-action="new-crop">{{ ui.crop_again }}</button>
         </div>
       </aside>
 
       <div class="patrika-reader-toast" id="patrikaReaderToast" role="status" aria-live="polite" hidden></div>
     {% else %}
       <section class="patrika-empty-reader">
-        <h2>पेज इमेज अभी तैयार नहीं हैं.</h2>
+        <h2>{{ ui.page_images_pending }}</h2>
         {% if conversion_error %}
-          <p>इमेज रीडर पेज तैयार नहीं कर पाया: {{ conversion_error }}</p>
+          <p>{{ ui.reader_error }} {{ conversion_error }}</p>
         {% else %}
-          <p>इस पत्रिका को admin में खोलकर एक बार सेव करें, या Regenerate page images action चलाएं.</p>
+          <p>{{ ui.reader_admin_hint }}</p>
         {% endif %}
         <div class="detail-actions">
-          <a class="secondary-action" href="{{ patrika.pdf.url }}" download>PDF डाउनलोड</a>
+          <a class="secondary-action" href="{{ patrika.pdf.url }}" download>{{ ui.pdf_download }}</a>
         </div>
       </section>
     {% endif %}

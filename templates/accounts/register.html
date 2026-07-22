@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}सदस्यता जुड़ें / Join Membership{% endblock %}
+{% block title %}{{ ui.join }} {{ ui.membership }}{% endblock %}
 
 {% block content %}
   <section class="auth-page">
     <div class="auth-panel">
-      <p class="eyebrow">सदस्यता / Membership</p>
-      <h1>अपना अकाउंट बनाएं</h1>
+      <p class="eyebrow">{{ ui.membership }}</p>
+      <h1>{{ ui.create_account }}</h1>
       <a class="social-button" href="{% url 'social:begin' 'google-oauth2' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">
-        Google से जारी रखें
+        {{ ui.continue_google }}
       </a>
-      <div class="auth-divider"><span>या</span></div>
+      <div class="auth-divider"><span>{{ ui.or }}</span></div>
       <form method="post" class="form-stack">
         {% csrf_token %}
         {{ form.non_field_errors }}
@@ -21,9 +21,9 @@
             {{ field.errors }}
           </label>
         {% endfor %}
-        <button class="primary-action" type="submit">अकाउंट बनाएं</button>
+        <button class="primary-action" type="submit">{{ ui.create_account }}</button>
       </form>
-      <p class="form-note">पहले से रजिस्टर हैं? <a class="text-link" href="{% url 'login' %}">लॉगिन करें</a></p>
+      <p class="form-note">{{ ui.already_registered }} <a class="text-link" href="{% url 'login' %}">{{ ui.login }}</a></p>
     </div>
   </section>
 {% endblock %}

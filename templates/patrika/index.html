@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}पत्रिका / Patrika{% endblock %}
+{% block title %}{{ ui.patrika }}{% endblock %}
 
 {% block content %}
   <section class="page-intro">
-    <p class="eyebrow">प्रकाशन / Publications</p>
-    <h1>पत्रिका</h1>
-    <p>धर्म रक्षा संघ की अपलोड की गई पत्रिकाएं पढ़ें और डाउनलोड करें.</p>
+    <p class="eyebrow">{{ ui.publications }}</p>
+    <h1>{{ ui.patrika }}</h1>
+    <p>{{ ui.patrika_desc }}</p>
   </section>
 
   {% if featured_patrika %}
@@ -20,7 +20,7 @@
           {% endif %}
         </a>
         <div class="patrika-feature-body">
-          <p class="eyebrow">विशेष अंक / Featured Issue</p>
+          <p class="eyebrow">{{ ui.featured_issue }}</p>
           <h2>{{ featured_patrika.title }}</h2>
           <div class="card-meta">
             {% if featured_patrika.issue_name %}
@@ -31,10 +31,10 @@
               <span>{{ featured_patrika.file_size_label }}</span>
             {% endif %}
           </div>
-          <p>{{ featured_patrika.short_description|default:featured_patrika.description|default:"इस अंक को ऑनलाइन पढ़ें या PDF डाउनलोड करें."|truncatewords:34 }}</p>
+          <p>{{ featured_patrika.short_description|default:featured_patrika.description|default:ui.patrika_desc|truncatewords:34 }}</p>
           <div class="detail-actions">
-            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">पत्रिका पढ़ें</a>
-            <a class="secondary-action" href="{{ featured_patrika.pdf.url }}" download>PDF डाउनलोड</a>
+            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">{{ ui.read_epaper }}</a>
+            <a class="secondary-action" href="{{ featured_patrika.pdf.url }}" download>{{ ui.pdf_download }}</a>
           </div>
         </div>
       </div>
@@ -60,15 +60,15 @@
               <span>{{ patrika.date_label }}</span>
             </div>
             <h2><a href="{{ patrika.get_absolute_url }}">{{ patrika.title }}</a></h2>
-            <p>{{ patrika.short_description|default:patrika.description|default:"इस पत्रिका को ऑनलाइन पढ़ें या PDF डाउनलोड करें."|truncatewords:22 }}</p>
+            <p>{{ patrika.short_description|default:patrika.description|default:ui.patrika_desc|truncatewords:22 }}</p>
             <div class="patrika-card-actions">
-              <a class="text-link" href="{{ patrika.get_absolute_url }}">पत्रिका पढ़ें</a>
-              <a class="text-link" href="{{ patrika.pdf.url }}" download>डाउनलोड</a>
+              <a class="text-link" href="{{ patrika.get_absolute_url }}">{{ ui.read_epaper }}</a>
+              <a class="text-link" href="{{ patrika.pdf.url }}" download>{{ ui.download }}</a>
             </div>
           </div>
         </article>
       {% empty %}
-        <p class="empty-state">अभी कोई पत्रिका PDF उपलब्ध नहीं है. Admin > Patrika से जोड़ें.</p>
+        <p class="empty-state">{{ ui.no_patrika }}</p>
       {% endfor %}
     </div>
   </section>

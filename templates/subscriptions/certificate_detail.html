@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}प्रमाणपत्र {{ certificate.certificate_number }}{% endblock %}
+{% block title %}{{ ui.certificate }} {{ certificate.certificate_number }}{% endblock %}
 
 {% block content %}
   <section class="certificate-page">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">सदस्यता प्रमाणपत्र / Membership Certificate</p>
+        <p class="eyebrow">{{ ui.certificate }}</p>
         <h1>{{ certificate.certificate_number }}</h1>
       </div>
       <div class="certificate-actions">
-        <a class="section-link" href="{% url 'accounts:profile' %}">प्रोफाइल पर वापस</a>
-        <a class="primary-action" href="{% url 'subscriptions:certificate_download' certificate.pk %}">डाउनलोड</a>
+        <a class="section-link" href="{% url 'accounts:profile' %}">{{ ui.back_profile }}</a>
+        <a class="primary-action" href="{% url 'subscriptions:certificate_download' certificate.pk %}">{{ ui.download }}</a>
       </div>
     </div>
 

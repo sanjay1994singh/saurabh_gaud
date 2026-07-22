@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}कार्यक्रम / Events{% endblock %}
+{% block title %}{{ ui.events }}{% endblock %}
 
 {% block content %}
   <section class="page-intro">
-    <p class="eyebrow">कार्यक्रम / Events</p>
-    <h1>कार्यक्रम</h1>
-    <p>धर्म रक्षा संघ के स्थायी, वर्तमान, विशेष और पूर्व कार्यक्रम.</p>
+    <p class="eyebrow">{{ ui.events }}</p>
+    <h1>{{ ui.events }}</h1>
+    <p>{{ ui.events_desc }}</p>
   </section>
 
   {% if featured_events %}
     <section class="section section-compact">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">विशेष / Featured</p>
-          <h2>विशेष कार्यक्रम</h2>
+          <p class="eyebrow">{{ ui.featured }}</p>
+          <h2>{{ ui.featured_events }}</h2>
         </div>
       </div>
       <div class="event-grid event-featured-grid">
@@ -28,15 +28,15 @@
   <section class="section section-compact">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">स्थायी / Any Time</p>
-        <h2>स्थायी कार्यक्रम</h2>
+        <p class="eyebrow">{{ ui.any_time }}</p>
+        <h2>{{ ui.any_time_events }}</h2>
       </div>
     </div>
     <div class="event-grid">
       {% for event in permanent_events %}
         {% include "events/partials/event_card.html" with event=event %}
       {% empty %}
-        <p class="empty-state">अभी कोई स्थायी कार्यक्रम उपलब्ध नहीं है.</p>
+        <p class="empty-state">{{ ui.no_events }}</p>
       {% endfor %}
     </div>
   </section>
@@ -44,15 +44,15 @@
   <section class="section section-compact">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">वर्तमान / Present</p>
-        <h2>वर्तमान कार्यक्रम</h2>
+        <p class="eyebrow">{% if current_lang == "hi" %}वर्तमान{% else %}Current{% endif %}</p>
+        <h2>{{ ui.current_events }}</h2>
       </div>
     </div>
     <div class="event-grid">
       {% for event in present_events %}
         {% include "events/partials/event_card.html" with event=event %}
       {% empty %}
-        <p class="empty-state">अभी कोई वर्तमान कार्यक्रम उपलब्ध नहीं है.</p>
+        <p class="empty-state">{{ ui.no_events }}</p>
       {% endfor %}
     </div>
   </section>
@@ -60,15 +60,15 @@
   <section class="section section-compact">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">पूर्व / Past</p>
-        <h2>पूर्व कार्यक्रम</h2>
+        <p class="eyebrow">{% if current_lang == "hi" %}पूर्व{% else %}Past{% endif %}</p>
+        <h2>{{ ui.past_events }}</h2>
       </div>
     </div>
     <div class="event-grid">
       {% for event in past_events %}
         {% include "events/partials/event_card.html" with event=event %}
       {% empty %}
-        <p class="empty-state">अभी कोई पूर्व कार्यक्रम उपलब्ध नहीं है.</p>
+        <p class="empty-state">{{ ui.no_events }}</p>
       {% endfor %}
     </div>
   </section>

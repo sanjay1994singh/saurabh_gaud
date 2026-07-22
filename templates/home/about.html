@@ -1,29 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}हमारे बारे में | {{ site_name }}{% endblock %}
+{% block title %}{{ ui.about }} | {{ ui.site_name }}{% endblock %}
 
 {% block content %}
   <section class="page-intro about-intro">
-    <p class="eyebrow">Dharm Raksha Sangh</p>
-    <h1>हमारे बारे में</h1>
-    <p>सनातन धर्म, संस्कृति और सेवा के संरक्षण हेतु संकल्पित संगठन।</p>
+    <p class="eyebrow">{{ ui.site_name }}</p>
+    <h1>{{ ui.about }}</h1>
+    <p>
+      {% if current_lang == "hi" %}
+        सनातन धर्म, संस्कृति और सेवा के संरक्षण हेतु संकल्पित संगठन.
+      {% else %}
+        An organization dedicated to protecting Sanatan Dharma, culture, and service values.
+      {% endif %}
+    </p>
   </section>
 
   <section class="section section-compact">
     <article class="about-panel">
       <div class="about-copy">
-        <p>
-          श्री राम नवमी संवत 2060 तदनुसार दिनांक 11 अप्रैल 2003 शुक्रवार को भारत के प्रसिद्ध संत, धर्माचार्य एवं धर्म सेवकों के सान्निध्य में धर्म रक्षा संघ की स्थापना की गई जिसके संस्थापक अध्यक्ष पद पर श्री सौरभ गौड़ को आसीन किया गया।
-        </p>
-        <p>
-          आज से 20 वर्ष पूर्व धर्म रक्षा संघ के रूप में रोपा गया पौधा आज वटवृक्ष बनकर धार्मिक और सामाजिक क्षेत्र में अपनी शीतल छाया प्रदान कर रहा है। धर्म रक्षा संघ मठ-मंदिर, आश्रम, धार्मिक स्थलों एवं वैदिक सनातन धर्म की रक्षा के साथ भारतीय संस्कृति सनातन संस्कृति के प्रचार प्रसार हेतु हमेशा तत्पर रहता है।
-        </p>
-        <p>
-          विगत दिनों में धर्म रक्षा संघ ने कुछ सनातन धर्म की रक्षा हेतु उल्लेखनीय कार्य किए हैं जिनमें वृन्दावन के प्रसिद्ध ठाकुर श्री बांके बिहारी मंदिर के पास मुस्लिम समाज द्वारा बनाई गई अनाधिकृत मस्जिद को बंद कराना, तत्कालीन अखिलेश सरकार द्वारा वृन्दावन में बांकेबिहारी मंदिर के अधिग्रहण को रुकवाना, धर्म रक्षा संघ के प्रयासों से उत्तर प्रदेश की योगी सरकार ने वृन्दावन ही नहीं अपितु ब्रज के मथुरा समेत अनेक स्थानों को तीर्थ स्थल घोषित कर अंडा शराब एवं मांसाहार पर रोक लगाई।
-        </p>
-        <p>
-          श्री कृष्ण जन्मभूमि मुक्ति हेतु मथुरा अदालत में प्रथम याचिका धर्म रक्षा संघ द्वारा प्रस्तुत की गयी है। इनके अलावा अनेक प्रकार के धार्मिक और सामाजिक आयोजन तथा सेवा कार्य धर्म रक्षा संघ द्वारा किए जाते रहे हैं।
-        </p>
+        {% if current_lang == "hi" %}
+          <p>
+            श्री राम नवमी संवत 2060 तदनुसार दिनांक 11 अप्रैल 2003 शुक्रवार को भारत के प्रसिद्ध संत, धर्माचार्य एवं धर्म सेवकों के सान्निध्य में धर्म रक्षा संघ की स्थापना की गई, जिसके संस्थापक अध्यक्ष पद पर श्री सौरभ गौड़ को आसीन किया गया.
+          </p>
+          <p>
+            धर्म रक्षा संघ मठ-मंदिर, आश्रम, धार्मिक स्थलों एवं वैदिक सनातन धर्म की रक्षा के साथ भारतीय संस्कृति और सनातन संस्कृति के प्रचार-प्रसार हेतु हमेशा तत्पर रहता है.
+          </p>
+          <p>
+            संगठन ने वृन्दावन, ब्रज और सनातन धर्म से जुड़े अनेक धार्मिक, सांस्कृतिक और सामाजिक विषयों पर उल्लेखनीय कार्य किए हैं.
+          </p>
+        {% else %}
+          <p>
+            Dharm Raksha Sangh was established on Shri Ram Navami, April 11, 2003, in the presence of respected saints, dharmacharyas, and dharma sevaks. Shri Saurabh Gaud was appointed as the founding president.
+          </p>
+          <p>
+            The Sangh works for the protection of temples, ashrams, sacred places, Vedic Sanatan Dharma, and the promotion of Indian cultural values.
+          </p>
+          <p>
+            Over the years, the organization has worked on several religious, cultural, and social issues connected with Vrindavan, Braj, and Sanatan Dharma.
+          </p>
+        {% endif %}
       </div>
     </article>
   </section>

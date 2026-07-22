@@ -9,4 +9,5 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("donate/", views.donate, name="donate"),
     path("contact/", views.contact, name="contact"),
+    path("language/", views.set_language, name="set_language"),
 ]

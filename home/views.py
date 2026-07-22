@@ -1,9 +1,12 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from hamare_stambh.models import HamareStambh
 from patrika.models import Patrika
 from seva_prakalp.models import SevaPrakalp
+
+from .language import LANGUAGE_COOKIE_NAME, LANGUAGE_SESSION_KEY, SUPPORTED_LANGUAGES
 
 
 def index(request):
@@ -38,3 +41,13 @@ def donate(request):
 
 def contact(request):
     return render(request, "home/contact.html", {"site_name": settings.SITE_NAME})
+
+
+def set_language(request):
+    language = request.POST.get("language") or request.GET.get("language")
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or reverse("home:index")
+    response = redirect(next_url)
+    if language in SUPPORTED_LANGUAGES:
+        request.session[LANGUAGE_SESSION_KEY] = language
+        response.set_cookie(LANGUAGE_COOKIE_NAME, language, max_age=60 * 60 * 24 * 365, samesite="Lax")
+    return response

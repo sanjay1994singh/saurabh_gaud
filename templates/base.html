@@ -1,10 +1,10 @@
 <!doctype html>
 {% load static %}
-<html lang="hi">
+<html lang="{{ current_lang|default:'hi' }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Dharm Raksha Sangh{% endblock %}</title>
+  <title>{% block title %}{{ ui.site_name|default:"Dharm Raksha Sangh" }}{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
 </head>
 <body>
@@ -12,33 +12,39 @@
     <nav class="site-nav">
       <a class="brand" href="{% url 'home:index' %}">
         <span class="brand-mark">D</span>
-        <span>Dharm Raksha Sangh</span>
+        <span>{{ ui.site_name }}</span>
       </a>
-      <input class="nav-toggle" id="siteNavToggle" type="checkbox" aria-label="Menu kholen">
+      <input class="nav-toggle" id="siteNavToggle" type="checkbox" aria-label="{{ ui.nav_toggle }}">
       <label class="nav-toggle-button" for="siteNavToggle" aria-hidden="true">
         <span></span>
         <span></span>
         <span></span>
       </label>
       <div class="nav-links">
-        <a href="{% url 'home:index' %}">होम / Home</a>
-        <a href="{% url 'home:about' %}">परिचय / About</a>
-        <a href="/contact/">संपर्क / Contact</a>
-        <a href="{% url 'events:index' %}">कार्यक्रम / Events</a>
-        <a href="{% url 'seva_prakalp:index' %}">सेवा प्रकल्प</a>
-        <a href="{% url 'hamare_stambh:index' %}">हमारे स्तंभ</a>
-        <a href="{% url 'patrika:index' %}">पत्रिका</a>
-        <a href="{% url 'subscriptions:plans' %}">सदस्यता</a>
-        <a class="donate-nav" href="/donate/">दान करें</a>
+        <a href="{% url 'home:index' %}">{{ ui.home }}</a>
+        <a href="{% url 'home:about' %}">{{ ui.about }}</a>
+        <a href="/contact/">{{ ui.contact }}</a>
+        <a href="{% url 'events:index' %}">{{ ui.events }}</a>
+        <a href="{% url 'seva_prakalp:index' %}">{{ ui.seva_prakalp }}</a>
+        <a href="{% url 'hamare_stambh:index' %}">{{ ui.hamare_stambh }}</a>
+        <a href="{% url 'patrika:index' %}">{{ ui.patrika }}</a>
+        <a href="{% url 'subscriptions:plans' %}">{{ ui.membership }}</a>
+        <a class="donate-nav" href="/donate/">{{ ui.donate }}</a>
+        <form class="language-switcher" method="post" action="{% url 'home:set_language' %}" aria-label="{{ ui.language }}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" name="language" value="hi" class="{% if current_lang == 'hi' %}is-active{% endif %}">हिन्दी</button>
+          <button type="submit" name="language" value="en" class="{% if current_lang == 'en' %}is-active{% endif %}">English</button>
+        </form>
         {% if user.is_authenticated %}
           <a class="user-chip" href="{% url 'accounts:profile' %}">{{ user.get_username }}</a>
           <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button class="link-button" type="submit">लॉगआउट</button>
+            <button class="link-button" type="submit">{{ ui.logout }}</button>
           </form>
         {% else %}
-          <a href="{% url 'login' %}">लॉगिन</a>
-          <a href="{% url 'accounts:register' %}">जुड़ें</a>
+          <a href="{% url 'login' %}">{{ ui.login }}</a>
+          <a href="{% url 'accounts:register' %}">{{ ui.join }}</a>
         {% endif %}
       </div>
     </nav>
@@ -60,20 +66,20 @@
       <div>
         <a class="brand footer-brand" href="{% url 'home:index' %}">
           <span class="brand-mark">D</span>
-          <span>Dharm Raksha Sangh</span>
+          <span>{{ ui.site_name }}</span>
         </a>
-        <p>संगठित सेवा प्रकल्प, सांस्कृतिक मूल्यों और समाज सेवा के माध्यम से राष्ट्रधर्म की सेवा.</p>
+        <p>{{ ui.footer_about }}</p>
       </div>
       <div class="footer-links">
-        <a href="{% url 'home:index' %}">होम</a>
-        <a href="{% url 'home:about' %}">परिचय</a>
-        <a href="/contact/">संपर्क</a>
-        <a href="{% url 'events:index' %}">कार्यक्रम</a>
-        <a href="{% url 'seva_prakalp:index' %}">सेवा प्रकल्प</a>
-        <a href="{% url 'hamare_stambh:index' %}">हमारे स्तंभ</a>
-        <a href="{% url 'patrika:index' %}">पत्रिका</a>
-        <a href="{% url 'subscriptions:plans' %}">सदस्यता</a>
-        <a href="/donate/">दान करें</a>
+        <a href="{% url 'home:index' %}">{{ ui.home }}</a>
+        <a href="{% url 'home:about' %}">{{ ui.about }}</a>
+        <a href="/contact/">{{ ui.contact }}</a>
+        <a href="{% url 'events:index' %}">{{ ui.events }}</a>
+        <a href="{% url 'seva_prakalp:index' %}">{{ ui.seva_prakalp }}</a>
+        <a href="{% url 'hamare_stambh:index' %}">{{ ui.hamare_stambh }}</a>
+        <a href="{% url 'patrika:index' %}">{{ ui.patrika }}</a>
+        <a href="{% url 'subscriptions:plans' %}">{{ ui.membership }}</a>
+        <a href="/donate/">{{ ui.donate }}</a>
       </div>
     </div>
   </footer>

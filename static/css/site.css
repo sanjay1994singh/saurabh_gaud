@@ -108,6 +108,34 @@ img {
   background: #bd5f18;
 }
 
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 3px;
+}
+
+.language-switcher button {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  padding: 7px 9px;
+}
+
+.language-switcher button.is-active {
+  background: var(--green);
+  color: #fff;
+}
+
 .user-chip {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -290,9 +318,15 @@ img {
   box-shadow: var(--shadow);
 }
 
+.home-header-banner picture {
+  display: block;
+}
+
 .home-header-banner img {
+  display: block;
   width: 100%;
-  height: clamp(160px, 20vw, 260px);
+  height: auto;
+  max-height: 300px;
   object-fit: cover;
   object-position: center;
 }
@@ -1981,6 +2015,15 @@ p {
     width: 100%;
   }
 
+  .nav-links .language-switcher {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .nav-links .language-switcher button {
+    flex: 1 1 0;
+  }
+
   .nav-links a,
   .nav-links .link-button {
     display: flex;
@@ -2005,7 +2048,7 @@ p {
   }
 
   .home-header-banner img {
-    height: clamp(140px, 26vw, 220px);
+    max-height: 260px;
   }
 
   .hero h1 {
@@ -2105,7 +2148,8 @@ p {
   }
 
   .home-header-banner img {
-    height: 145px;
+    max-height: none;
+    aspect-ratio: 1 / 1;
     object-position: center;
   }
 

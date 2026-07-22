@@ -1,39 +1,45 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}दान करें / Donate Now | {{ site_name }}{% endblock %}
+{% block title %}{{ ui.donate }} | {{ ui.site_name }}{% endblock %}
 
 {% block content %}
   <section class="page-intro">
-    <p class="eyebrow">सेवा सहयोग / Seva Sahyog</p>
-    <h1>दान करें</h1>
-    <p>धर्म रक्षा संघ के धार्मिक, सांस्कृतिक और सेवा कार्यों में सहयोग हेतु दान करें।</p>
+    <p class="eyebrow">{% if current_lang == "hi" %}सेवा सहयोग{% else %}Seva Sahyog{% endif %}</p>
+    <h1>{{ ui.donate }}</h1>
+    <p>
+      {% if current_lang == "hi" %}
+        धर्म रक्षा संघ के धार्मिक, सांस्कृतिक और सेवा कार्यों में सहयोग हेतु दान करें.
+      {% else %}
+        Donate to support the religious, cultural, and service work of Dharm Raksha Sangh.
+      {% endif %}
+    </p>
   </section>
 
   <section class="section section-compact">
     <div class="donation-layout">
       <div class="donation-panel">
-        <p class="eyebrow">बैंक विवरण / Bank Details</p>
-        <h2>खाता जानकारी</h2>
+        <p class="eyebrow">{{ ui.bank_details }}</p>
+        <h2>{{ ui.account_info }}</h2>
         <dl class="bank-details">
           <div>
-            <dt>नाम / Name</dt>
+            <dt>{% if current_lang == "hi" %}नाम{% else %}Name{% endif %}</dt>
             <dd>DHARM RAKSHA SANGH</dd>
           </div>
           <div>
-            <dt>चालू खाता संख्या</dt>
+            <dt>{% if current_lang == "hi" %}चालू खाता संख्या{% else %}Current Account Number{% endif %}</dt>
             <dd>101705500235</dd>
           </div>
           <div>
-            <dt>बैंक का नाम</dt>
+            <dt>{% if current_lang == "hi" %}बैंक का नाम{% else %}Bank Name{% endif %}</dt>
             <dd>ICICI Bank</dd>
           </div>
           <div>
-            <dt>IFSC कोड</dt>
+            <dt>{% if current_lang == "hi" %}IFSC कोड{% else %}IFSC Code{% endif %}</dt>
             <dd>ICIC0001017</dd>
           </div>
           <div>
-            <dt>शाखा / Branch</dt>
+            <dt>{% if current_lang == "hi" %}शाखा{% else %}Branch{% endif %}</dt>
             <dd>Vrindavan</dd>
           </div>
           <div>
@@ -44,15 +50,19 @@
       </div>
 
       <div class="donation-panel qr-panel">
-        <p class="eyebrow">स्कैन करें और दान दें</p>
-        <img src="{% static 'donation/qr.png' %}" alt="धर्म रक्षा संघ दान QR code">
+        <p class="eyebrow">{{ ui.scan_donate }}</p>
+        <img src="{% static 'donation/qr.png' %}" alt="{{ ui.donate }} QR code">
       </div>
     </div>
 
     <div class="tax-note">
-      <strong>80-G एवं 12-A कर छूट</strong>
+      <strong>80-G {% if current_lang == "hi" %}एवं{% else %}and{% endif %} 12-A {% if current_lang == "hi" %}कर छूट{% else %}tax exemption{% endif %}</strong>
       <p>
-        आयकर की धारा 80-G एवं 12-A के अंतर्गत कर राशि में छूट प्राप्त करने हेतु मान्य Vide URNO.
+        {% if current_lang == "hi" %}
+          आयकर की धारा 80-G एवं 12-A के अंतर्गत कर राशि में छूट प्राप्त करने हेतु मान्य Vide URNO.
+        {% else %}
+          Valid for tax exemption under sections 80-G and 12-A vide URNO.
+        {% endif %}
         AACTD6153HE20221 Valid upto AY 2025.
       </p>
     </div>

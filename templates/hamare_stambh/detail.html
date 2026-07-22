@@ -10,7 +10,7 @@
       {% endif %}
 
       <div class="detail-content">
-        <p class="eyebrow">हमारे स्तंभ</p>
+        <p class="eyebrow">{{ ui.hamare_stambh }}</p>
         <h1>{{ stambh.name }}</h1>
 
         <div class="detail-meta">
@@ -32,8 +32,8 @@
           {{ stambh.content|linebreaks }}
         </div>
         <div class="detail-actions">
-          <a class="secondary-action" href="{% url 'hamare_stambh:index' %}">हमारे स्तंभ पर वापस</a>
-          <a class="primary-action" href="{% url 'home:index' %}">होम</a>
+          <a class="secondary-action" href="{% url 'hamare_stambh:index' %}">{{ ui.back_stambh }}</a>
+          <a class="primary-action" href="{% url 'home:index' %}">{{ ui.home }}</a>
         </div>
       </div>
     </div>

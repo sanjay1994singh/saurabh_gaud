@@ -14,7 +14,7 @@
         <div class="detail-meta">
           <span>{{ event.date_label }}</span>
           {% if event.end_date %}
-            <span>से {{ event.end_date|date:"d M Y" }} तक</span>
+            <span>{% if current_lang == "hi" %}से{% else %}to{% endif %} {{ event.end_date|date:"d M Y" }}</span>
           {% endif %}
           {% if event.start_time %}
             <span>{{ event.start_time|time:"g:i A" }}</span>
@@ -30,7 +30,7 @@
           {{ event.description|linebreaks }}
         </div>
         <div class="detail-actions">
-          <a class="secondary-action" href="{% url 'events:index' %}">कार्यक्रमों पर वापस</a>
+          <a class="secondary-action" href="{% url 'events:index' %}">{{ ui.back_events }}</a>
         </div>
       </div>
     </div>
