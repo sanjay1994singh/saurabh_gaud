@@ -37,11 +37,19 @@
           <button type="submit" name="language" value="en" class="{% if current_lang == 'en' %}is-active{% endif %}">English</button>
         </form>
         {% if user.is_authenticated %}
-          <a class="user-chip" href="{% url 'accounts:profile' %}">{{ user.get_username }}</a>
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button class="link-button" type="submit">{{ ui.logout }}</button>
-          </form>
+          <details class="account-menu">
+            <summary>
+              <span class="account-avatar">{{ user.get_username|first|upper }}</span>
+              <span class="account-name">{{ user.get_username }}</span>
+            </summary>
+            <div class="account-dropdown">
+              <a href="{% url 'accounts:profile' %}">{{ ui.my_profile }}</a>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">{{ ui.logout }}</button>
+              </form>
+            </div>
+          </details>
         {% else %}
           <a href="{% url 'login' %}">{{ ui.login }}</a>
           <a href="{% url 'accounts:register' %}">{{ ui.join }}</a>

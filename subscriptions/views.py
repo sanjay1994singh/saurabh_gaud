@@ -167,13 +167,55 @@ def get_certificate_background_data_uri():
     return f"data:image/jpeg;base64,{encoded}"
 
 
+def get_certificate_address(user):
+    state_name = user.state_obj.name if user.state_obj_id else user.state
+    country_name = user.country.name if user.country_id else ""
+    raw_parts = (user.address, user.city, state_name, country_name)
+    parts = []
+    for part in raw_parts:
+        value = str(part).strip() if part else ""
+        if value and value not in parts:
+            parts.append(value)
+    return ", ".join(parts) or "N/A"
+
+
+def wrap_certificate_text(text, limit=72):
+    words = text.split()
+    if not words:
+        return ["N/A"]
+
+    lines = []
+    current = ""
+    for word in words:
+        next_line = f"{current} {word}".strip()
+        if current and len(next_line) > limit:
+            lines.append(current)
+            current = word
+        else:
+            current = next_line
+
+    if current:
+        lines.append(current)
+    return lines
+
+
+def build_address_markup(address):
+    lines = wrap_certificate_text(address)
+    font_size = 34 if len(lines) == 1 else 28
+    line_height = 38
+    start_y = 1625 - ((len(lines) - 1) * line_height // 2)
+    return "\n".join(
+        f'  <text x="1104" y="{start_y + index * line_height}" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="{font_size}" fill="#5b1f0d">{escape(line)}</text>'
+        for index, line in enumerate(lines)
+    )
+
+
 def build_certificate_svg(certificate, photo_data_uri=""):
     subscription = certificate.subscription
     user = certificate.user
     full_name = user.get_full_name() or user.get_username()
     member_type = subscription.plan.name
-    address_parts = [part for part in (user.address, user.city) if part]
-    address = ", ".join(address_parts) or "N/A"
+    address_markup = build_address_markup(get_certificate_address(user))
     background_data_uri = get_certificate_background_data_uri()
     background_markup = (
         f'<image href="{background_data_uri}" x="0" y="0" width="2208" height="2989"/>'
@@ -195,7 +237,7 @@ def build_certificate_svg(certificate, photo_data_uri=""):
   {background_markup}
   {photo_markup}
   <text x="1104" y="1550" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="58" fill="#5b1f0d" font-weight="700">{escape(full_name)}</text>
-  <text x="1104" y="1625" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="34" fill="#5b1f0d">{escape(address)}</text>
+{address_markup}
   <text x="1104" y="2048" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="74" fill="#5b1f0d" font-weight="700">{escape(member_type)}</text>
 </svg>"""
 
