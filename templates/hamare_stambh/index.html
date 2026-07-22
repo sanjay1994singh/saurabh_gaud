@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Hamare Stambh{% endblock %}
+{% block title %}हमारे स्तंभ / Hamare Stambh{% endblock %}
 
 {% block content %}
   <section class="page-intro stambh-intro">
-    <p class="eyebrow">Our Pillars</p>
-    <h1>Hamare Stambh</h1>
-    <p>The people who guide, serve, and strengthen Dharm Raksha Sangh.</p>
+    <p class="eyebrow">हमारे स्तंभ / Our Pillars</p>
+    <h1>हमारे स्तंभ</h1>
+    <p>वे व्यक्तित्व जो धर्म रक्षा संघ को दिशा, सेवा और शक्ति देते हैं.</p>
   </section>
 
   <section class="section section-compact">
@@ -26,16 +26,16 @@
                 <span>{{ stambh.designation }}</span>
               {% endif %}
               {% if stambh.is_featured %}
-                <span>Featured</span>
+                <span>विशेष</span>
               {% endif %}
             </div>
             <h2><a href="{{ stambh.get_absolute_url }}">{{ stambh.name }}</a></h2>
             <p>{{ stambh.short_description|default:stambh.content|truncatewords:24 }}</p>
-            <a class="text-link" href="{{ stambh.get_absolute_url }}">Read details</a>
+            <a class="text-link" href="{{ stambh.get_absolute_url }}">विवरण पढ़ें</a>
           </div>
         </article>
       {% empty %}
-        <p class="empty-state">No hamare stambh entries are available yet.</p>
+        <p class="empty-state">अभी कोई स्तंभ जानकारी उपलब्ध नहीं है.</p>
       {% endfor %}
     </div>
   </section>

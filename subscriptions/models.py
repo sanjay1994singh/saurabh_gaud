@@ -47,6 +47,10 @@ class SubscriptionPlan(models.Model):
         return self.plan_type == self.FREE or self.amount == 0
 
     @property
+    def plan_type_label(self):
+        return "निशुल्क" if self.is_free else "पेड / Paid"
+
+    @property
     def certificate_member_type(self):
         return self.member_type_text or self.name
 
@@ -87,6 +91,16 @@ class MembershipSubscription(models.Model):
     @property
     def is_active(self):
         return self.status == self.ACTIVE and (self.ends_at is None or self.ends_at >= timezone.now())
+
+    @property
+    def status_label(self):
+        labels = {
+            self.PENDING: "लंबित",
+            self.ACTIVE: "सक्रिय",
+            self.FAILED: "असफल",
+            self.EXPIRED: "समाप्त",
+        }
+        return labels.get(self.status, self.get_status_display())
 
     def activate(self):
         now = timezone.now()

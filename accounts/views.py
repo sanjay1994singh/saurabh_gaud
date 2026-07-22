@@ -17,7 +17,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Account created successfully. Choose your membership.")
+            messages.success(request, "अकाउंट बन गया है. कृपया सदस्यता चुनें.")
             return redirect("subscriptions:plans")
     else:
         form = RegisterForm()
@@ -41,7 +41,7 @@ def profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, "Profile updated.")
+            messages.success(request, "प्रोफाइल अपडेट हो गई.")
             return redirect("accounts:profile")
     else:
         form = ProfileForm(instance=request.user)

@@ -65,16 +65,16 @@ class Event(models.Model):
     @property
     def status_label(self):
         if self.is_permanent:
-            return "Permanent Event"
-        return "Past Event" if self.is_past else "Present Event"
+            return "स्थायी कार्यक्रम"
+        return "पूर्व कार्यक्रम" if self.is_past else "वर्तमान कार्यक्रम"
 
     @property
     def date_label(self):
         if self.is_permanent and self.recurring_month and self.recurring_day:
-            return f"Every {self.get_recurring_month_display()} {self.recurring_day}"
+            return f"हर वर्ष {self.get_recurring_month_display()} {self.recurring_day}"
         if self.start_date:
             return self.start_date.strftime("%d %b %Y")
-        return "Any time"
+        return "कभी भी"
 
     def clean(self):
         super().clean()

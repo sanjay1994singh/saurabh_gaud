@@ -1,39 +1,39 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Donate Now | {{ site_name }}{% endblock %}
+{% block title %}दान करें / Donate Now | {{ site_name }}{% endblock %}
 
 {% block content %}
   <section class="page-intro">
-    <p class="eyebrow">Seva Sahyog</p>
-    <h1>Donate Now</h1>
+    <p class="eyebrow">सेवा सहयोग / Seva Sahyog</p>
+    <h1>दान करें</h1>
     <p>धर्म रक्षा संघ के धार्मिक, सांस्कृतिक और सेवा कार्यों में सहयोग हेतु दान करें।</p>
   </section>
 
   <section class="section section-compact">
     <div class="donation-layout">
       <div class="donation-panel">
-        <p class="eyebrow">Bank Details</p>
-        <h2>Account Information</h2>
+        <p class="eyebrow">बैंक विवरण / Bank Details</p>
+        <h2>खाता जानकारी</h2>
         <dl class="bank-details">
           <div>
-            <dt>Name</dt>
+            <dt>नाम / Name</dt>
             <dd>DHARM RAKSHA SANGH</dd>
           </div>
           <div>
-            <dt>Current A/c No</dt>
+            <dt>चालू खाता संख्या</dt>
             <dd>101705500235</dd>
           </div>
           <div>
-            <dt>Bank Name</dt>
+            <dt>बैंक का नाम</dt>
             <dd>ICICI Bank</dd>
           </div>
           <div>
-            <dt>IFSC Code</dt>
+            <dt>IFSC कोड</dt>
             <dd>ICIC0001017</dd>
           </div>
           <div>
-            <dt>Branch</dt>
+            <dt>शाखा / Branch</dt>
             <dd>Vrindavan</dd>
           </div>
           <div>
@@ -44,8 +44,8 @@
       </div>
 
       <div class="donation-panel qr-panel">
-        <p class="eyebrow">Scan And Donate</p>
-        <img src="{% static 'donation/qr.png' %}" alt="Dharm Raksha Sangh donation QR code">
+        <p class="eyebrow">स्कैन करें और दान दें</p>
+        <img src="{% static 'donation/qr.png' %}" alt="धर्म रक्षा संघ दान QR code">
       </div>
     </div>
 

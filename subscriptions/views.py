@@ -60,10 +60,10 @@ def join(request, slug):
         if duplicate_count:
             messages.info(
                 request,
-                f"You already have an active {plan.name} membership. Duplicate certificates were removed.",
+                f"आपकी {plan.name} सदस्यता पहले से सक्रिय है. Duplicate certificates हटा दिए गए.",
             )
         else:
-            messages.info(request, f"You already have an active {plan.name} membership.")
+            messages.info(request, f"आपकी {plan.name} सदस्यता पहले से सक्रिय है.")
         return redirect("accounts:profile")
 
     if plan.is_free:
@@ -73,7 +73,7 @@ def join(request, slug):
             status=MembershipSubscription.PENDING,
         )
         subscription.activate()
-        messages.success(request, "Your free membership is active. Certificate generated.")
+        messages.success(request, "आपकी निशुल्क सदस्यता सक्रिय हो गई है. प्रमाणपत्र बन गया है.")
         return redirect("accounts:profile")
 
     subscription = MembershipSubscription.objects.create(
@@ -91,7 +91,7 @@ def join(request, slug):
     except (RazorpayConfigurationError, RazorpayOrderError) as exc:
         subscription.status = MembershipSubscription.FAILED
         subscription.save(update_fields=("status", "updated_at"))
-        messages.error(request, f"Payment could not start: {exc}")
+        messages.error(request, f"भुगतान शुरू नहीं हो सका: {exc}")
         return redirect("subscriptions:plans")
 
     subscription.razorpay_order_id = order["id"]
@@ -127,7 +127,7 @@ def payment_success(request):
     if not verify_payment_signature(order_id=order_id, payment_id=payment_id, signature=signature):
         subscription.status = MembershipSubscription.FAILED
         subscription.save(update_fields=("status", "updated_at"))
-        messages.error(request, "Payment verification failed. Please contact admin if money was deducted.")
+        messages.error(request, "भुगतान सत्यापन असफल रहा. यदि पैसे कट गए हैं तो admin से संपर्क करें.")
         return redirect("subscriptions:plans")
 
     subscription.razorpay_payment_id = payment_id
@@ -135,7 +135,7 @@ def payment_success(request):
     subscription.save(update_fields=("razorpay_payment_id", "razorpay_signature", "updated_at"))
     subscription.activate()
     delete_duplicate_active_plan_certificates(request.user, subscription.plan)
-    messages.success(request, "Payment successful. Your membership and certificate are ready.")
+    messages.success(request, "भुगतान सफल रहा. आपकी सदस्यता और प्रमाणपत्र तैयार हैं.")
     return redirect("accounts:profile")
 
 
@@ -205,7 +205,7 @@ def certificate_detail(request, pk):
     certificate = get_object_or_404(Certificate, pk=pk, user=request.user)
     subscription = certificate.subscription
     if not subscription.is_active:
-        raise Http404("Certificate is available only for active memberships.")
+        raise Http404("प्रमाणपत्र केवल सक्रिय सदस्यता के लिए उपलब्ध है.")
 
     return render(
         request,
@@ -223,7 +223,7 @@ def certificate_download(request, pk):
     certificate = get_object_or_404(Certificate, pk=pk, user=request.user)
     subscription = certificate.subscription
     if not subscription.is_active:
-        raise Http404("Certificate is available only for active memberships.")
+        raise Http404("प्रमाणपत्र केवल सक्रिय सदस्यता के लिए उपलब्ध है.")
 
     svg = build_certificate_svg(certificate, get_member_photo_data_uri(request.user))
     response = HttpResponse(svg, content_type="image/svg+xml")

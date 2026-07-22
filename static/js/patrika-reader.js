@@ -104,10 +104,10 @@
       return;
     }
     if (bookmarks.length === 0) {
-      bookmarkList.innerHTML = "<h3>Bookmarks</h3><p>No bookmarked pages yet.</p>";
+      bookmarkList.innerHTML = "<h3>बुकमार्क</h3><p>अभी कोई बुकमार्क पेज नहीं है.</p>";
       return;
     }
-    bookmarkList.innerHTML = "<h3>Bookmarks</h3>" + bookmarks.map(function (bookmark) {
+    bookmarkList.innerHTML = "<h3>बुकमार्क</h3>" + bookmarks.map(function (bookmark) {
       return `<button type="button" data-bookmark-page="${bookmark.index}">${bookmark.label}</button>`;
     }).join("");
   }
@@ -187,7 +187,7 @@
       restorePageStageAnchor(anchor);
     });
     if (announce !== false) {
-      showToast(`Zoom ${Math.round(zoom * 100)}%`);
+      showToast(`ज़ूम ${Math.round(zoom * 100)}%`);
     }
   }
 
@@ -275,7 +275,7 @@
 
     saveBookmarks(nextBookmarks);
     renderBookmarks();
-    showToast(exists ? `${page.title} removed from bookmarks` : `${page.title} bookmarked`);
+    showToast(exists ? `${page.title} बुकमार्क से हटाया गया` : `${page.title} बुकमार्क किया गया`);
   }
 
   function setClipMode(nextMode) {
@@ -316,7 +316,7 @@
     const height = Math.abs(end.y - start.y);
 
     if (width < 24 || height < 24) {
-      showToast("Clip area is too small");
+      showToast("क्लिप क्षेत्र बहुत छोटा है");
       hideClipBox();
       return "";
     }
@@ -345,12 +345,12 @@
     cropPreview.src = imageUrl;
     cropResult.hidden = false;
     setClipMode(false);
-    showToast("Crop ready");
+    showToast("क्रॉप तैयार है");
   }
 
   function downloadCurrentCrop() {
     if (!croppedImageUrl) {
-      showToast("Please crop a page first");
+      showToast("कृपया पहले पेज क्रॉप करें");
       return;
     }
     const link = document.createElement("a");
@@ -361,7 +361,7 @@
 
   async function shareCurrentCrop() {
     if (!croppedImageUrl) {
-      showToast("Please crop a page first");
+      showToast("कृपया पहले पेज क्रॉप करें");
       return;
     }
 
@@ -370,7 +370,7 @@
       const blob = await response.blob();
       const file = new File([blob], `patrika-page-${pageIndex + 1}-clip.png`, { type: "image/png" });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ title: document.title, text: "Cropped patrika page", files: [file] });
+        await navigator.share({ title: document.title, text: "क्रॉप किया गया पत्रिका पेज", files: [file] });
         return;
       }
     } catch (error) {
@@ -379,7 +379,7 @@
 
     const imageWindow = window.open("", "_blank", "noopener,noreferrer");
     if (imageWindow) {
-      imageWindow.document.write(`<img src="${croppedImageUrl}" alt="Cropped page" style="max-width:100%">`);
+      imageWindow.document.write(`<img src="${croppedImageUrl}" alt="क्रॉप पेज" style="max-width:100%">`);
     }
   }
 
@@ -397,7 +397,7 @@
   async function copyReaderLink() {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      showToast("Reader link copied");
+      showToast("रीडर लिंक कॉपी हो गया");
     } catch (error) {
       showToast(window.location.href);
     }
@@ -488,7 +488,7 @@
       toggleBookmark();
     } else if (action === "clip") {
       setClipMode(!clipMode);
-      showToast(clipMode ? "Drag on the page to crop" : "Crop mode off");
+      showToast(clipMode ? "क्रॉप करने के लिए पेज पर ड्रैग करें" : "क्रॉप मोड बंद");
     } else if (action === "pages") {
       pagesDrawer.hidden = false;
     } else if (action === "close-pages") {

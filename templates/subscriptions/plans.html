@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Membership Plans{% endblock %}
+{% block title %}सदस्यता प्लान / Membership Plans{% endblock %}
 
 {% block content %}
   <section class="page-intro">
-    <p class="eyebrow">Membership</p>
-    <h1>Choose your subscription</h1>
-    <p>Create an account or login first, then join a free or paid membership and download your certificate from profile.</p>
+    <p class="eyebrow">सदस्यता / Membership</p>
+    <h1>अपनी सदस्यता चुनें</h1>
+    <p>पहले अकाउंट बनाएं या लॉगिन करें, फिर निशुल्क या पेड सदस्यता लेकर प्रोफाइल से प्रमाणपत्र डाउनलोड करें.</p>
   </section>
 
   <section class="section section-compact">
@@ -14,26 +14,26 @@
       {% for plan in plan_list %}
         <article class="plan-card">
           <div>
-            <p class="eyebrow">{{ plan.get_plan_type_display }}</p>
+            <p class="eyebrow">{{ plan.plan_type_label }}</p>
             <h2>{{ plan.name }}</h2>
-            <p>{{ plan.description|default:"Membership for Dharm Raksha Sangh members." }}</p>
+            <p>{{ plan.description|default:"धर्म रक्षा संघ सदस्यों के लिए सदस्यता." }}</p>
           </div>
           <div>
             <strong class="plan-price">
               {% if plan.is_free %}
-                Free
+                निशुल्क
               {% else %}
                 Rs. {{ plan.amount }}
               {% endif %}
             </strong>
-            <span class="plan-duration">{{ plan.duration_days }} days validity</span>
+            <span class="plan-duration">{{ plan.duration_days }} दिन की वैधता</span>
             <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'login' %}?next={{ plan.get_absolute_url }}{% endif %}">
-              {% if user.is_authenticated %}Join now{% else %}Login to buy{% endif %}
+              {% if user.is_authenticated %}अभी जुड़ें{% else %}लॉगिन करके लें{% endif %}
             </a>
           </div>
         </article>
       {% empty %}
-        <p class="empty-state">No membership plans are available yet. Add plans from Django admin.</p>
+        <p class="empty-state">अभी कोई सदस्यता प्लान उपलब्ध नहीं है. Django admin से प्लान जोड़ें.</p>
       {% endfor %}
     </div>
   </section>
