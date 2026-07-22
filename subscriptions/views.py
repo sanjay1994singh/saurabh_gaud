@@ -233,7 +233,7 @@ def build_certificate_svg(certificate, photo_data_uri=""):
   <rect x="914" y="998" width="352" height="388" fill="#ffffff"/>
   <text x="1090" y="1245" text-anchor="middle" font-family="Arial, sans-serif" font-size="150" fill="#7b2435" font-weight="700">{initial}</text>"""
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="2208" height="2989" viewBox="0 0 2208 2989">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2208 2989" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;max-width:2208px;height:auto;background:#fff8c7;">
   {background_markup}
   {photo_markup}
   <text x="1104" y="1550" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="58" fill="#5b1f0d" font-weight="700">{escape(full_name)}</text>

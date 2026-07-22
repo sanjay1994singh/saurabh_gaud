@@ -945,16 +945,11 @@ p {
 }
 
 .photo-field-actions {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  align-items: stretch;
+  display: block;
 }
 
 .photo-gallery-control {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
+  display: block;
 }
 
 .photo-gallery-control > span,
@@ -972,6 +967,11 @@ p {
   padding: 8px 10px;
   font-weight: 900;
   text-align: center;
+}
+
+.photo-gallery-control > span,
+.photo-camera-control {
+  display: none;
 }
 
 .photo-gallery-control input[type="file"] {
@@ -2872,14 +2872,29 @@ p {
   }
 
   .photo-field-actions {
+    display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
   }
 
+  .photo-gallery-control {
+    position: relative;
+  }
+
   .photo-gallery-control > span,
   .photo-camera-control {
+    display: inline-flex;
     min-height: 46px;
     white-space: normal;
+  }
+
+  .photo-gallery-control input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .bank-details div {
