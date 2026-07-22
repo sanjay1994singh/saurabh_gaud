@@ -12,13 +12,21 @@
         {% if next_url %}
           <input type="hidden" name="next" value="{{ next_url }}">
         {% endif %}
+        {% if is_membership_join %}
+          <input type="hidden" name="password1" value="{{ membership_join_password }}">
+          <input type="hidden" name="password2" value="{{ membership_join_password }}">
+        {% endif %}
         {{ form.non_field_errors }}
         {% for field in form %}
-          <label>
-            <span>{{ field.label }}</span>
-            {{ field }}
-            {{ field.errors }}
-          </label>
+          {% if is_membership_join and field.name == "password1" %}
+          {% elif is_membership_join and field.name == "password2" %}
+          {% else %}
+            <label>
+              <span>{{ field.label }}</span>
+              {{ field }}
+              {{ field.errors }}
+            </label>
+          {% endif %}
         {% endfor %}
         <button class="primary-action" type="submit">{{ ui.create_account }}</button>
       </form>

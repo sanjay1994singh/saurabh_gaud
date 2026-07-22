@@ -134,7 +134,7 @@ RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "")
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.google.GoogleOAuth2",
-    "django.contrib.auth.backends.ModelBackend",
+    "accounts.backends.EmailPhoneUsernameBackend",
 )
 
 SOCIAL_AUTH_URL_NAMESPACE = "social"

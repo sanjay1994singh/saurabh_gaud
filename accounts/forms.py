@@ -1,8 +1,13 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.text import slugify
 
 from .models import Country, State, User
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label="ईमेल / मोबाइल / Username")
 
 
 def _india_country():

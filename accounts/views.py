@@ -10,6 +10,8 @@ from .models import State
 from subscriptions.models import MembershipSubscription
 from subscriptions.views import delete_duplicate_active_plan_certificates
 
+MEMBERSHIP_JOIN_PASSWORD = "Darmraksha@123"
+
 
 def _safe_next_url(request):
     next_url = request.POST.get("next") or request.GET.get("next") or ""
@@ -18,8 +20,13 @@ def _safe_next_url(request):
     return ""
 
 
+def _is_membership_join_url(next_url):
+    return next_url.startswith("/subscriptions/join/")
+
+
 def register(request):
     next_url = _safe_next_url(request)
+    is_membership_join = _is_membership_join_url(next_url)
 
     if request.user.is_authenticated:
         if next_url:
@@ -27,10 +34,14 @@ def register(request):
         return redirect("accounts:profile")
 
     if request.method == "POST":
-        form = RegisterForm(request.POST, request.FILES)
+        post_data = request.POST.copy()
+        if is_membership_join:
+            post_data["password1"] = MEMBERSHIP_JOIN_PASSWORD
+            post_data["password2"] = MEMBERSHIP_JOIN_PASSWORD
+        form = RegisterForm(post_data, request.FILES)
         if form.is_valid():
             user = form.save()
-            login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+            login(request, user, backend="accounts.backends.EmailPhoneUsernameBackend")
             messages.success(request, "अकाउंट बन गया है. कृपया सदस्यता चुनें.")
             if next_url:
                 return redirect(next_url)
@@ -38,7 +49,16 @@ def register(request):
     else:
         form = RegisterForm()
 
-    return render(request, "accounts/register.html", {"form": form, "next_url": next_url})
+    return render(
+        request,
+        "accounts/register.html",
+        {
+            "form": form,
+            "next_url": next_url,
+            "is_membership_join": is_membership_join,
+            "membership_join_password": MEMBERSHIP_JOIN_PASSWORD,
+        },
+    )
 
 
 def states_for_country(request):
