@@ -4,7 +4,8 @@ from uuid import uuid4
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
-from PIL import Image, ImageOps
+
+from dharm_raksha_sangh.image_utils import optimize_image_file
 
 
 def patrika_pdf_upload_to(instance, filename):
@@ -83,18 +84,7 @@ class Patrika(models.Model):
             self._resize_cover_image()
 
     def _resize_cover_image(self):
-        image_path = Path(self.cover_image.path)
-        if not image_path.exists():
-            return
-
-        with Image.open(image_path) as image:
-            image = ImageOps.exif_transpose(image).convert("RGB")
-            image = ImageOps.fit(image, (900, 1200), method=Image.Resampling.LANCZOS)
-            image_format = "PNG" if image_path.suffix.lower() == ".png" else "JPEG"
-            save_kwargs = {"optimize": True}
-            if image_format == "JPEG":
-                save_kwargs["quality"] = 90
-            image.save(image_path, image_format, **save_kwargs)
+        optimize_image_file(self.cover_image.path, fit_size=(900, 1200), quality=82, background="#ffffff")
 
 
 class PatrikaPage(models.Model):
@@ -109,3 +99,8 @@ class PatrikaPage(models.Model):
 
     def __str__(self):
         return f"{self.patrika} page {self.number:02d}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            optimize_image_file(self.image.path, max_size=(1800, 2400), quality=82, background="#ffffff")

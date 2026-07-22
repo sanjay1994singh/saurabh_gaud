@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from dharm_raksha_sangh.image_utils import optimize_image_file
+
 
 class Banner(models.Model):
     HEADER_TOP = "header_top"
@@ -39,6 +41,11 @@ class Banner(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.get_placement_display()})"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            optimize_image_file(self.image.path, max_size=(1800, 600), quality=82, background="#ffffff")
 
     @property
     def is_live(self):

@@ -1,8 +1,7 @@
-from pathlib import Path
-
 from django.db import models
 from django.urls import reverse
-from PIL import Image, ImageOps
+
+from dharm_raksha_sangh.image_utils import optimize_image_file
 
 
 class SevaPrakalp(models.Model):
@@ -35,15 +34,4 @@ class SevaPrakalp(models.Model):
             self._resize_prakalp_image()
 
     def _resize_prakalp_image(self):
-        image_path = Path(self.image.path)
-        if not image_path.exists():
-            return
-
-        with Image.open(image_path) as image:
-            image = ImageOps.exif_transpose(image).convert("RGB")
-            image = ImageOps.fit(image, (1200, 760), method=Image.Resampling.LANCZOS)
-            image_format = "PNG" if image_path.suffix.lower() == ".png" else "JPEG"
-            save_kwargs = {"optimize": True}
-            if image_format == "JPEG":
-                save_kwargs["quality"] = 90
-            image.save(image_path, image_format, **save_kwargs)
+        optimize_image_file(self.image.path, fit_size=(1200, 760), quality=82, background="#e7eee4")

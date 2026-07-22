@@ -7,7 +7,7 @@
     <div class="auth-panel register-panel">
       <p class="eyebrow">{{ ui.membership }}</p>
       <h1>{{ ui.create_account }}</h1>
-      <form method="post" class="form-stack">
+      <form method="post" enctype="multipart/form-data" class="form-stack">
         {% csrf_token %}
         {% if next_url %}
           <input type="hidden" name="next" value="{{ next_url }}">
