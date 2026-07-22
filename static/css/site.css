@@ -2149,7 +2149,6 @@ p {
 
   .home-header-banner img {
     max-height: none;
-    aspect-ratio: 1 / 1;
     object-position: center;
   }
 
