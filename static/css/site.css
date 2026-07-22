@@ -931,6 +931,70 @@ p {
   font-weight: 800;
 }
 
+.photo-field {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.register-panel .photo-field {
+  gap: 4px;
+  font-size: 13px;
+}
+
+.photo-field-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.photo-gallery-control {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.photo-gallery-control > span,
+.photo-camera-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fffaf2;
+  color: var(--maroon);
+  cursor: pointer;
+  padding: 8px 10px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.photo-gallery-control input[type="file"] {
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+}
+
+.photo-camera-control {
+  background: var(--green);
+  color: #fff;
+  white-space: nowrap;
+}
+
+.photo-camera-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .register-panel .form-stack input,
 .register-panel .form-stack textarea,
 .register-panel .form-stack select {
@@ -2752,6 +2816,22 @@ p {
     font-size: 28px;
   }
 
+  .certificate-page {
+    padding: 26px 0 42px;
+  }
+
+  .certificate-preview {
+    overflow: hidden;
+    padding: 8px;
+  }
+
+  .certificate-preview svg {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+  }
+
   .card-body h2,
   .card-body h3 {
     min-height: 0;
@@ -2789,6 +2869,17 @@ p {
 
   .profile-username-field {
     flex-basis: min(100%, 220px);
+  }
+
+  .photo-field-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .photo-gallery-control > span,
+  .photo-camera-control {
+    min-height: 46px;
+    white-space: normal;
   }
 
   .bank-details div {

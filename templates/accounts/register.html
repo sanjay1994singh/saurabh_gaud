@@ -20,6 +20,21 @@
         {% for field in form %}
           {% if is_membership_join and field.name == "password1" %}
           {% elif is_membership_join and field.name == "password2" %}
+          {% elif field.name == "photo" %}
+            <div class="photo-field">
+              <span>{{ field.label }}</span>
+              <div class="photo-field-actions">
+                <label class="photo-gallery-control">
+                  <span>{% if current_lang == "hi" %}गैलरी से चुनें{% else %}Choose from gallery{% endif %}</span>
+                  {{ field }}
+                </label>
+                <label class="photo-camera-control" for="{{ field.id_for_label }}_camera">
+                  {% if current_lang == "hi" %}कैमरा से फोटो लें{% else %}Take photo{% endif %}
+                </label>
+                <input class="photo-camera-input" id="{{ field.id_for_label }}_camera" name="{{ field.html_name }}" type="file" accept="image/*" capture="user">
+              </div>
+              {{ field.errors }}
+            </div>
           {% else %}
             <label>
               <span>{{ field.label }}</span>

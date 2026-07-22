@@ -14,6 +14,12 @@ def _india_country():
     return Country.objects.filter(code="IN", is_active=True).first()
 
 
+def _default_state(country):
+    if not country:
+        return None
+    return State.objects.filter(country=country, name__iexact="Uttar Pradesh", is_active=True).first()
+
+
 def _configure_location_fields(form, selected_country=None):
     form.fields["country"].queryset = Country.objects.filter(is_active=True)
     form.fields["state_obj"].queryset = State.objects.none()
@@ -27,6 +33,10 @@ def _configure_location_fields(form, selected_country=None):
 
     if selected_country:
         form.fields["state_obj"].queryset = State.objects.filter(country=selected_country, is_active=True)
+        if not form.is_bound and not form.initial.get("state_obj"):
+            default_state = _default_state(selected_country)
+            if default_state:
+                form.fields["state_obj"].initial = default_state
 
 
 class RegisterForm(UserCreationForm):
@@ -57,6 +67,7 @@ class RegisterForm(UserCreationForm):
             "state_obj": "राज्य / State",
         }
         widgets = {
+            "photo": forms.ClearableFileInput(attrs={"accept": "image/*"}),
             "address": forms.Textarea(attrs={"rows": 2}),
             "country": forms.Select(attrs={"data-country-select": "true"}),
         }
@@ -111,6 +122,7 @@ class ProfileForm(forms.ModelForm):
             "state_obj": "राज्य / State",
         }
         widgets = {
+            "photo": forms.ClearableFileInput(attrs={"accept": "image/*"}),
             "address": forms.Textarea(attrs={"rows": 3}),
             "country": forms.Select(attrs={"data-country-select": "true"}),
         }
