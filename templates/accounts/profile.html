@@ -13,30 +13,7 @@
     </div>
 
     <div class="profile-layout">
-      <div class="profile-panel">
-        <h2>{{ ui.update_details }}</h2>
-        <div class="profile-photo">
-          {% if user.photo %}
-            <img src="{{ user.photo.url }}" alt="{{ user.get_full_name|default:user.username }}">
-          {% else %}
-            <span>{{ user.get_username|slice:":1" }}</span>
-          {% endif %}
-        </div>
-        <form method="post" enctype="multipart/form-data" class="form-stack">
-          {% csrf_token %}
-          {{ form.non_field_errors }}
-          {% for field in form %}
-            <label>
-              <span>{{ field.label }}</span>
-              {{ field }}
-              {{ field.errors }}
-            </label>
-          {% endfor %}
-          <button class="primary-action" type="submit">{{ ui.save_details }}</button>
-        </form>
-      </div>
-
-      <div class="profile-panel">
+      <div class="profile-panel profile-membership-panel">
         <h2>{{ ui.subscriptions }}</h2>
         <div class="membership-list">
           {% for membership in memberships %}
@@ -72,6 +49,29 @@
             <p class="empty-state">{{ ui.no_certificates }}</p>
           {% endfor %}
         </div>
+      </div>
+
+      <div class="profile-panel profile-details-panel">
+        <h2>{{ ui.update_details }}</h2>
+        <div class="profile-photo">
+          {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="{{ user.get_full_name|default:user.username }}">
+          {% else %}
+            <span>{{ user.get_username|slice:":1" }}</span>
+          {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data" class="form-stack">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          {% for field in form %}
+            <label>
+              <span>{{ field.label }}</span>
+              {{ field }}
+              {{ field.errors }}
+            </label>
+          {% endfor %}
+          <button class="primary-action" type="submit">{{ ui.save_details }}</button>
+        </form>
       </div>
     </div>
   </section>

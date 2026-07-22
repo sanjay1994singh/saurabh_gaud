@@ -992,7 +992,7 @@ p {
 
 .profile-layout {
   display: grid;
-  grid-template-columns: minmax(280px, 430px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 430px);
   gap: 24px;
   align-items: start;
 }
