@@ -1,9 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ site_name }}{% endblock %}
 
 {% block content %}
   <section class="hero">
+    <div class="home-header-banner">
+      <img src="{% static 'banners/home_header_compact.jpg' %}" alt="Dharm Raksha Sangh">
+    </div>
     <div class="hero-content">
       <p class="eyebrow">Seva. Sanskar. Samarpan.</p>
       <h1>{{ site_name }}</h1>

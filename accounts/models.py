@@ -71,9 +71,22 @@ class User(AbstractUser):
         except ImportError:
             return None
 
-        gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
-        cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-        faces = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(60, 60))
+        cascade_classifier = getattr(cv2, "CascadeClassifier", None)
+        cvt_color = getattr(cv2, "cvtColor", None)
+        color_rgb_to_gray = getattr(cv2, "COLOR_RGB2GRAY", None)
+        haarcascades = getattr(getattr(cv2, "data", None), "haarcascades", "")
+        if not all([cascade_classifier, cvt_color, color_rgb_to_gray, haarcascades]):
+            return None
+
+        try:
+            gray = cvt_color(np.array(image), color_rgb_to_gray)
+            cascade = cascade_classifier(haarcascades + "haarcascade_frontalface_default.xml")
+            if hasattr(cascade, "empty") and cascade.empty():
+                return None
+            faces = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(60, 60))
+        except Exception:
+            return None
+
         if len(faces) == 0:
             return None
 
