@@ -922,6 +922,15 @@ p {
   font: inherit;
 }
 
+.form-stack input:disabled,
+.form-stack textarea:disabled,
+.form-stack select:disabled {
+  background: #f0ece4;
+  color: var(--maroon);
+  cursor: not-allowed;
+  font-weight: 800;
+}
+
 .register-panel .form-stack input,
 .register-panel .form-stack textarea,
 .register-panel .form-stack select {
@@ -1026,6 +1035,22 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.profile-identity-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-identity-row .profile-photo {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
+.profile-username-field {
+  flex: 1 1 180px;
+  min-width: 0;
 }
 
 .membership-list {
@@ -2755,6 +2780,15 @@ p {
   .membership-row {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .profile-identity-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .profile-username-field {
+    flex-basis: min(100%, 220px);
   }
 
   .bank-details div {

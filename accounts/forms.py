@@ -94,9 +94,11 @@ class RegisterForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
+    username = forms.CharField(label="Username", required=False, disabled=True)
+
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "phone", "photo", "address", "city", "country", "state_obj")
+        fields = ("username", "first_name", "last_name", "email", "phone", "photo", "address", "city", "country", "state_obj")
         labels = {
             "first_name": "नाम / First name",
             "last_name": "उपनाम / Last name",
