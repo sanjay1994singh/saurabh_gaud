@@ -2,14 +2,26 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .forms import ProfileForm, RegisterForm
 from subscriptions.models import MembershipSubscription
 from subscriptions.views import delete_duplicate_active_plan_certificates
 
 
+def _safe_next_url(request):
+    next_url = request.POST.get("next") or request.GET.get("next") or ""
+    if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return next_url
+    return ""
+
+
 def register(request):
+    next_url = _safe_next_url(request)
+
     if request.user.is_authenticated:
+        if next_url:
+            return redirect(next_url)
         return redirect("accounts:profile")
 
     if request.method == "POST":
@@ -18,11 +30,13 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, "अकाउंट बन गया है. कृपया सदस्यता चुनें.")
+            if next_url:
+                return redirect(next_url)
             return redirect("subscriptions:plans")
     else:
         form = RegisterForm()
 
-    return render(request, "accounts/register.html", {"form": form})
+    return render(request, "accounts/register.html", {"form": form, "next_url": next_url})
 
 
 @login_required

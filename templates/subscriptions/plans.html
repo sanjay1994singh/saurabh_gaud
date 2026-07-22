@@ -27,8 +27,8 @@
               {% endif %}
             </strong>
             <span class="plan-duration">{{ plan.duration_days }} {{ ui.days_validity }}</span>
-            <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'login' %}?next={{ plan.get_absolute_url }}{% endif %}">
-              {% if user.is_authenticated %}{{ ui.join_now }}{% else %}{{ ui.login_to_join }}{% endif %}
+            <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'accounts:register' %}?next={{ plan.get_absolute_url }}{% endif %}">
+              {{ ui.join }}
             </a>
           </div>
         </article>

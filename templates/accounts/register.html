@@ -13,6 +13,9 @@
       <div class="auth-divider"><span>{{ ui.or }}</span></div>
       <form method="post" class="form-stack">
         {% csrf_token %}
+        {% if next_url %}
+          <input type="hidden" name="next" value="{{ next_url }}">
+        {% endif %}
         {{ form.non_field_errors }}
         {% for field in form %}
           <label>
