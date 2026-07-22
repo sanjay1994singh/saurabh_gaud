@@ -4,13 +4,9 @@
 
 {% block content %}
   <section class="auth-page">
-    <div class="auth-panel">
+    <div class="auth-panel register-panel">
       <p class="eyebrow">{{ ui.membership }}</p>
       <h1>{{ ui.create_account }}</h1>
-      <a class="social-button" href="{% url 'social:begin' 'google-oauth2' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">
-        {{ ui.continue_google }}
-      </a>
-      <div class="auth-divider"><span>{{ ui.or }}</span></div>
       <form method="post" class="form-stack">
         {% csrf_token %}
         {% if next_url %}
@@ -27,6 +23,12 @@
         <button class="primary-action" type="submit">{{ ui.create_account }}</button>
       </form>
       <p class="form-note">{{ ui.already_registered }} <a class="text-link" href="{% url 'login' %}">{{ ui.login }}</a></p>
+      <div class="social-auth-section">
+        <div class="auth-divider"><span>{{ ui.or }}</span></div>
+        <a class="social-button" href="{% url 'social:begin' 'google-oauth2' %}{% if next_url %}?next={{ next_url|urlencode }}{% elif request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">
+          {{ ui.continue_google }}
+        </a>
+      </div>
     </div>
   </section>
 {% endblock %}

@@ -728,6 +728,13 @@ p {
   padding: 34px;
 }
 
+.register-panel {
+  width: min(100%, 560px);
+  max-height: calc(100vh - 116px);
+  overflow-y: auto;
+  padding: 24px 28px;
+}
+
 .auth-panel h1,
 .profile-page h1 {
   margin-bottom: 20px;
@@ -735,9 +742,18 @@ p {
   line-height: 1.12;
 }
 
+.register-panel h1 {
+  margin-bottom: 14px;
+  font-size: 32px;
+}
+
 .form-stack {
   display: grid;
   gap: 16px;
+}
+
+.register-panel .form-stack {
+  gap: 10px;
 }
 
 .social-button {
@@ -769,6 +785,16 @@ p {
   text-transform: uppercase;
 }
 
+.social-auth-section {
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+  padding-top: 2px;
+}
+
+.register-panel .auth-divider {
+  margin: 10px 0;
+}
+
 .auth-divider::before,
 .auth-divider::after {
   content: "";
@@ -785,6 +811,11 @@ p {
   font-weight: 800;
 }
 
+.register-panel .form-stack label {
+  gap: 4px;
+  font-size: 13px;
+}
+
 .form-stack input,
 .form-stack textarea,
 .form-stack select {
@@ -795,6 +826,19 @@ p {
   color: var(--deep);
   padding: 11px 12px;
   font: inherit;
+}
+
+.register-panel .form-stack input,
+.register-panel .form-stack textarea,
+.register-panel .form-stack select {
+  padding: 8px 10px;
+}
+
+.register-panel .primary-action,
+.register-panel .social-button {
+  min-height: 40px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .form-stack .errorlist {
@@ -2510,6 +2554,15 @@ p {
   .donation-panel,
   .tax-note {
     padding: 22px;
+  }
+
+  .register-panel {
+    max-height: calc(100vh - 94px);
+    padding: 18px;
+  }
+
+  .register-panel h1 {
+    font-size: 28px;
   }
 
   .card-body h2,
