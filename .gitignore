@@ -1,7 +1,52 @@
+# Environment and secrets
 .env
-.venv/
+.env.*
+!.env.example
+*.local
+
+# Python
 __pycache__/
 *.py[cod]
+*$py.class
+*.pyo
+.Python
+.python-version
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Django
 db.sqlite3
+db.sqlite3-journal
 media/
+staticfiles/
+*.log
+local_settings.py
+
+# Test, coverage, and build output
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+dist/
+build/
+*.egg-info/
+
+# Editor and OS files
 .idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Codex/local workspace metadata
+.agents/
+.codex/
