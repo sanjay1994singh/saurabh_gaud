@@ -33,6 +33,19 @@ def get_service_icon_key(prakalp, index):
     return SERVICE_ICON_ORDER[index % len(SERVICE_ICON_ORDER)]
 
 
+def get_home_message_stambh(stambh_queryset):
+    president_match = stambh_queryset.filter(
+        Q(name__icontains="saurabh")
+        | Q(name__icontains="gaur")
+        | Q(name__icontains="gaud")
+        | Q(name__icontains="सौरभ")
+        | Q(name__icontains="गौड़")
+        | Q(designation__icontains="राष्ट्रीय अध्यक्ष")
+        | Q(designation__icontains="national president")
+    ).first()
+    return president_match or stambh_queryset.filter(is_featured=True).first() or stambh_queryset.first()
+
+
 def index(request):
     today = timezone.localdate()
     seva_prakalps = SevaPrakalp.objects.filter(is_active=True)
@@ -40,7 +53,7 @@ def index(request):
     prakalp_count = seva_prakalps.count()
     home_prakalps = seva_prakalps[:6]
     hamare_stambh = HamareStambh.objects.filter(is_active=True)
-    featured_stambh = hamare_stambh.filter(is_featured=True).first() or hamare_stambh.first()
+    featured_stambh = get_home_message_stambh(hamare_stambh)
     stambh_list = hamare_stambh[:4]
     patrikas = Patrika.objects.filter(is_active=True)
     featured_patrika = patrikas.filter(is_featured=True).first() or patrikas.first()
