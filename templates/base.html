@@ -5,13 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ ui.site_name|default:"Dharm Raksha Sangh" }}{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{% static 'brand/favicon.png' %}">
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
 </head>
 <body>
   <header class="site-header">
     <nav class="site-nav">
       <a class="brand" href="{% url 'home:index' %}">
-        <span class="brand-mark">D</span>
+        <span class="brand-mark"><img src="{% static 'brand/drs-logo-small.png' %}" alt=""></span>
         <span>{{ ui.site_name }}</span>
       </a>
       <input class="nav-toggle" id="siteNavToggle" type="checkbox" aria-label="{{ ui.nav_toggle }}">
@@ -71,24 +72,47 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <div>
+      <div class="footer-about">
         <a class="brand footer-brand" href="{% url 'home:index' %}">
-          <span class="brand-mark">D</span>
+          <span class="brand-mark"><img src="{% static 'brand/drs-logo-small.png' %}" alt=""></span>
           <span>{{ ui.site_name }}</span>
         </a>
         <p>{{ ui.footer_about }}</p>
+        <div class="footer-social" aria-label="Social links">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="YouTube">▶</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="X">x</a>
+        </div>
       </div>
       <div class="footer-links">
-        <a href="{% url 'home:index' %}">{{ ui.home }}</a>
-        <a href="{% url 'home:about' %}">{{ ui.about }}</a>
-        <a href="/contact/">{{ ui.contact }}</a>
-        <a href="{% url 'events:index' %}">{{ ui.events }}</a>
-        <a href="{% url 'seva_prakalp:index' %}">{{ ui.seva_prakalp }}</a>
-        <a href="{% url 'hamare_stambh:index' %}">{{ ui.hamare_stambh }}</a>
-        <a href="{% url 'patrika:index' %}">{{ ui.patrika }}</a>
-        <a href="{% url 'subscriptions:plans' %}">{{ ui.membership }}</a>
-        <a href="/donate/">{{ ui.donate }}</a>
+        <h2>{% if current_lang == "hi" %}त्वरित लिंक{% else %}Quick Links{% endif %}</h2>
+        <div>
+          <a href="{% url 'home:index' %}">{{ ui.home }}</a>
+          <a href="{% url 'home:about' %}">{{ ui.about }}</a>
+          <a href="/contact/">{{ ui.contact }}</a>
+          <a href="{% url 'events:index' %}">{{ ui.events }}</a>
+          <a href="{% url 'seva_prakalp:index' %}">{{ ui.seva_prakalp }}</a>
+          <a href="{% url 'hamare_stambh:index' %}">{{ ui.hamare_stambh }}</a>
+          <a href="{% url 'patrika:index' %}">{{ ui.patrika }}</a>
+          <a href="{% url 'subscriptions:plans' %}">{{ ui.membership }}</a>
+          <a href="/donate/">{{ ui.donate }}</a>
+        </div>
       </div>
+      <div class="footer-contact">
+        <h2>{{ ui.site_name }}</h2>
+        <p><span>⌖</span>{% if current_lang == "hi" %}श्रीधाम वृंदावन, मथुरा, उत्तर प्रदेश, भारत{% else %}Shri Dham Vrindavan, Mathura, Uttar Pradesh, India{% endif %}</p>
+        <p><span>☎</span>+91 98371 647 90</p>
+        <p><span>✉</span>info@dharmrakshasangh.com</p>
+        <div class="footer-actions">
+          <a class="primary-action" href="{% url 'subscriptions:plans' %}">{{ ui.join }}</a>
+          <a class="secondary-action" href="/donate/">{{ ui.donate }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>{% if current_lang == "hi" %}सेवा • संस्कार • समर्पण{% else %}Seva • Sanskar • Samarpan{% endif %}</span>
+      <strong>{% if current_lang == "hi" %}जय श्री राम{% else %}Jai Shri Ram{% endif %}</strong>
     </div>
   </footer>
   {% block scripts %}{% endblock %}

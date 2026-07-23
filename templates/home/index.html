@@ -4,82 +4,75 @@
 {% block title %}{{ ui.site_name }}{% endblock %}
 
 {% block content %}
-  <section class="hero">
-    <div class="home-header-banner">
+  <section class="landing-hero">
+    <div class="landing-hero-bg">
       <picture>
-        <source media="(max-width: 640px)" srcset="{% static 'banners/home_religious_banner_mobile.jpg' %}">
-        <img src="{% static 'banners/home_religious_banner_desktop.jpg' %}" alt="{{ ui.site_name }}">
+        <source media="(max-width: 640px)" srcset="{% static 'banners/landing_hero_drs_mobile.jpg' %}">
+        <source media="(max-width: 1024px)" srcset="{% static 'banners/landing_hero_drs_tablet.jpg' %}">
+        <img src="{% static 'banners/landing_hero_drs_desktop.jpg' %}" alt="{{ ui.site_name }}">
       </picture>
     </div>
-    <div class="hero-content">
-      <p class="eyebrow">{{ ui.hero_eyebrow }}</p>
+    <div class="landing-hero-content">
+      <p class="landing-mantra">{% if current_lang == "hi" %}।। धर्मो रक्षति रक्षितः ।।{% else %}Dharma protects those who protect it{% endif %}</p>
       <h1>{{ ui.site_name }}</h1>
-      {% if featured_prakalp %}
-        <p>{{ featured_prakalp.short_description|default:featured_prakalp.content|truncatewords:28 }}</p>
-        <div class="hero-actions">
-          <a class="primary-action" href="{{ featured_prakalp.get_absolute_url }}">{{ ui.view }} {{ featured_prakalp.name }}</a>
-          <a class="secondary-action" href="{% url 'seva_prakalp:index' %}">{{ ui.all_seva }}</a>
-        </div>
-      {% else %}
-        <p>{{ ui.welcome }}</p>
-      {% endif %}
-    </div>
-    <div class="hero-visual">
-      {% if featured_prakalp and featured_prakalp.image %}
-        <img src="{{ featured_prakalp.image.url }}" alt="{{ featured_prakalp.name }}">
-      {% else %}
-        <div class="hero-placeholder">
-          <span>DRS</span>
-        </div>
-      {% endif %}
-      <div class="hero-badge">
-        <strong>{{ prakalp_count }}</strong>
-        <span>{{ ui.active_prakalp }}</span>
+      <p class="landing-tagline">{{ ui.hero_eyebrow }}</p>
+      <p class="landing-subtitle">{% if current_lang == "hi" %}धर्म की रक्षा, राष्ट्र की सेवा, समाज का उत्थान{% else %}Protecting dharma, serving the nation, uplifting society{% endif %}</p>
+      <div class="landing-actions">
+        <a class="primary-action" href="{% url 'subscriptions:plans' %}">{{ ui.join }}</a>
+        <a class="secondary-action landing-support-action" href="{% url 'home:donate' %}">{% if current_lang == "hi" %}सहयोग करें{% else %}Support Us{% endif %}</a>
+        <a class="secondary-action landing-dark-action" href="{% url 'seva_prakalp:index' %}">{{ ui.explore_seva }}</a>
       </div>
     </div>
   </section>
 
-  <section class="values-strip" aria-label="{{ ui.core_values }}">
-    <div>
-      <strong>{{ ui.seva }}</strong>
-      <span>{{ ui.seva_desc }}</span>
-    </div>
-    <div>
-      <strong>{{ ui.sanskar }}</strong>
-      <span>{{ ui.sanskar_desc }}</span>
-    </div>
-    <div>
-      <strong>{{ ui.sangathan }}</strong>
-      <span>{{ ui.sangathan_desc }}</span>
-    </div>
+  <section class="landing-service-strip" aria-label="{{ ui.core_values }}">
+    {% for tile in service_tiles %}
+      <a class="landing-service-item" href="{{ tile.prakalp.get_absolute_url }}">
+        <span class="landing-service-icon landing-icon-{{ tile.icon_key }}" aria-hidden="true"></span>
+        <strong>{{ tile.prakalp.name }}</strong>
+        <small>{{ tile.prakalp.short_description|default:tile.prakalp.content|truncatewords:8 }}</small>
+      </a>
+    {% empty %}
+      <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
+        <span class="landing-service-icon landing-icon-cow" aria-hidden="true"></span>
+        <strong>{% if current_lang == "hi" %}गौ सेवा{% else %}Cow Seva{% endif %}</strong>
+        <small>{% if current_lang == "hi" %}गौ संरक्षण, संवर्धन एवं सेवा{% else %}Protection, care and service{% endif %}</small>
+      </a>
+      <a class="landing-service-item" href="{% url 'events:index' %}">
+        <span class="landing-service-icon landing-icon-education" aria-hidden="true"></span>
+        <strong>{% if current_lang == "hi" %}शिक्षा एवं संस्कार{% else %}Education & Sanskar{% endif %}</strong>
+        <small>{% if current_lang == "hi" %}गुरुकुल, विद्यालय, छात्रावास{% else %}Gurukul, school and students{% endif %}</small>
+      </a>
+      <a class="landing-service-item" href="{% url 'hamare_stambh:index' %}">
+        <span class="landing-service-icon landing-icon-health" aria-hidden="true"></span>
+        <strong>{% if current_lang == "hi" %}स्वास्थ्य सेवा{% else %}Health Seva{% endif %}</strong>
+        <small>{% if current_lang == "hi" %}चिकित्सा शिविर एवं सहायता{% else %}Medical camps and support{% endif %}</small>
+      </a>
+    {% endfor %}
   </section>
 
-  {% if hamare_stambh %}
-    <section class="section home-stambh-section">
-      <div class="section-heading">
+  {% if seva_prakalps %}
+    <section class="landing-section landing-prakalp-section">
+      <div class="landing-section-heading">
         <div>
-          <p class="eyebrow">{{ ui.hamare_stambh }}</p>
-          <h2>{{ ui.stambh_heading }}</h2>
+          <p class="eyebrow">{{ ui.our_work }}</p>
+          <h2>{% if current_lang == "hi" %}हमारे सेवा प्रकल्प{% else %}Our Seva Prakalp{% endif %}</h2>
         </div>
-        <a class="section-link" href="{% url 'hamare_stambh:index' %}">{{ ui.view_all }}</a>
+        <a class="section-link" href="{% url 'seva_prakalp:index' %}">{{ ui.view_all }}</a>
       </div>
-
-      <div class="home-stambh-grid">
-        {% for stambh in hamare_stambh %}
-          <article class="home-stambh-card">
-            <a class="home-stambh-photo" href="{{ stambh.get_absolute_url }}">
-              {% if stambh.image %}
-                <img src="{{ stambh.image.url }}" alt="{{ stambh.name }}">
+      <div class="landing-prakalp-grid">
+        {% for prakalp in seva_prakalps|slice:":6" %}
+          <article class="landing-prakalp-card">
+            <a class="landing-prakalp-media" href="{{ prakalp.get_absolute_url }}">
+              {% if prakalp.image %}
+                <img src="{{ prakalp.image.url }}" alt="{{ prakalp.name }}">
               {% else %}
-                <span>{{ stambh.name|slice:":1" }}</span>
+                <span>{{ prakalp.name|slice:":1" }}</span>
               {% endif %}
             </a>
-            <div class="home-stambh-body">
-              <h3><a href="{{ stambh.get_absolute_url }}">{{ stambh.name }}</a></h3>
-              {% if stambh.designation %}
-                <p>{{ stambh.designation }}</p>
-              {% endif %}
-              <a class="text-link" href="{{ stambh.get_absolute_url }}">{{ ui.read_details }}</a>
+            <div class="landing-prakalp-body">
+              <h3><a href="{{ prakalp.get_absolute_url }}">{{ prakalp.name }}</a></h3>
+              <a class="text-link landing-prakalp-link" href="{{ prakalp.get_absolute_url }}">{% if current_lang == "hi" %}और जानें{% else %}Learn more{% endif %}</a>
             </div>
           </article>
         {% endfor %}
@@ -87,43 +80,92 @@
     </section>
   {% endif %}
 
-  {% if featured_patrika %}
-    <section class="section home-patrika-section">
-      <div class="patrika-feature">
-        <a class="patrika-feature-cover" href="{{ featured_patrika.get_absolute_url }}">
+  <section class="landing-dashboard">
+    <div class="landing-events-panel">
+      <div class="landing-panel-heading">
+        <h2>{% if current_lang == "hi" %}आगामी कार्यक्रम{% else %}Upcoming Events{% endif %}</h2>
+        <a href="{% url 'events:index' %}">{{ ui.view_all }}</a>
+      </div>
+      <div class="landing-event-list">
+        {% for event in latest_updates|slice:":3" %}
+          <a class="landing-event-row" href="{{ event.get_absolute_url }}">
+            <span>{{ event.start_date|date:"d"|default:event.recurring_day|default:"--" }}<small>{{ event.start_date|date:"M"|default:event.get_recurring_month_display|default:"" }}</small></span>
+            <strong>{{ event.title }}</strong>
+            <em>{{ event.venue|default:event.date_label }}</em>
+          </a>
+        {% empty %}
+          <p class="empty-state">{{ ui.no_events }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="landing-news-panel">
+      <div class="landing-panel-heading">
+        <h2>{% if current_lang == "hi" %}ताजा समाचार{% else %}Latest Updates{% endif %}</h2>
+        <a href="{% url 'events:index' %}">{{ ui.view_all }}</a>
+      </div>
+      {% if featured_patrika %}
+        <a class="landing-news-feature" href="{{ featured_patrika.get_absolute_url }}">
           {% if featured_patrika.cover_image %}
             <img src="{{ featured_patrika.cover_image.url }}" alt="{{ featured_patrika.title }}">
           {% else %}
-            <span>PDF</span>
+            <span>{{ ui.patrika }}</span>
           {% endif %}
+          <strong>{{ featured_patrika.title }}</strong>
+          <small>{{ featured_patrika.date_label }}</small>
         </a>
-        <div class="patrika-feature-body">
-          <p class="eyebrow">{{ ui.patrika }}</p>
-          <h2>{{ featured_patrika.title }}</h2>
-          <div class="card-meta">
-            {% if featured_patrika.issue_name %}
-              <span>{{ featured_patrika.issue_name }}</span>
-            {% endif %}
-            <span>{{ featured_patrika.date_label }}</span>
-            {% if featured_patrika.file_size_label %}
-              <span>{{ featured_patrika.file_size_label }}</span>
-            {% endif %}
-          </div>
-          <p>{{ featured_patrika.short_description|default:featured_patrika.description|default:ui.patrika_desc|truncatewords:30 }}</p>
-          <div class="detail-actions">
-            <a class="primary-action" href="{{ featured_patrika.get_absolute_url }}">{{ ui.read_epaper }}</a>
-            <a class="secondary-action" href="{{ featured_patrika.pdf.url }}" download>{{ ui.pdf_download }}</a>
-          </div>
-        </div>
+      {% endif %}
+      <div class="landing-news-list">
+        {% for event in latest_updates|slice:":3" %}
+          <a href="{{ event.get_absolute_url }}">{{ event.title }} <span>{{ event.date_label }}</span></a>
+        {% empty %}
+          <p class="empty-state">{{ ui.no_events }}</p>
+        {% endfor %}
       </div>
-    </section>
-  {% endif %}
+    </div>
 
-  <section class="cta-band">
+    <aside class="landing-message-panel">
+      {% if featured_stambh %}
+        <div class="landing-message-photo">
+          {% if featured_stambh.image %}
+            <img src="{{ featured_stambh.image.url }}" alt="{{ featured_stambh.name }}">
+          {% else %}
+            <span>{{ featured_stambh.name|slice:":1" }}</span>
+          {% endif %}
+        </div>
+        <p class="eyebrow">{% if current_lang == "hi" %}राष्ट्रीय अध्यक्ष का संदेश{% else %}Message{% endif %}</p>
+        <h2>{{ featured_stambh.name }}</h2>
+        {% if featured_stambh.designation %}
+          <strong>{{ featured_stambh.designation }}</strong>
+        {% endif %}
+        <p>{{ featured_stambh.short_description|default:featured_stambh.content|truncatewords:34 }}</p>
+        <a class="primary-action" href="{{ featured_stambh.get_absolute_url }}">{{ ui.read_details }}</a>
+      {% else %}
+        <p class="eyebrow">{{ ui.cta_title }}</p>
+        <h2>{{ ui.site_name }}</h2>
+        <p>{{ ui.cta_text }}</p>
+        <a class="primary-action" href="{% url 'subscriptions:plans' %}">{{ ui.join }}</a>
+      {% endif %}
+    </aside>
+  </section>
+
+  <section class="landing-stats" aria-label="{% if current_lang == 'hi' %}संस्था के आंकड़े{% else %}Organization stats{% endif %}">
+    <div><strong>{{ stats.prakalp }}+</strong><span>{{ ui.seva_prakalp }}</span></div>
+    <div><strong>{{ stats.events }}+</strong><span>{{ ui.events }}</span></div>
+    <div><strong>{{ stats.members }}+</strong><span>{{ ui.membership }}</span></div>
+    <div><strong>{{ stats.stambh }}+</strong><span>{{ ui.hamare_stambh }}</span></div>
+    <div><strong>{{ stats.patrika }}+</strong><span>{{ ui.patrika }}</span></div>
+  </section>
+
+  <section class="landing-final-cta">
     <div>
       <p class="eyebrow">{{ ui.cta_title }}</p>
-      <h2>{{ ui.cta_text }}</h2>
+      <h2>{% if current_lang == "hi" %}आइए, धर्म रक्षा के इस महायज्ञ में सहभागी बनें।{% else %}Join this shared mission of service and culture.{% endif %}</h2>
+      <p>{% if current_lang == "hi" %}सेवा ही साधना है, समर्पण ही पूजा है।{% else %}Service is practice; dedication is worship.{% endif %}</p>
     </div>
-    <a class="primary-action" href="{% url 'seva_prakalp:index' %}">{{ ui.explore_seva }}</a>
+    <div class="landing-actions">
+      <a class="primary-action" href="{% url 'subscriptions:plans' %}">{{ ui.join }}</a>
+      <a class="secondary-action" href="{% url 'home:donate' %}">{{ ui.donate }}</a>
+    </div>
   </section>
 {% endblock %}
