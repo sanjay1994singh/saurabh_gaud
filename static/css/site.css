@@ -1497,35 +1497,45 @@ p {
   grid-template-columns: repeat(6, minmax(0, 1fr));
   width: 100%;
   overflow: hidden;
-  border-top: 1px solid #d5a35d;
-  border-bottom: 1px solid #c18a42;
+  border-top: 1px solid #b9772d;
+  border-bottom: 1px solid #9f6021;
+  padding-right: 34px;
+  padding-left: 34px;
   background:
-    linear-gradient(90deg, rgba(118, 58, 15, 0.22), transparent 4%, transparent 96%, rgba(118, 58, 15, 0.22)),
-    linear-gradient(180deg, #f6d58f 0, #fff2c8 14%, #fff0c2 72%, #e8b565 100%);
-  box-shadow: inset 0 7px 13px rgba(99, 46, 11, 0.15), inset 0 -7px 12px rgba(99, 46, 11, 0.13);
+    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.52), transparent 42%),
+    linear-gradient(90deg, rgba(125, 60, 16, 0.12), transparent 10%, transparent 90%, rgba(125, 60, 16, 0.12)),
+    linear-gradient(180deg, #d3923a 0, #f5c56f 8px, #fff0bd 30px, #fff5cf 55%, #f2c66f calc(100% - 11px), #ad6a24 100%);
+  box-shadow:
+    inset 0 12px 18px rgba(82, 35, 8, 0.26),
+    inset 0 -12px 18px rgba(82, 35, 8, 0.24),
+    0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .landing-service-strip::before,
 .landing-service-strip::after {
   content: "";
   position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 1;
-  width: 34px;
+  top: -7px;
+  bottom: -7px;
+  z-index: 3;
+  width: 48px;
   pointer-events: none;
 }
 
 .landing-service-strip::before {
   left: 0;
   background:
-    linear-gradient(90deg, rgba(88, 38, 8, 0.24), rgba(184, 100, 24, 0.1) 24%, transparent 100%);
+    radial-gradient(ellipse at 64% 50%, rgba(255, 239, 184, 0.88) 0 34%, rgba(185, 93, 24, 0.42) 35% 52%, transparent 54%),
+    linear-gradient(90deg, rgba(68, 28, 7, 0.58), rgba(134, 65, 17, 0.3) 26%, rgba(255, 232, 166, 0.18) 56%, transparent 100%);
+  box-shadow: inset 10px 0 18px rgba(70, 27, 6, 0.34);
 }
 
 .landing-service-strip::after {
   right: 0;
   background:
-    linear-gradient(270deg, rgba(88, 38, 8, 0.24), rgba(184, 100, 24, 0.1) 24%, transparent 100%);
+    radial-gradient(ellipse at 36% 50%, rgba(255, 239, 184, 0.88) 0 34%, rgba(185, 93, 24, 0.42) 35% 52%, transparent 54%),
+    linear-gradient(270deg, rgba(68, 28, 7, 0.58), rgba(134, 65, 17, 0.3) 26%, rgba(255, 232, 166, 0.18) 56%, transparent 100%);
+  box-shadow: inset -10px 0 18px rgba(70, 27, 6, 0.34);
 }
 
 .landing-service-item {
@@ -1536,9 +1546,9 @@ p {
   align-content: start;
   gap: 7px;
   min-height: 142px;
-  border-right: 1px solid rgba(170, 107, 42, 0.24);
+  border-right: 1px solid rgba(150, 86, 28, 0.2);
   background:
-    linear-gradient(90deg, rgba(116, 54, 13, 0.035), transparent 12%, transparent 88%, rgba(116, 54, 13, 0.035));
+    linear-gradient(90deg, rgba(116, 54, 13, 0.03), transparent 12%, transparent 88%, rgba(116, 54, 13, 0.03));
   color: #4a2a18;
   padding: 16px 14px;
   text-align: center;
@@ -1750,6 +1760,184 @@ p {
   font-size: 12px;
   font-weight: 800;
   line-height: 1.3;
+}
+
+.landing-service-strip {
+  min-height: 148px;
+  padding-right: 0;
+  padding-left: 58px;
+  border-top-color: #8d4c17;
+  border-bottom-color: #c9934c;
+  background:
+    linear-gradient(180deg, rgba(68, 27, 5, 0.5) 0, rgba(151, 82, 25, 0.34) 5px, transparent 18px),
+    linear-gradient(180deg, transparent calc(100% - 16px), rgba(176, 101, 31, 0.24) calc(100% - 7px), rgba(97, 42, 10, 0.28) 100%),
+    linear-gradient(90deg, rgba(133, 67, 17, 0.09), transparent 12%, transparent 90%, rgba(133, 67, 17, 0.05)),
+    linear-gradient(180deg, #f4c777 0, #ffefbf 22%, #fff2ca 66%, #f1c36f 100%);
+  box-shadow:
+    inset 0 7px 10px rgba(70, 29, 6, 0.23),
+    inset 0 -5px 8px rgba(70, 29, 6, 0.1);
+}
+
+.landing-service-strip::before {
+  top: 0;
+  bottom: 0;
+  width: 58px;
+  background:
+    radial-gradient(ellipse at 65% 50%, rgba(255, 242, 188, 0.86) 0 28%, rgba(236, 178, 91, 0.9) 29% 42%, rgba(156, 79, 20, 0.48) 43% 53%, transparent 55%),
+    linear-gradient(90deg, #8a4616 0, #c9893a 18%, #f2bf66 42%, #a55b1d 74%, rgba(121, 56, 14, 0.36) 100%);
+  box-shadow:
+    inset 9px 0 14px rgba(71, 29, 6, 0.32),
+    inset -5px 0 10px rgba(95, 40, 7, 0.16);
+}
+
+.landing-service-strip::after {
+  display: none;
+}
+
+.landing-service-strip .landing-service-item {
+  min-height: 148px;
+  gap: 6px;
+  padding: 15px 16px 13px;
+  border-right-color: rgba(155, 96, 38, 0.24);
+  background: linear-gradient(90deg, rgba(126, 66, 19, 0.03), transparent 18%, transparent 82%, rgba(126, 66, 19, 0.03));
+}
+
+.landing-service-strip .landing-service-icon {
+  width: 62px;
+  height: 48px;
+  background: transparent;
+  color: #a74c18;
+  filter: drop-shadow(0 2px 1px rgba(90, 42, 12, 0.16));
+}
+
+.landing-service-strip .landing-service-icon::before {
+  position: static;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-size: 32px;
+  line-height: 1;
+  transform: none;
+}
+
+.landing-service-strip .landing-service-icon::after {
+  display: none;
+}
+
+.landing-service-strip .landing-icon-cow::before {
+  content: "\1F404";
+}
+
+.landing-service-strip .landing-icon-education::before {
+  content: "\1F4D6";
+}
+
+.landing-service-strip .landing-icon-health::before {
+  content: "\271A";
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 3px solid rgba(167, 76, 24, 0.3);
+  border-radius: 50%;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.landing-service-strip .landing-icon-environment::before {
+  content: "\1F331";
+}
+
+.landing-service-strip .landing-icon-women::before {
+  content: "\1F469";
+}
+
+.landing-service-strip .landing-icon-relief::before {
+  content: "\1F91D";
+}
+
+.landing-service-strip .landing-service-item strong {
+  color: #553019;
+  font-size: 16px;
+}
+
+.landing-service-strip .landing-service-item small {
+  max-width: 170px;
+  color: #76502e;
+  font-size: 12px;
+}
+
+.landing-service-strip {
+  min-height: 150px;
+  padding: 0 42px;
+  border-top: 1px solid #7f4215;
+  border-bottom: 1px solid #c7944b;
+  background:
+    linear-gradient(180deg, rgba(69, 26, 5, 0.54), rgba(120, 59, 17, 0.22) 6px, transparent 19px),
+    linear-gradient(180deg, transparent calc(100% - 17px), rgba(166, 86, 23, 0.18) calc(100% - 6px), rgba(86, 36, 8, 0.22)),
+    linear-gradient(90deg, rgba(122, 58, 14, 0.14), transparent 8%, transparent 92%, rgba(122, 58, 14, 0.14)),
+    linear-gradient(180deg, #edbc65 0, #fff0bd 19%, #fff4cf 58%, #f0bf68 100%);
+  box-shadow:
+    inset 0 7px 9px rgba(62, 25, 5, 0.25),
+    inset 0 -5px 8px rgba(62, 25, 5, 0.11);
+}
+
+.landing-service-strip::before,
+.landing-service-strip::after {
+  display: block;
+  top: 0;
+  bottom: 0;
+  width: 42px;
+}
+
+.landing-service-strip::before {
+  left: 0;
+  background:
+    linear-gradient(90deg, rgba(83, 34, 7, 0.62), rgba(164, 82, 22, 0.34) 34%, rgba(241, 178, 89, 0.35) 58%, transparent),
+    linear-gradient(180deg, rgba(62, 25, 5, 0.24), transparent 25%, transparent 78%, rgba(62, 25, 5, 0.18));
+  box-shadow: inset 8px 0 14px rgba(57, 22, 4, 0.36);
+}
+
+.landing-service-strip::after {
+  right: 0;
+  background:
+    linear-gradient(270deg, rgba(83, 34, 7, 0.48), rgba(164, 82, 22, 0.24) 34%, rgba(241, 178, 89, 0.22) 58%, transparent),
+    linear-gradient(180deg, rgba(62, 25, 5, 0.18), transparent 25%, transparent 78%, rgba(62, 25, 5, 0.14));
+  box-shadow: inset -7px 0 12px rgba(57, 22, 4, 0.26);
+}
+
+.landing-service-strip .landing-service-item {
+  min-height: 150px;
+  padding: 16px 12px 13px;
+  border-right-color: rgba(136, 78, 25, 0.2);
+  background: transparent;
+}
+
+.landing-service-strip .landing-service-icon {
+  height: 47px;
+  margin-bottom: 2px;
+  color: #b35a1d;
+}
+
+.landing-service-strip .landing-service-icon::before {
+  font-size: 34px;
+}
+
+.landing-service-strip .landing-service-item strong {
+  color: #553019;
+  font-size: 16px;
+  line-height: 1.18;
+}
+
+.landing-service-strip .landing-service-item small {
+  max-width: 180px;
+  color: #775234;
+  font-size: 11.5px;
+  line-height: 1.25;
 }
 
 .landing-section,
@@ -3480,11 +3668,13 @@ p {
 
   .landing-service-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-right: 20px;
+    padding-left: 20px;
   }
 
   .landing-service-strip::before,
   .landing-service-strip::after {
-    width: 22px;
+    width: 28px;
   }
 
   .landing-service-item {
@@ -4053,6 +4243,8 @@ p {
 
   .landing-service-strip {
     grid-template-columns: 1fr;
+    padding-right: 18px;
+    padding-left: 18px;
   }
 
   .landing-prakalp-card {

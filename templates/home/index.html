@@ -26,29 +26,36 @@
   </section>
 
   <section class="landing-service-strip" aria-label="{{ ui.core_values }}">
-    {% for tile in service_tiles %}
-      <a class="landing-service-item" href="{{ tile.prakalp.get_absolute_url }}">
-        <span class="landing-service-icon landing-icon-{{ tile.icon_key }}" aria-hidden="true"></span>
-        <strong>{{ tile.prakalp.name }}</strong>
-        <small>{{ tile.prakalp.short_description|default:tile.prakalp.content|truncatewords:8 }}</small>
-      </a>
-    {% empty %}
-      <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
-        <span class="landing-service-icon landing-icon-cow" aria-hidden="true"></span>
-        <strong>{% if current_lang == "hi" %}गौ सेवा{% else %}Cow Seva{% endif %}</strong>
-        <small>{% if current_lang == "hi" %}गौ संरक्षण, संवर्धन एवं सेवा{% else %}Protection, care and service{% endif %}</small>
-      </a>
-      <a class="landing-service-item" href="{% url 'events:index' %}">
-        <span class="landing-service-icon landing-icon-education" aria-hidden="true"></span>
-        <strong>{% if current_lang == "hi" %}शिक्षा एवं संस्कार{% else %}Education & Sanskar{% endif %}</strong>
-        <small>{% if current_lang == "hi" %}गुरुकुल, विद्यालय, छात्रावास{% else %}Gurukul, school and students{% endif %}</small>
-      </a>
-      <a class="landing-service-item" href="{% url 'hamare_stambh:index' %}">
-        <span class="landing-service-icon landing-icon-health" aria-hidden="true"></span>
-        <strong>{% if current_lang == "hi" %}स्वास्थ्य सेवा{% else %}Health Seva{% endif %}</strong>
-        <small>{% if current_lang == "hi" %}चिकित्सा शिविर एवं सहायता{% else %}Medical camps and support{% endif %}</small>
-      </a>
-    {% endfor %}
+    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
+      <span class="landing-service-icon landing-icon-cow" aria-hidden="true"></span>
+      <strong>{% if current_lang == "hi" %}गौ सेवा{% else %}Cow Seva{% endif %}</strong>
+      <small>{% if current_lang == "hi" %}गौ संरक्षण, संवर्धन एवं गौ आधारित सेवा{% else %}Protection, care and cow-based seva{% endif %}</small>
+    </a>
+    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
+      <span class="landing-service-icon landing-icon-education" aria-hidden="true"></span>
+      <strong>{% if current_lang == "hi" %}शिक्षा एवं संस्कार{% else %}Education & Sanskar{% endif %}</strong>
+      <small>{% if current_lang == "hi" %}गुरुकुल, विद्यालय, छात्रावास एवं संस्कार केंद्र{% else %}Gurukul, schools and sanskar centers{% endif %}</small>
+    </a>
+    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
+      <span class="landing-service-icon landing-icon-health" aria-hidden="true"></span>
+      <strong>{% if current_lang == "hi" %}स्वास्थ्य सेवा{% else %}Health Seva{% endif %}</strong>
+      <small>{% if current_lang == "hi" %}चिकित्सा शिविर, रक्तदान, और स्वास्थ्य सहायता{% else %}Medical camps, blood donation and aid{% endif %}</small>
+    </a>
+    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
+      <span class="landing-service-icon landing-icon-environment" aria-hidden="true"></span>
+      <strong>{% if current_lang == "hi" %}पर्यावरण संरक्षण{% else %}Environment Protection{% endif %}</strong>
+      <small>{% if current_lang == "hi" %}वृक्षारोपण, जल संरक्षण, और स्वच्छता अभियान{% else %}Plantation, water conservation and cleanliness{% endif %}</small>
+    </a>
+    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
+      <span class="landing-service-icon landing-icon-women" aria-hidden="true"></span>
+      <strong>{% if current_lang == "hi" %}महिला सशक्तिकरण{% else %}Women Empowerment{% endif %}</strong>
+      <small>{% if current_lang == "hi" %}महिला सुरक्षा, प्रशिक्षण, और आत्मनिर्भरता{% else %}Safety, training and self-reliance{% endif %}</small>
+    </a>
+    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
+      <span class="landing-service-icon landing-icon-relief" aria-hidden="true"></span>
+      <strong>{% if current_lang == "hi" %}आपदा राहत{% else %}Disaster Relief{% endif %}</strong>
+      <small>{% if current_lang == "hi" %}आपदा के समय राहत, सहायता एवं पुनर्वास{% else %}Relief, support and rehabilitation{% endif %}</small>
+    </a>
   </section>
 
   {% if seva_prakalps %}
