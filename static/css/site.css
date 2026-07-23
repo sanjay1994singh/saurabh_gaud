@@ -1403,6 +1403,84 @@ p {
   box-shadow: 0 18px 32px rgba(54, 20, 8, 0.24);
 }
 
+.landing-hero .landing-actions .primary-action,
+.landing-hero .landing-actions .secondary-action {
+  gap: 10px;
+  min-width: 210px;
+  font-family: "Noto Sans Devanagari", "Mangal", "Segoe UI", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.landing-action-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  color: rgba(255, 244, 218, 0.92);
+}
+
+.landing-action-icon::before,
+.landing-action-icon::after {
+  content: "";
+  position: absolute;
+  display: block;
+}
+
+.landing-action-membership .landing-action-icon::before {
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-shadow: -9px 7px 0 -4px currentColor, 9px 7px 0 -4px currentColor;
+  transform: translateY(-5px);
+}
+
+.landing-action-membership .landing-action-icon::after {
+  width: 26px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  transform: translateY(7px);
+}
+
+.landing-support-action .landing-action-icon::before {
+  width: 22px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  transform: translateY(6px);
+}
+
+.landing-support-action .landing-action-icon::after {
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-6px) rotate(45deg);
+  border-radius: 2px;
+}
+
+.landing-dark-action .landing-action-icon::before {
+  width: 18px;
+  height: 22px;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  transform: translateY(1px);
+}
+
+.landing-dark-action .landing-action-icon::after {
+  width: 10px;
+  height: 2px;
+  background: currentColor;
+  box-shadow: 0 6px 0 currentColor, 0 12px 0 currentColor;
+  transform: translateY(-4px);
+}
+
 .landing-support-action {
   background: var(--green);
   color: #fff;
@@ -1677,8 +1755,7 @@ p {
 }
 
 .landing-prakalp-section .landing-section-heading {
-  display: grid;
-  justify-items: center;
+  display: block;
   gap: 8px;
   width: 100%;
   margin-bottom: 22px;
@@ -1686,8 +1763,6 @@ p {
 }
 
 .landing-prakalp-section .landing-section-heading > div {
-  display: flex;
-  justify-content: center;
   width: 100%;
 }
 
@@ -1698,11 +1773,12 @@ p {
 
 .landing-prakalp-section .landing-section-heading h2 {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
-  width: auto;
+  width: fit-content;
+  max-width: 100%;
   margin-right: auto;
   margin-left: auto;
   color: #3b2115;
@@ -1710,6 +1786,7 @@ p {
   font-size: 36px;
   font-weight: 900;
   line-height: 1.08;
+  text-align: center;
 }
 
 .landing-prakalp-section .landing-section-heading h2::before,
