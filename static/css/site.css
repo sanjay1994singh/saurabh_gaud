@@ -3386,6 +3386,7 @@ p {
 
 @media (max-width: 900px) {
   .site-nav {
+    position: relative;
     flex-wrap: wrap;
   }
 
@@ -3419,17 +3420,41 @@ p {
     height: 2px;
     border-radius: 99px;
     background: var(--maroon);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .nav-toggle:checked + .nav-toggle-button span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .nav-toggle:checked + .nav-toggle-button span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle:checked + .nav-toggle-button span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
   }
 
   .nav-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 40;
     display: none;
-    flex: 1 0 100%;
     align-items: stretch;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
     width: 100%;
-    border-top: 1px solid var(--line);
-    padding-top: 12px;
+    max-height: calc(100dvh - 68px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid rgba(255, 216, 153, 0.2);
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+    background: rgba(58, 20, 8, 0.98);
+    padding: 14px;
+    box-shadow: 0 20px 36px rgba(32, 12, 4, 0.3);
   }
 
   .nav-toggle:checked ~ .nav-links {
@@ -3491,15 +3516,19 @@ p {
     align-items: center;
     justify-content: center;
     min-height: 40px;
-    border: 1px solid var(--line);
+    border: 1px solid rgba(255, 218, 161, 0.25);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.76);
+    background: rgba(255, 250, 240, 0.96);
+    color: #5d2118;
     padding: 8px 10px;
+    font-weight: 900;
     text-align: center;
   }
 
   .nav-links .donate-nav {
     border-color: transparent;
+    background: var(--saffron);
+    color: #fff;
     padding: 8px 10px;
   }
 
