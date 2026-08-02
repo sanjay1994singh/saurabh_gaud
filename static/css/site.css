@@ -3627,49 +3627,69 @@ p {
   }
 
   .landing-hero {
-    /* The mobile artwork is 3:4. Keep that composition intact instead of
-       forcing it into the desktop hero height and cropping most of it. */
-    height: clamp(520px, 133.333vw, 620px);
+    /* Preserve the desktop hero composition on phones and scale the complete
+       banner, copy and actions together. */
+    height: auto;
     min-height: 0;
+    aspect-ratio: 16 / 9;
+    background: #f7c768;
+  }
+
+  .landing-hero-bg {
+    background: #f7c768;
+  }
+
+  .landing-hero-bg picture {
+    display: block;
+    height: 100%;
   }
 
   .landing-hero-bg img {
-    object-position: center center;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
   }
 
   .landing-hero::before {
     background:
-      linear-gradient(180deg, rgba(32, 12, 4, 0) 0 28%, rgba(255, 244, 211, 0.06) 48%, rgba(32, 12, 4, 0.2) 100%);
+      linear-gradient(180deg, rgba(32, 12, 4, 0), rgba(32, 12, 4, 0.04) 62%, rgba(32, 12, 4, 0.2));
   }
 
   .landing-hero-content {
-    width: min(100% - 28px, 420px);
-    margin-bottom: 14px;
-    padding: 0;
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 72%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 3.5vw 0 1.8vw;
   }
 
   .landing-mantra {
-    margin-bottom: 3px;
-    font-size: clamp(13px, 3.8vw, 16px);
-    line-height: 1.25;
+    margin-bottom: 0.4vw;
+    font-size: clamp(8px, 2.6vw, 16px);
+    line-height: 1.1;
   }
 
   .landing-hero h1 {
-    margin-bottom: 5px;
-    font-size: clamp(34px, 10.5vw, 44px);
-    line-height: 0.98;
+    margin-bottom: 0.5vw;
+    font-size: clamp(22px, 8vw, 44px);
+    line-height: 0.9;
   }
 
   .landing-tagline {
-    margin-bottom: 7px;
-    font-size: clamp(19px, 5.8vw, 24px);
-    line-height: 1.15;
+    margin-bottom: 0.8vw;
+    font-size: clamp(13px, 5vw, 26px);
+    line-height: 1;
   }
 
   .landing-subtitle {
-    margin-bottom: 10px;
-    font-size: clamp(12px, 3.6vw, 15px);
-    line-height: 1.35;
+    margin-bottom: 1.2vw;
+    font-size: clamp(8px, 2.7vw, 15px);
+    line-height: 1.15;
+    white-space: nowrap;
   }
 
   .landing-copy {
@@ -3678,26 +3698,32 @@ p {
 
   .landing-actions {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-    width: min(100%, 350px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2vw;
+    width: 100%;
     margin-right: auto;
     margin-left: auto;
+  }
+
+  .landing-hero .landing-actions {
+    margin-top: 0;
   }
 
   .landing-hero .landing-actions .primary-action,
   .landing-hero .landing-actions .secondary-action {
     width: 100%;
     min-width: 0;
-    min-height: 44px;
-    padding: 8px 16px;
-    font-size: clamp(15px, 4.5vw, 18px);
+    min-height: clamp(26px, 7.5vw, 40px);
+    padding: 0.8vw 1vw;
+    border-radius: clamp(4px, 1.2vw, 8px);
+    font-size: clamp(8px, 2.7vw, 15px);
+    white-space: nowrap;
   }
 
   .landing-hero .landing-action-icon {
-    width: 24px;
-    height: 24px;
-    transform: scale(0.85);
+    width: clamp(12px, 3.8vw, 22px);
+    height: clamp(12px, 3.8vw, 22px);
+    transform: scale(0.68);
   }
 
   /* Uploaded content can have fixed intrinsic sizes. These rules keep every
