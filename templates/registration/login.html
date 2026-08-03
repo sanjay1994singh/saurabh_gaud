@@ -16,9 +16,11 @@
           {% endif %}
         </div>
       {% endif %}
-      <a class="social-button" href="{% url 'social:begin' 'google-oauth2' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">
-        {{ ui.continue_google }}
-      </a>
+      <form method="post" action="{% url 'social:begin' 'google-oauth2' %}" class="social-auth-form">
+        {% csrf_token %}
+        {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+        <button class="social-button" type="submit">{{ ui.continue_google }}</button>
+      </form>
       <div class="auth-divider"><span>{{ ui.or }}</span></div>
       <form method="post" class="form-stack">
         {% csrf_token %}

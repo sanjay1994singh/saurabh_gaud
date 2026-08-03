@@ -44,9 +44,15 @@
       <p class="form-note">{{ ui.already_registered }} <a class="text-link" href="{% url 'login' %}">{{ ui.login }}</a></p>
       <div class="social-auth-section">
         <div class="auth-divider"><span>{{ ui.or }}</span></div>
-        <a class="social-button" href="{% url 'social:begin' 'google-oauth2' %}{% if next_url %}?next={{ next_url|urlencode }}{% elif request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">
-          {{ ui.continue_google }}
-        </a>
+        <form method="post" action="{% url 'social:begin' 'google-oauth2' %}" class="social-auth-form">
+          {% csrf_token %}
+          {% if next_url %}
+            <input type="hidden" name="next" value="{{ next_url }}">
+          {% elif request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+          {% endif %}
+          <button class="social-button" type="submit">{{ ui.continue_google }}</button>
+        </form>
       </div>
     </div>
   </section>

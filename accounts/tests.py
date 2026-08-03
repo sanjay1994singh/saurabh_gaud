@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .forms import RegisterForm
@@ -47,3 +47,21 @@ class GeneratedPasswordRegistrationTests(TestCase):
         send_welcome.assert_called_once()
         initial_password = send_welcome.call_args.kwargs["initial_password"]
         self.assertTrue(user.check_password(initial_password))
+
+
+@override_settings(
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY="test-google-client-id",
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET="test-google-client-secret",
+)
+class GoogleOAuthStartTests(TestCase):
+    def test_login_page_uses_post_form_for_google_oauth(self):
+        response = self.client.get(reverse("login"))
+
+        self.assertContains(response, 'method="post"')
+        self.assertContains(response, f'action="{reverse("social:begin", args=["google-oauth2"])}"')
+
+    def test_google_oauth_post_redirects_to_google_instead_of_405(self):
+        response = self.client.post(reverse("social:begin", args=["google-oauth2"]))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response["Location"].startswith("https://accounts.google.com/"))
