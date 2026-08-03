@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Terms and Conditions{% endblock %}
+{% block content %}
+<section class="detail-page"><div class="detail-shell"><article class="detail-content rich-text policy-content">
+  <p class="eyebrow">Legal</p><h1>Terms and Conditions</h1><p><strong>Effective: 3 August 2026</strong></p>
+  <h2>1. Service</h2><p>Dharm Raksha Sangh provides membership, digital certificates, information and service-related facilities through this website. Membership benefits, price and validity are shown on the Membership page before payment.</p>
+  <h2>2. Account information</h2><p>You must provide accurate name, email, phone number and address details. You are responsible for activity performed through your account and for keeping login credentials secure.</p>
+  <h2>3. Payments and annual membership donation</h2><p>The amount collected for a paid plan is a voluntary yearly membership donation to Dharm Raksha Sangh. It is processed securely by Razorpay. We do not collect or store card, UPI PIN, CVV or banking credentials. Membership is activated only after payment authenticity and captured status are verified.</p>
+  <h2>4. Membership</h2><p>The current plans are fixed-period yearly memberships and do not auto-renew unless an auto-renewal option is expressly shown and separately authorised. Certificates and membership privileges are personal and may not be transferred. A successfully processed voluntary membership donation is final and non-refundable after activation, subject only to duplicate debit, failed activation, or rights that cannot legally be excluded.</p>
+  <h2>5. Acceptable use</h2><p>You must not misuse the website, impersonate another person, attempt unauthorised access, submit unlawful material or use membership in a misleading or fraudulent manner.</p>
+  <h2>6. Cancellation and refunds</h2><p>Cancellation and refund requests are governed by our <a href="{% url 'home:refunds' %}">Cancellation and Refund Policy</a>.</p>
+  <h2>7. Liability</h2><p>We take reasonable care to keep services available and records accurate. To the extent permitted by law, liability relating to a paid membership will not exceed the amount paid for that membership.</p>
+  <h2>8. Contact</h2><p>Questions may be sent to info@dharmrakshasangh.com or raised through our <a href="{% url 'home:contact' %}">Contact page</a>.</p>
+</article></div></section>{% endblock %}

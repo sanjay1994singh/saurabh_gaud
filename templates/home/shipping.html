@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Shipping and Delivery Policy{% endblock %}
+{% block content %}
+<section class="detail-page"><div class="detail-shell"><article class="detail-content rich-text policy-content">
+  <p class="eyebrow">Legal</p><h1>Shipping and Delivery Policy</h1><p><strong>Effective: 3 August 2026</strong></p>
+  <h2>Digital delivery</h2><p>Membership is a digital service. No physical item is shipped and no shipping charge applies unless a product page expressly states otherwise.</p>
+  <h2>Delivery time</h2><p>After a paid transaction reaches captured status, membership, invoice and certificate are normally made available immediately in the member profile and a confirmation email is sent to the registered email address.</p>
+  <h2>Delays</h2><p>Bank processing, payment verification or email delivery may occasionally cause delay. If access is not available within 24 hours after a successful debit, contact us with the Razorpay payment ID and order ID.</p>
+  <h2>Contact</h2><p>Email info@dharmrakshasangh.com or use the <a href="{% url 'home:contact' %}">Contact page</a>.</p>
+</article></div></section>{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Invoice {{ invoice.invoice_number }}{% endblock %}
+
+{% block content %}
+  <section class="detail-page">
+    <div class="detail-shell">
+      <div class="detail-content">
+        <p class="eyebrow">Membership Invoice / Payment Receipt</p>
+        <h1>{{ invoice.invoice_number }}</h1>
+        <p><strong>Issued:</strong> {{ invoice.issued_at|date:"d M Y, h:i A" }}</p>
+        <p><strong>Member:</strong> {{ invoice.payment.user_name }}</p>
+        <p><strong>Email:</strong> {{ invoice.payment.user_email }}</p>
+        <p><strong>Plan:</strong> {{ invoice.payment.plan_name }}</p>
+        <p><strong>Amount paid:</strong> INR {{ invoice.total_rupees|floatformat:2 }}</p>
+        <p><strong>Razorpay Order ID:</strong> {{ invoice.payment.razorpay_order_id }}</p>
+        <p><strong>Razorpay Payment ID:</strong> {{ invoice.payment.razorpay_payment_id }}</p>
+        <div class="detail-actions">
+          <a class="primary-action" href="{% url 'subscriptions:invoice_download' invoice.pk %}">Download PDF</a>
+          <a class="secondary-action" href="{% url 'accounts:profile' %}">Back to profile</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

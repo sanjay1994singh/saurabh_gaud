@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Certificate, MembershipSubscription, SubscriptionPlan
+from .models import Certificate, Invoice, InvoiceSequence, MembershipSubscription, PaymentTransaction, SubscriptionPlan
 
 
 @admin.register(SubscriptionPlan)
@@ -15,7 +15,7 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         "display_order",
     )
     list_filter = ("plan_type", "is_active")
-    prepopulated_fields = {"slug": ("name",)}
+    readonly_fields = ("slug", "created_at", "updated_at")
     search_fields = ("name", "member_type_text", "description")
 
 
@@ -38,3 +38,35 @@ class CertificateAdmin(admin.ModelAdmin):
     list_display = ("certificate_number", "user", "subscription", "issued_at")
     search_fields = ("certificate_number", "user__username", "user__email")
     readonly_fields = ("certificate_number", "issued_at")
+
+
+@admin.register(PaymentTransaction)
+class PaymentTransactionAdmin(admin.ModelAdmin):
+    list_display = ("razorpay_order_id", "user_name", "plan_name", "amount_paise", "status", "gateway_status", "paid_at", "created_at")
+    list_filter = ("status", "gateway_status", "currency", "created_at")
+    search_fields = ("razorpay_order_id", "razorpay_payment_id", "user_name", "user_email", "user_phone")
+    readonly_fields = (
+        "subscription", "user_name", "user_email", "user_phone", "user_address", "plan_name",
+        "amount_paise", "currency", "status", "razorpay_order_id", "razorpay_payment_id",
+        "razorpay_signature", "gateway_status", "failure_reason", "gateway_response", "paid_at",
+        "created_at", "updated_at",
+    )
+
+
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = ("invoice_number", "payment", "total_paise", "currency", "issued_at")
+    search_fields = ("invoice_number", "payment__razorpay_order_id", "payment__razorpay_payment_id", "payment__user_email")
+    readonly_fields = ("payment", "invoice_number", "issued_at", "description", "subtotal_paise", "tax_paise", "total_paise", "currency", "created_at")
+
+    def has_add_permission(self, request):
+        return False
+
+
+@admin.register(InvoiceSequence)
+class InvoiceSequenceAdmin(admin.ModelAdmin):
+    list_display = ("financial_year", "next_number")
+    readonly_fields = ("financial_year", "next_number")
+
+    def has_add_permission(self, request):
+        return False

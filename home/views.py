@@ -114,6 +114,22 @@ def contact(request):
     return render(request, "home/contact.html", {"site_name": settings.SITE_NAME})
 
 
+def terms(request):
+    return render(request, "home/terms.html")
+
+
+def privacy(request):
+    return render(request, "home/privacy.html")
+
+
+def refunds(request):
+    return render(request, "home/refunds.html")
+
+
+def shipping(request):
+    return render(request, "home/shipping.html")
+
+
 def set_language(request):
     language = request.POST.get("language") or request.GET.get("language")
     next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or reverse("home:index")

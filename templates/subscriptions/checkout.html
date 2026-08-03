@@ -8,7 +8,18 @@
       <p class="eyebrow">{{ ui.secure_payment }}</p>
       <h1>{{ plan.name }}</h1>
       <p class="checkout-amount">Rs. {{ plan.amount }}</p>
-      <button id="pay-button" class="primary-action" type="button">{{ ui.pay_razorpay }}</button>
+      <div class="checkout-donation-notice">
+        <strong>वार्षिक सदस्यता दान / Yearly Membership Donation</strong>
+        <p>यह राशि धर्म रक्षा संघ के लिए स्वैच्छिक वार्षिक सदस्यता दान है। सफल भुगतान और सदस्यता सक्रिय होने के बाद यह donation final और non-refundable है, केवल duplicate debit, failed activation अथवा कानून द्वारा अनिवार्य स्थिति को छोड़कर।</p>
+        <p>This amount is a voluntary yearly membership donation to Dharm Raksha Sangh. After successful payment and membership activation, it is final and non-refundable, except duplicate debit, failed activation, or where required by law.</p>
+      </div>
+      <label class="checkout-consent">
+        <input id="policy-consent" type="checkbox" required>
+        <span>I understand that this is a yearly membership donation and agree to the <a href="{% url 'home:terms' %}" target="_blank">Terms</a>,
+          <a href="{% url 'home:privacy' %}" target="_blank">Privacy Policy</a> and
+          <a href="{% url 'home:refunds' %}" target="_blank">Cancellation & Refund Policy</a>.</span>
+      </label>
+      <button id="pay-button" class="primary-action" type="button" disabled>{{ ui.pay_razorpay }}</button>
       <a class="secondary-action" href="{% url 'subscriptions:plans' %}">{{ ui.cancel }}</a>
 
       <form id="payment-form" method="post" action="{% url 'subscriptions:payment_success' %}">
@@ -24,6 +35,10 @@
   <script>
     const payButton = document.getElementById("pay-button");
     const paymentForm = document.getElementById("payment-form");
+    const policyConsent = document.getElementById("policy-consent");
+    policyConsent.addEventListener("change", function () {
+      payButton.disabled = !policyConsent.checked;
+    });
 
     payButton.addEventListener("click", function () {
       const options = {
@@ -31,7 +46,7 @@
         amount: "{{ amount_paise }}",
         currency: "INR",
         name: "{{ ui.site_name|escapejs }}",
-        description: "{{ plan.name|escapejs }}",
+        description: "Yearly membership donation - {{ plan.name|escapejs }}",
         order_id: "{{ razorpay_order_id }}",
         prefill: {
           name: "{{ request.user.get_full_name|default:request.user.username|escapejs }}",
@@ -48,6 +63,17 @@
         }
       };
       const checkout = new Razorpay(options);
+      checkout.on("payment.failed", function (response) {
+        const failureForm = new FormData();
+        failureForm.append("csrfmiddlewaretoken", paymentForm.querySelector('[name="csrfmiddlewaretoken"]').value);
+        failureForm.append("razorpay_order_id", "{{ razorpay_order_id|escapejs }}");
+        failureForm.append("error_description", response.error.description || "Payment failed");
+        fetch("{% url 'subscriptions:payment_failed' %}", {
+          method: "POST",
+          body: failureForm,
+          credentials: "same-origin"
+        });
+      });
       checkout.open();
     });
   </script>

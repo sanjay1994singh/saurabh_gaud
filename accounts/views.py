@@ -1,17 +1,19 @@
+import secrets
+import string
+
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from .forms import ProfileForm, RegisterForm
 from .models import State
-from subscriptions.models import MembershipSubscription
+from subscriptions.models import Invoice, MembershipSubscription
+from subscriptions.notifications import send_account_welcome_email, send_profile_updated_email
 from subscriptions.views import delete_duplicate_active_plan_certificates
-
-MEMBERSHIP_JOIN_PASSWORD = "Darmraksha@123"
-
 
 def _safe_next_url(request):
     next_url = request.POST.get("next") or request.GET.get("next") or ""
@@ -24,6 +26,20 @@ def _is_membership_join_url(next_url):
     return next_url.startswith("/subscriptions/join/")
 
 
+def _generate_initial_password(length=20):
+    """Return a cryptographically strong password with mixed character classes."""
+    alphabet = string.ascii_letters + string.digits + "@#$%*-_!"
+    while True:
+        password = "".join(secrets.choice(alphabet) for _ in range(length))
+        if (
+            any(char.islower() for char in password)
+            and any(char.isupper() for char in password)
+            and any(char.isdigit() for char in password)
+            and any(char in "@#$%*-_!" for char in password)
+        ):
+            return password
+
+
 def register(request):
     next_url = _safe_next_url(request)
     is_membership_join = _is_membership_join_url(next_url)
@@ -34,14 +50,16 @@ def register(request):
         return redirect("accounts:profile")
 
     if request.method == "POST":
-        post_data = request.POST.copy()
-        if is_membership_join:
-            post_data["password1"] = MEMBERSHIP_JOIN_PASSWORD
-            post_data["password2"] = MEMBERSHIP_JOIN_PASSWORD
-        form = RegisterForm(post_data, request.FILES)
+        form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save()
+            initial_password = _generate_initial_password()
+            user = form.save(commit=False)
+            user.set_password(initial_password)
+            user.save()
             login(request, user, backend="accounts.backends.EmailPhoneUsernameBackend")
+            transaction.on_commit(
+                lambda: send_account_welcome_email(user, initial_password=initial_password)
+            )
             messages.success(request, "अकाउंट बन गया है. कृपया सदस्यता चुनें.")
             if next_url:
                 return redirect(next_url)
@@ -56,7 +74,6 @@ def register(request):
             "form": form,
             "next_url": next_url,
             "is_membership_join": is_membership_join,
-            "membership_join_password": MEMBERSHIP_JOIN_PASSWORD,
         },
     )
 
@@ -82,7 +99,8 @@ def profile(request):
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            transaction.on_commit(lambda: send_profile_updated_email(user))
             messages.success(request, "प्रोफाइल अपडेट हो गई.")
             return redirect("accounts:profile")
     else:
@@ -90,6 +108,7 @@ def profile(request):
 
     memberships = request.user.memberships.select_related("plan", "certificate")
     certificates = request.user.certificates.select_related("subscription__plan")
+    invoices = Invoice.objects.filter(payment__subscription__user=request.user).select_related("payment")
     return render(
         request,
         "accounts/profile.html",
@@ -97,5 +116,6 @@ def profile(request):
             "form": form,
             "memberships": memberships,
             "certificates": certificates,
+            "invoices": invoices,
         },
     )

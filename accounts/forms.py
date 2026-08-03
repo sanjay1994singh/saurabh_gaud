@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm
 from django.utils.text import slugify
 
 from .models import Country, State, User
@@ -39,7 +38,7 @@ def _configure_location_fields(form, selected_country=None):
                 form.fields["state_obj"].initial = default_state
 
 
-class RegisterForm(UserCreationForm):
+class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
@@ -52,8 +51,6 @@ class RegisterForm(UserCreationForm):
             "city",
             "country",
             "state_obj",
-            "password1",
-            "password2",
         )
         labels = {
             "first_name": "नाम / First name",

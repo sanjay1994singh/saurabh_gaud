@@ -1226,6 +1226,65 @@ p {
   font-weight: 800;
 }
 
+.checkout-consent {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  margin: 18px 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.checkout-donation-notice {
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid #e5c49d;
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  background: #fff8ed;
+  color: #4a2414;
+}
+
+.checkout-donation-notice strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--maroon);
+}
+
+.checkout-donation-notice p {
+  margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.checkout-consent input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+.checkout-consent a,
+.policy-content a {
+  color: var(--maroon);
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.primary-action:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.35);
+  opacity: 0.55;
+}
+
+.policy-content h2 {
+  margin-top: 28px;
+  margin-bottom: 8px;
+  color: var(--maroon);
+  font-size: 24px;
+}
+
 .home-stambh-section {
   padding-bottom: 34px;
 }
@@ -4251,8 +4310,10 @@ p {
   }
 
   .certificate-preview {
-    overflow: hidden;
+    overflow: auto;
+    max-width: 100%;
     padding: 8px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .certificate-preview svg {
@@ -4260,6 +4321,23 @@ p {
     width: 100%;
     min-width: 0;
     height: auto;
+  }
+
+  .certificate-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .certificate-actions a {
+    flex: 1 1 140px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .certificate-format-note {
+    overflow-wrap: anywhere;
   }
 
   .card-body h2,

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Cancellation and Refund Policy{% endblock %}
+{% block content %}
+<section class="detail-page"><div class="detail-shell"><article class="detail-content rich-text policy-content">
+  <p class="eyebrow">Legal</p><h1>Cancellation and Refund Policy</h1><p><strong>Effective: 3 August 2026</strong></p>
+  <h2>Cancellation</h2><p>Current memberships are fixed-period and do not auto-renew. A member may ask us to close the account, but closing an account does not automatically create a refund entitlement.</p>
+  <h2>Nature of payment</h2><p>The paid-plan amount is a voluntary yearly membership donation to Dharm Raksha Sangh. Once payment is successful, membership is activated and the certificate/benefits are delivered, the donation is final and non-refundable. No refund is provided for change of mind, non-use of membership, account closure, or incorrect information supplied by the member.</p>
+  <h2>Limited exceptions</h2><p>Only a verified duplicate debit, successful debit where membership was never activated, an incorrect amount caused by our technical error, or a refund required by applicable law may be reviewed. A failed or reversed transaction is not treated as a successfully received donation.</p>
+  <h2>How to request</h2><p>Contact us within 7 days of payment with your registered email, Razorpay payment ID, order ID and reason. Do not share card details, CVV, OTP or UPI PIN.</p>
+  <h2>Processing time</h2><p>Approved refunds are initiated to the original payment method. Banks and payment providers may take approximately 5-10 working days to reflect the credit after initiation.</p>
+  <h2>Contact</h2><p>Email info@dharmrakshasangh.com or use the <a href="{% url 'home:contact' %}">Contact page</a>.</p>
+</article></div></section>{% endblock %}

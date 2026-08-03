@@ -42,11 +42,30 @@
               </div>
               <div class="certificate-actions">
                 <a class="section-link" href="{{ certificate.get_absolute_url }}">{{ ui.view }}</a>
-                <a class="section-link" href="{% url 'subscriptions:certificate_download' certificate.pk %}">{{ ui.download }}</a>
+                <a class="section-link" href="{% url 'subscriptions:certificate_download' certificate.pk %}" target="_blank" rel="noopener">{{ ui.download }} PDF</a>
               </div>
             </div>
           {% empty %}
             <p class="empty-state">{{ ui.no_certificates }}</p>
+          {% endfor %}
+        </div>
+
+        <h2>{% if current_lang == "hi" %}भुगतान रसीद / इनवॉइस{% else %}Payment Invoices{% endif %}</h2>
+        <div class="membership-list">
+          {% for invoice in invoices %}
+            <div class="membership-row">
+              <div>
+                <strong>{{ invoice.invoice_number }}</strong>
+                <span>{{ invoice.payment.plan_name }} - INR {{ invoice.total_rupees|floatformat:2 }}</span>
+                <small>{{ invoice.issued_at|date:"d M Y" }}</small>
+              </div>
+              <div class="certificate-actions">
+                <a class="section-link" href="{{ invoice.get_absolute_url }}">{{ ui.view }}</a>
+                <a class="section-link" href="{% url 'subscriptions:invoice_download' invoice.pk %}">{{ ui.download }} PDF</a>
+              </div>
+            </div>
+          {% empty %}
+            <p class="empty-state">{% if current_lang == "hi" %}अभी कोई भुगतान इनवॉइस उपलब्ध नहीं है।{% else %}No payment invoice is available yet.{% endif %}</p>
           {% endfor %}
         </div>
       </div>

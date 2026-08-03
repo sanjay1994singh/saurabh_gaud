@@ -97,6 +97,10 @@
           <a href="{% url 'patrika:index' %}">{{ ui.patrika }}</a>
           <a href="{% url 'subscriptions:plans' %}">{{ ui.membership }}</a>
           <a href="/donate/">{{ ui.donate }}</a>
+          <a href="{% url 'home:terms' %}">{% if current_lang == "hi" %}नियम एवं शर्तें{% else %}Terms{% endif %}</a>
+          <a href="{% url 'home:privacy' %}">{% if current_lang == "hi" %}गोपनीयता नीति{% else %}Privacy{% endif %}</a>
+          <a href="{% url 'home:refunds' %}">{% if current_lang == "hi" %}रद्दीकरण एवं रिफंड{% else %}Cancellation & Refunds{% endif %}</a>
+          <a href="{% url 'home:shipping' %}">{% if current_lang == "hi" %}डिलीवरी नीति{% else %}Delivery Policy{% endif %}</a>
         </div>
       </div>
       <div class="footer-contact">

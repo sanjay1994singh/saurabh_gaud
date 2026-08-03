@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 class SubscriptionPlan(models.Model):
@@ -17,7 +18,7 @@ class SubscriptionPlan(models.Model):
     )
 
     name = models.CharField(max_length=150)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=180, unique=True, blank=True)
     plan_type = models.CharField(max_length=12, choices=PLAN_TYPES, default=FREE)
     member_type_text = models.CharField(
         max_length=150,
@@ -37,6 +38,20 @@ class SubscriptionPlan(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            # Django's Unicode slug validator strips Hindi combining marks
+            # (matras/halant). Use a stable, valid generated slug instead of
+            # saving a visually corrupted Hindi word.
+            base_slug = slugify(self.name) or f"plan-{uuid4().hex[:8]}"
+            candidate = base_slug
+            suffix = 2
+            while SubscriptionPlan.objects.exclude(pk=self.pk).filter(slug=candidate).exists():
+                candidate = f"{base_slug}-{suffix}"
+                suffix += 1
+            self.slug = candidate
+        super().save(*args, **kwargs)
 
     @property
     def amount_paise(self):
@@ -109,6 +124,101 @@ class MembershipSubscription(models.Model):
         self.ends_at = now + timedelta(days=self.plan.duration_days)
         self.save(update_fields=("status", "starts_at", "ends_at", "updated_at"))
         Certificate.objects.get_or_create(user=self.user, subscription=self)
+
+
+class PaymentTransaction(models.Model):
+    CREATED = "created"
+    PAID = "paid"
+    FAILED = "failed"
+
+    STATUS_CHOICES = ((CREATED, "Created"), (PAID, "Paid"), (FAILED, "Failed"))
+
+    subscription = models.OneToOneField(
+        MembershipSubscription, on_delete=models.CASCADE, related_name="payment_transaction"
+    )
+    user_name = models.CharField(max_length=180)
+    user_email = models.EmailField(blank=True)
+    user_phone = models.CharField(max_length=30, blank=True)
+    user_address = models.TextField(blank=True)
+    plan_name = models.CharField(max_length=150)
+    amount_paise = models.PositiveIntegerField()
+    currency = models.CharField(max_length=3, default="INR")
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default=CREATED)
+    razorpay_order_id = models.CharField(max_length=120, unique=True)
+    razorpay_payment_id = models.CharField(max_length=120, blank=True, db_index=True)
+    razorpay_signature = models.CharField(max_length=255, blank=True)
+    gateway_status = models.CharField(max_length=40, blank=True)
+    failure_reason = models.TextField(blank=True)
+    gateway_response = models.JSONField(default=dict, blank=True)
+    paid_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return f"{self.razorpay_order_id} - {self.get_status_display()}"
+
+
+class InvoiceSequence(models.Model):
+    financial_year = models.CharField(max_length=7, unique=True)
+    next_number = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.financial_year}: {self.next_number}"
+
+
+class Invoice(models.Model):
+    payment = models.OneToOneField(PaymentTransaction, on_delete=models.PROTECT, related_name="invoice")
+    invoice_number = models.CharField(max_length=16, unique=True)
+    issued_at = models.DateTimeField(default=timezone.now)
+    description = models.CharField(max_length=255, default="Annual membership fee")
+    subtotal_paise = models.PositiveIntegerField()
+    tax_paise = models.PositiveIntegerField(default=0)
+    total_paise = models.PositiveIntegerField()
+    currency = models.CharField(max_length=3, default="INR")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("-issued_at",)
+
+    def __str__(self):
+        return self.invoice_number
+
+    @property
+    def total_rupees(self):
+        return self.total_paise / 100
+
+    def get_absolute_url(self):
+        return reverse("subscriptions:invoice", kwargs={"pk": self.pk})
+
+    @classmethod
+    def issue_for_payment(cls, payment):
+        from django.db import transaction
+
+        existing = cls.objects.filter(payment=payment).first()
+        if existing:
+            return existing
+        today = timezone.localdate()
+        start_year = today.year if today.month >= 4 else today.year - 1
+        financial_year = f"{start_year}-{str(start_year + 1)[-2:]}"
+        with transaction.atomic():
+            sequence, _ = InvoiceSequence.objects.select_for_update().get_or_create(
+                financial_year=financial_year
+            )
+            number = sequence.next_number
+            sequence.next_number += 1
+            sequence.save(update_fields=("next_number",))
+            return cls.objects.create(
+                payment=payment,
+                invoice_number=f"DRS{str(start_year)[-2:]}-{number:06d}",
+                description=f"{payment.plan_name} yearly membership donation",
+                subtotal_paise=payment.amount_paise,
+                tax_paise=0,
+                total_paise=payment.amount_paise,
+                currency=payment.currency,
+            )
 
 
 class Certificate(models.Model):

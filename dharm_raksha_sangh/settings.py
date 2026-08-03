@@ -76,8 +76,8 @@ DATABASES = {
         "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.mysql"),
         "NAME": os.environ.get("DB_NAME", "dharm_raksha_sangh"),
         "USER": os.environ.get("DB_USER", "saurabh_gaud"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "Hello12345678#$@"),
-        "HOST": os.environ.get("DB_HOST", "103.168.19.9"),
+        "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": os.environ.get("DB_PORT", "3306"),
         "OPTIONS": {
             "charset": "utf8mb4",
@@ -131,6 +131,16 @@ LOGIN_ERROR_URL = "login"
 
 RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "")
 RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "")
+RAZORPAY_WEBHOOK_SECRET = os.environ.get("RAZORPAY_WEBHOOK_SECRET", "")
+
+SITE_URL = os.environ.get("SITE_URL", "https://dharmrakshasangh.com").rstrip("/")
+ORGANIZATION_NAME = os.environ.get("ORGANIZATION_NAME", SITE_NAME)
+ORGANIZATION_ADDRESS = os.environ.get(
+    "ORGANIZATION_ADDRESS", "Shri Dham Vrindavan, Mathura, Uttar Pradesh, India"
+)
+ORGANIZATION_PHONE = os.environ.get("ORGANIZATION_PHONE", "+91 98371 647 90")
+ORGANIZATION_EMAIL = os.environ.get("ORGANIZATION_EMAIL", "info@dharmrakshasangh.com")
+ORGANIZATION_GSTIN = os.environ.get("ORGANIZATION_GSTIN", "")
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.google.GoogleOAuth2",
@@ -151,4 +161,43 @@ SOCIAL_AUTH_PROTECTED_USER_FIELDS = [
     "address",
     "city",
     "photo",
+]
+
+
+# Django Email Configuration
+# Add the following entries to the project .env file (without the leading #):
+# EMAIL_HOST_USER=your-gmail-address@gmail.com
+# EMAIL_HOST_PASSWORD=your-new-16-character-google-app-password
+# DEFAULT_FROM_EMAIL=your-gmail-address@gmail.com
+#
+# Do not paste the real Gmail password or App Password in settings.py.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "").replace(" ", "")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "webmaster@localhost")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_TIMEOUT = 20
+
+
+# HTTPS/security defaults are enabled whenever DEBUG=False. If TLS terminates
+# at a reverse proxy, it must forward X-Forwarded-Proto correctly.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_HSTS_SECONDS = int(os.environ.get("SECURE_HSTS_SECONDS", "31536000" if not DEBUG else "0"))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "CSRF_TRUSTED_ORIGINS",
+        "https://dharmrakshasangh.com,https://www.dharmrakshasangh.com",
+    ).split(",")
+    if origin.strip()
 ]

@@ -12,15 +12,9 @@
         {% if next_url %}
           <input type="hidden" name="next" value="{{ next_url }}">
         {% endif %}
-        {% if is_membership_join %}
-          <input type="hidden" name="password1" value="{{ membership_join_password }}">
-          <input type="hidden" name="password2" value="{{ membership_join_password }}">
-        {% endif %}
         {{ form.non_field_errors }}
         {% for field in form %}
-          {% if is_membership_join and field.name == "password1" %}
-          {% elif is_membership_join and field.name == "password2" %}
-          {% elif field.name == "photo" %}
+          {% if field.name == "photo" %}
             <div class="photo-field">
               <span>{{ field.label }}</span>
               <div class="photo-field-actions">
@@ -45,6 +39,8 @@
         {% endfor %}
         <button class="primary-action" type="submit">{{ ui.create_account }}</button>
       </form>
+      <p class="form-note">By creating an account, you agree to our <a class="text-link" href="{% url 'home:terms' %}">Terms</a> and <a class="text-link" href="{% url 'home:privacy' %}">Privacy Policy</a>.</p>
+      <p class="form-note">A strong initial password will be generated securely and sent to your registered email address. Please change it after your first login.</p>
       <p class="form-note">{{ ui.already_registered }} <a class="text-link" href="{% url 'login' %}">{{ ui.login }}</a></p>
       <div class="social-auth-section">
         <div class="auth-divider"><span>{{ ui.or }}</span></div>
