@@ -1,9 +1,11 @@
 from io import BytesIO
+from html import escape
 from pathlib import Path
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+import fitz
+from PIL import Image, ImageDraw, ImageOps
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -17,22 +19,31 @@ def _font_path():
     return Path(settings.BASE_DIR) / "static" / "fonts" / "NotoSansDevanagari-Variable.ttf"
 
 
-def _image_font(size):
-    return ImageFont.truetype(str(_font_path()), size=size)
-
-
 def _background_path():
     return finders.find("certificate_background/Certificate.jpg") or str(
         Path(settings.BASE_DIR) / "static" / "certificate_background" / "Certificate.jpg"
     )
 
 
-def _background_image():
+def _jpeg_bytes(image, quality=92):
+    output = BytesIO()
+    image.save(output, "JPEG", quality=quality, optimize=True, progressive=False)
+    return output.getvalue()
+
+
+def _png_bytes(image):
+    output = BytesIO()
+    image.save(output, "PNG", optimize=True)
+    return output.getvalue()
+
+
+def _background_bytes():
     with Image.open(_background_path()) as source:
-        return ImageOps.exif_transpose(source).convert("RGB").resize(
+        image = ImageOps.exif_transpose(source).convert("RGB").resize(
             (DESIGN_WIDTH, DESIGN_HEIGHT),
             Image.Resampling.LANCZOS,
         )
+        return _jpeg_bytes(image, quality=92)
 
 
 def _member_address(user):
@@ -72,44 +83,68 @@ def _photo_image(user):
         return None
 
 
-def _draw_image_centered(draw, text, y, size, color="#5b1f0d"):
-    font = _image_font(size)
-    draw.text(
-        (DESIGN_WIDTH / 2, y),
-        str(text),
-        anchor="mt",
-        align="center",
-        fill=color,
-        font=font,
-    )
+def _framed_photo_image(image, radius=22, y_offset=20):
+    framed = Image.new("RGBA", (352, 388), (255, 255, 255, 0))
+    framed.paste(image.convert("RGBA"), (0, y_offset))
+    mask = Image.new("L", framed.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, framed.width, framed.height), radius=radius, fill=255)
+    framed.putalpha(mask)
+    return framed
 
 
-def _certificate_image(certificate):
+def _insert_centered_html(page, text, y, width, height, size, color="#5b1f0d", weight=700):
+    font_dir = _font_path().parent
+    css = f"""
+@font-face {{
+  font-family: DRSDevanagari;
+  src: url("{_font_path().name}");
+}}
+body {{
+  margin: 0;
+  padding: 0;
+}}
+.text {{
+  color: {color};
+  font-family: DRSDevanagari, "Noto Sans Devanagari", sans-serif;
+  font-size: {size}px;
+  font-weight: {weight};
+  line-height: 1.15;
+  text-align: center;
+}}
+"""
+    rect = fitz.Rect((DESIGN_WIDTH - width) / 2, y, (DESIGN_WIDTH + width) / 2, y + height)
+    html = f'<div class="text">{escape(str(text))}</div>'
+    archive = fitz.Archive(str(font_dir))
+    page.insert_htmlbox(rect, html, css=css, archive=archive)
+
+
+def _certificate_page_pixmap(certificate):
     user = certificate.user
     subscription = certificate.subscription
     full_name = user.get_full_name() or user.get_username()
     member_type = subscription.plan.certificate_member_type
 
-    image = _background_image()
+    document = fitz.open()
+    page = document.new_page(width=DESIGN_WIDTH, height=DESIGN_HEIGHT)
+    page.insert_image(page.rect, stream=_background_bytes())
+
     photo = _photo_image(user)
     if photo:
-        image.paste(photo, (914, 998))
+        page.insert_image(fitz.Rect(914, 998, 1266, 1386), stream=_png_bytes(_framed_photo_image(photo)))
     else:
-        draw = ImageDraw.Draw(image)
-        draw.rectangle((914, 998, 1266, 1386), fill="#ffffff")
-        _draw_image_centered(draw, (full_name[:1] or "M").upper(), 1170, 150, "#7b2435")
+        page.draw_rect(fitz.Rect(914, 998, 1266, 1386), color=(1, 1, 1), fill=(1, 1, 1))
+        _insert_centered_html(page, (full_name[:1] or "M").upper(), 1160, 352, 180, 150, "#7b2435")
 
-    draw = ImageDraw.Draw(image)
-    _draw_image_centered(draw, full_name, 1518, 58)
+    _insert_centered_html(page, full_name, 1490, 1500, 80, 58)
 
     address_lines = _wrap(_member_address(user))
     address_size = 34 if len(address_lines) == 1 else 28
-    start_y = 1598 - ((len(address_lines) - 1) * 38 // 2)
+    start_y = 1570 - ((len(address_lines) - 1) * 38 // 2)
     for index, line in enumerate(address_lines):
-        _draw_image_centered(draw, line, start_y + index * 38, address_size)
+        _insert_centered_html(page, line, start_y + index * 38, 1600, 54, address_size, weight=500)
 
-    _draw_image_centered(draw, member_type, 2006, 74)
-    return image
+    _insert_centered_html(page, member_type, 1998, 1300, 95, 74)
+    return page.get_pixmap(alpha=False)
 
 
 def build_certificate_pdf(certificate):
@@ -127,10 +162,8 @@ def build_certificate_pdf(certificate):
         title=f"Membership Certificate {certificate.certificate_number}",
         author=settings.ORGANIZATION_NAME,
     )
-    certificate_image = _certificate_image(certificate)
-    image_output = BytesIO()
-    certificate_image.save(image_output, "JPEG", quality=92, optimize=True, progressive=False)
-    image_output.seek(0)
+    pixmap = _certificate_page_pixmap(certificate)
+    image_output = BytesIO(pixmap.tobytes("png"))
     pdf.drawImage(ImageReader(image_output), 0, 0, A4[0], A4[1])
     pdf.showPage()
     pdf.save()

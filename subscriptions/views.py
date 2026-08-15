@@ -417,7 +417,7 @@ def build_address_markup(address):
     lines = wrap_certificate_text(address)
     font_size = 34 if len(lines) == 1 else 28
     line_height = 38
-    start_y = 1625 - ((len(lines) - 1) * line_height // 2)
+    start_y = 1603 - ((len(lines) - 1) * line_height // 2)
     return "\n".join(
         f'  <text x="1104" y="{start_y + index * line_height}" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="{font_size}" fill="#5b1f0d">{escape(line)}</text>'
         for index, line in enumerate(lines)
@@ -439,8 +439,13 @@ def build_certificate_svg(certificate, photo_data_uri=""):
 
     if photo_data_uri:
         photo_markup = f"""
-  <clipPath id="memberPhotoClip"><rect x="914" y="998" width="352" height="388"/></clipPath>
-  <image href="{photo_data_uri}" x="914" y="998" width="352" height="388" preserveAspectRatio="xMidYMid slice" clip-path="url(#memberPhotoClip)"/>"""
+  <defs>
+    <mask id="memberPhotoMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+      <rect width="2208" height="2989" fill="black"/>
+      <rect x="914" y="998" width="352" height="388" rx="22" ry="22" fill="white"/>
+    </mask>
+  </defs>
+  <image href="{photo_data_uri}" x="914" y="1018" width="352" height="388" preserveAspectRatio="xMidYMid slice" mask="url(#memberPhotoMask)"/>"""
     else:
         initial = escape(full_name[:1].upper() or "M")
         photo_markup = f"""
@@ -450,7 +455,7 @@ def build_certificate_svg(certificate, photo_data_uri=""):
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2208 2989" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;max-width:2208px;height:auto;background:#fff8c7;">
   {background_markup}
   {photo_markup}
-  <text x="1104" y="1550" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="58" fill="#5b1f0d" font-weight="700">{escape(full_name)}</text>
+  <text x="1104" y="1528" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="58" fill="#5b1f0d" font-weight="700">{escape(full_name)}</text>
 {address_markup}
   <text x="1104" y="2048" text-anchor="middle" font-family="Arial, Noto Sans Devanagari, sans-serif" font-size="74" fill="#5b1f0d" font-weight="700">{escape(member_type)}</text>
 </svg>"""
