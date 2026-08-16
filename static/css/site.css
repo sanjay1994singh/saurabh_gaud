@@ -1256,6 +1256,25 @@ p {
   font-weight: 800;
 }
 
+.plan-join-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.plan-join-row .primary-action {
+  margin-top: 0;
+}
+
+.plan-click-hint {
+  color: var(--maroon);
+  font-size: 18px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
 .checkout-consent {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

@@ -38,9 +38,12 @@
                 {{ plan.duration_days }} {{ ui.days_validity }}
               {% endif %}
             </span>
-            <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'accounts:register' %}?next={{ plan.get_absolute_url }}{% endif %}">
-              {{ ui.join }}
-            </a>
+            <div class="plan-join-row">
+              <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'accounts:register' %}?next={{ plan.get_absolute_url }}{% endif %}">
+                {{ ui.join }}
+              </a>
+              <span class="plan-click-hint" aria-hidden="true">← यहाँ क्लिक करें</span>
+            </div>
           </div>
         </article>
       {% empty %}
