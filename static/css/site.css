@@ -4766,3 +4766,219 @@ p {
     font-size: 11px;
   }
 }
+
+@media (max-width: 640px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  a,
+  button,
+  strong,
+  span,
+  small {
+    overflow-wrap: anywhere;
+  }
+
+  .primary-action,
+  .secondary-action,
+  .section-link,
+  .social-button,
+  .landing-channel-join,
+  .landing-youtube-actions .primary-action,
+  .landing-youtube-actions .secondary-action {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    justify-content: center;
+    padding: 10px 14px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .detail-actions,
+  .certificate-actions,
+  .footer-actions,
+  .landing-actions,
+  .patrika-card-actions,
+  .plan-join-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .plan-click-hint {
+    text-align: center;
+    white-space: normal;
+  }
+
+  .auth-panel,
+  .profile-panel,
+  .plan-card,
+  .about-panel,
+  .contact-panel,
+  .donation-panel,
+  .tax-note,
+  .landing-events-panel,
+  .landing-news-panel,
+  .landing-message-panel,
+  .prakalp-card,
+  .event-card,
+  .patrika-card,
+  .detail-content {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .plan-card,
+  .event-card,
+  .prakalp-card,
+  .patrika-card,
+  .landing-prakalp-card,
+  .membership-row,
+  .landing-event-row {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-prakalp-card {
+    max-width: 100%;
+  }
+
+  .landing-prakalp-media,
+  .card-media,
+  .patrika-cover,
+  .patrika-feature-cover,
+  .landing-news-video {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .landing-message-photo {
+    width: 104px;
+    height: 104px;
+  }
+
+  .form-stack,
+  .register-panel .form-stack {
+    grid-template-columns: 1fr;
+  }
+
+  .form-stack label,
+  .photo-field {
+    min-width: 0;
+  }
+
+  .form-stack input,
+  .form-stack textarea,
+  .form-stack select,
+  .photo-gallery-control input[type="file"] {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-prakalp-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .landing-prakalp-card {
+    display: block;
+    width: min(100%, 430px);
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .landing-prakalp-media {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .landing-prakalp-body {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    min-height: 0;
+    padding: 14px 12px 16px;
+    text-align: center;
+  }
+
+  .landing-prakalp-body h3 {
+    display: block;
+    min-height: 0;
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  .landing-stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .landing-stats div {
+    gap: 3px;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 0;
+    padding: 12px 4px;
+  }
+
+  .landing-stats div::before {
+    width: 24px;
+    height: 24px;
+  }
+
+  .landing-stats strong {
+    font-size: clamp(18px, 6vw, 28px);
+  }
+
+  .landing-stats span {
+    font-size: clamp(10px, 3vw, 14px);
+  }
+
+  .landing-final-cta {
+    gap: 18px;
+    padding: 34px 20px 42px;
+  }
+
+  .landing-final-cta h2 {
+    font-size: clamp(32px, 10vw, 46px);
+    line-height: 1.12;
+  }
+
+  .landing-final-cta .landing-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .landing-final-cta .landing-actions .primary-action,
+  .landing-final-cta .landing-actions .secondary-action {
+    width: 100%;
+    min-width: 0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .landing-stats strong {
+    font-size: 19px;
+  }
+
+  .landing-stats span {
+    font-size: 10px;
+  }
+
+  .landing-final-cta .landing-actions {
+    grid-template-columns: 1fr;
+  }
+}
