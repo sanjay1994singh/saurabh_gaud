@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ ui.membership }}{% endblock %}
 
 {% block content %}
+  <section class="membership-banner">
+    <img src="{% static 'banners/membership_banner.png' %}" alt="{{ ui.membership_banner_alt }}">
+  </section>
+
   <section class="page-intro">
     <p class="eyebrow">{{ ui.membership }}</p>
     <h1>{{ ui.choose_plan }}</h1>
@@ -26,7 +31,13 @@
                 Rs. {{ plan.amount }}
               {% endif %}
             </strong>
-            <span class="plan-duration">{{ plan.duration_days }} {{ ui.days_validity }}</span>
+            <span class="plan-duration">
+              {% if plan.is_free %}
+                {{ ui.lifetime_free }}
+              {% else %}
+                {{ plan.duration_days }} {{ ui.days_validity }}
+              {% endif %}
+            </span>
             <a class="primary-action" href="{% if user.is_authenticated %}{{ plan.get_absolute_url }}{% else %}{% url 'accounts:register' %}?next={{ plan.get_absolute_url }}{% endif %}">
               {{ ui.join }}
             </a>

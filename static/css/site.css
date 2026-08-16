@@ -1198,6 +1198,21 @@ p {
   height: auto;
 }
 
+.membership-banner {
+  width: min(1180px, calc(100% - 44px));
+  margin: 28px auto 0;
+}
+
+.membership-banner img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2048 / 670;
+  border-radius: 8px;
+  object-fit: cover;
+  object-position: center;
+  box-shadow: var(--shadow);
+}
+
 .plan-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4281,6 +4296,7 @@ p {
   .cta-band,
   .section,
   .page-intro,
+  .membership-banner,
   .banner-slot,
   .detail-page,
   .certificate-page,

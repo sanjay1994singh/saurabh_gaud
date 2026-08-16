@@ -117,6 +117,8 @@ UI_TEXT = {
     },
     "free": {"hi": "निशुल्क", "en": "Free"},
     "days_validity": {"hi": "दिन की वैधता", "en": "days validity"},
+    "lifetime_free": {"hi": "आजीवन निशुल्क", "en": "Lifetime free"},
+    "membership_banner_alt": {"hi": "धर्म रक्षा संघ सदस्यता अभियान", "en": "Dharm Raksha Sangh membership campaign"},
     "join_now": {"hi": "अभी जुड़ें", "en": "Join now"},
     "login_to_join": {"hi": "लॉगिन करके लें", "en": "Log in to join"},
     "no_plans": {"hi": "अभी कोई सदस्यता प्लान उपलब्ध नहीं है.", "en": "No membership plans are available yet."},
