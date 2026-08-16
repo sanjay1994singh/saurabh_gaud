@@ -11,7 +11,7 @@
   function setOptions(states, keepValue) {
     const placeholder = document.createElement("option");
     placeholder.value = "";
-    placeholder.textContent = states.length ? "Select state" : "State not available";
+    placeholder.textContent = states.length ? "राज्य चुनें" : "राज्य उपलब्ध नहीं है";
     stateSelect.replaceChildren(placeholder);
     states.forEach(function (state) {
       const option = document.createElement("option");

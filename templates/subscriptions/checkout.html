@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{% if current_lang == "hi" %}भुगतान{% else %}Payment{% endif %}{% endblock %}
+{% block title %}भुगतान{% endblock %}
 
 {% block content %}
   <section class="auth-page">
@@ -9,15 +9,14 @@
       <h1>{{ plan.name }}</h1>
       <p class="checkout-amount">Rs. {{ plan.amount }}</p>
       <div class="checkout-donation-notice">
-        <strong>वार्षिक सदस्यता दान / Yearly Membership Donation</strong>
-        <p>यह राशि धर्म रक्षा संघ के लिए स्वैच्छिक वार्षिक सदस्यता दान है। सफल भुगतान और सदस्यता सक्रिय होने के बाद यह donation final और non-refundable है, केवल duplicate debit, failed activation अथवा कानून द्वारा अनिवार्य स्थिति को छोड़कर।</p>
-        <p>This amount is a voluntary yearly membership donation to Dharm Raksha Sangh. After successful payment and membership activation, it is final and non-refundable, except duplicate debit, failed activation, or where required by law.</p>
+        <strong>वार्षिक सदस्यता दान</strong>
+        <p>यह राशि धर्म रक्षा संघ के लिए स्वैच्छिक वार्षिक सदस्यता दान है. सफल भुगतान और सदस्यता सक्रिय होने के बाद यह दान अंतिम और non-refundable है, केवल duplicate debit, failed activation अथवा कानून द्वारा अनिवार्य स्थिति को छोड़कर.</p>
       </div>
       <label class="checkout-consent">
         <input id="policy-consent" type="checkbox" required>
-        <span>I understand that this is a yearly membership donation and agree to the <a href="{% url 'home:terms' %}" target="_blank">Terms</a>,
-          <a href="{% url 'home:privacy' %}" target="_blank">Privacy Policy</a> and
-          <a href="{% url 'home:refunds' %}" target="_blank">Cancellation & Refund Policy</a>.</span>
+        <span>मैं समझता/समझती हूँ कि यह वार्षिक सदस्यता दान है और <a href="{% url 'home:terms' %}" target="_blank">नियम एवं शर्तें</a>,
+          <a href="{% url 'home:privacy' %}" target="_blank">गोपनीयता नीति</a> और
+          <a href="{% url 'home:refunds' %}" target="_blank">रद्दीकरण एवं रिफंड नीति</a> से सहमत हूँ.</span>
       </label>
       <button id="pay-button" class="primary-action" type="button" disabled>{{ ui.pay_razorpay }}</button>
       <a class="secondary-action" href="{% url 'subscriptions:plans' %}">{{ ui.cancel }}</a>
@@ -46,7 +45,7 @@
         amount: "{{ amount_paise }}",
         currency: "INR",
         name: "{{ ui.site_name|escapejs }}",
-        description: "Yearly membership donation - {{ plan.name|escapejs }}",
+        description: "वार्षिक सदस्यता दान - {{ plan.name|escapejs }}",
         order_id: "{{ razorpay_order_id }}",
         prefill: {
           name: "{{ request.user.get_full_name|default:request.user.username|escapejs }}",
@@ -67,7 +66,7 @@
         const failureForm = new FormData();
         failureForm.append("csrfmiddlewaretoken", paymentForm.querySelector('[name="csrfmiddlewaretoken"]').value);
         failureForm.append("razorpay_order_id", "{{ razorpay_order_id|escapejs }}");
-        failureForm.append("error_description", response.error.description || "Payment failed");
+        failureForm.append("error_description", response.error.description || "भुगतान असफल रहा");
         fetch("{% url 'subscriptions:payment_failed' %}", {
           method: "POST",
           body: failureForm,

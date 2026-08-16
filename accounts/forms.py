@@ -6,7 +6,7 @@ from .models import Country, State, User
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(label="ईमेल / मोबाइल / Username")
+    username = forms.CharField(label="ईमेल / मोबाइल / यूजरनेम")
 
 
 def _india_country():
@@ -46,22 +46,26 @@ class RegisterForm(forms.ModelForm):
             "last_name",
             "email",
             "phone",
-            "photo",
             "address",
             "city",
-            "country",
+            "district",
+            "pin_code",
             "state_obj",
+            "country",
+            "photo",
         )
         labels = {
-            "first_name": "नाम / First name",
-            "last_name": "उपनाम / Last name",
-            "email": "ईमेल / Email",
-            "phone": "मोबाइल / Phone",
-            "photo": "फोटो / Photo",
-            "address": "पूरा पता / Complete address",
-            "city": "शहर / City",
-            "country": "देश / Country",
-            "state_obj": "राज्य / State",
+            "first_name": "नाम",
+            "last_name": "उपनाम",
+            "email": "ईमेल",
+            "phone": "मोबाइल",
+            "photo": "फोटो",
+            "address": "पूरा पता",
+            "city": "शहर",
+            "district": "जिला",
+            "pin_code": "पिन कोड",
+            "country": "देश",
+            "state_obj": "राज्य",
         }
         widgets = {
             "photo": forms.ClearableFileInput(attrs={"accept": "image/*"}),
@@ -102,21 +106,36 @@ class RegisterForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-    username = forms.CharField(label="Username", required=False, disabled=True)
+    username = forms.CharField(label="यूजरनेम", required=False, disabled=True)
 
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name", "email", "phone", "photo", "address", "city", "country", "state_obj")
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "address",
+            "city",
+            "district",
+            "pin_code",
+            "state_obj",
+            "country",
+            "photo",
+        )
         labels = {
-            "first_name": "नाम / First name",
-            "last_name": "उपनाम / Last name",
-            "email": "ईमेल / Email",
-            "phone": "मोबाइल / Phone",
-            "photo": "फोटो / Photo",
-            "address": "पूरा पता / Complete address",
-            "city": "शहर / City",
-            "country": "देश / Country",
-            "state_obj": "राज्य / State",
+            "first_name": "नाम",
+            "last_name": "उपनाम",
+            "email": "ईमेल",
+            "phone": "मोबाइल",
+            "photo": "फोटो",
+            "address": "पूरा पता",
+            "city": "शहर",
+            "district": "जिला",
+            "pin_code": "पिन कोड",
+            "country": "देश",
+            "state_obj": "राज्य",
         }
         widgets = {
             "photo": forms.ClearableFileInput(attrs={"accept": "image/*"}),

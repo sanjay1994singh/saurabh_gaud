@@ -13,5 +13,4 @@ urlpatterns = [
     path("privacy-policy/", views.privacy, name="privacy"),
     path("cancellation-and-refunds/", views.refunds, name="refunds"),
     path("shipping-and-delivery/", views.shipping, name="shipping"),
-    path("language/", views.set_language, name="set_language"),
 ]

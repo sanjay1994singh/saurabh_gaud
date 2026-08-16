@@ -13,13 +13,13 @@
       </picture>
     </div>
     <div class="landing-hero-content">
-      <p class="landing-mantra">{% if current_lang == "hi" %}।। धर्मो रक्षति रक्षितः ।।{% else %}Dharma protects those who protect it{% endif %}</p>
+      <p class="landing-mantra">।। धर्मो रक्षति रक्षितः ।।</p>
       <h1>{{ ui.site_name }}</h1>
       <p class="landing-tagline">{{ ui.hero_eyebrow }}</p>
-      <p class="landing-subtitle">{% if current_lang == "hi" %}धर्म की रक्षा, राष्ट्र की सेवा, समाज का उत्थान{% else %}Protecting dharma, serving the nation, uplifting society{% endif %}</p>
+      <p class="landing-subtitle">धर्म की रक्षा, राष्ट्र की सेवा, समाज का उत्थान</p>
       <div class="landing-actions">
         <a class="primary-action landing-action-membership" href="{% url 'subscriptions:plans' %}"><span class="landing-action-icon" aria-hidden="true"></span>{{ ui.join }}</a>
-        <a class="secondary-action landing-support-action" href="{% url 'home:donate' %}"><span class="landing-action-icon" aria-hidden="true"></span>{% if current_lang == "hi" %}सहयोग करें{% else %}Support Us{% endif %}</a>
+        <a class="secondary-action landing-support-action" href="{% url 'home:donate' %}"><span class="landing-action-icon" aria-hidden="true"></span>सहयोग करें</a>
         <a class="secondary-action landing-dark-action" href="{% url 'seva_prakalp:index' %}"><span class="landing-action-icon" aria-hidden="true"></span>{{ ui.explore_seva }}</a>
       </div>
     </div>
@@ -28,33 +28,33 @@
   <section class="landing-service-strip" aria-label="{{ ui.core_values }}">
     <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
       <span class="landing-service-icon landing-icon-cow" aria-hidden="true"></span>
-      <strong>{% if current_lang == "hi" %}गौ सेवा{% else %}Cow Seva{% endif %}</strong>
-      <small>{% if current_lang == "hi" %}गौ संरक्षण, संवर्धन एवं गौ आधारित सेवा{% else %}Protection, care and cow-based seva{% endif %}</small>
+      <strong>गौ सेवा</strong>
+      <small>गौ संरक्षण, संवर्धन एवं गौ आधारित सेवा</small>
     </a>
     <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
       <span class="landing-service-icon landing-icon-education" aria-hidden="true"></span>
-      <strong>{% if current_lang == "hi" %}शिक्षा एवं संस्कार{% else %}Education & Sanskar{% endif %}</strong>
-      <small>{% if current_lang == "hi" %}गुरुकुल, विद्यालय, छात्रावास एवं संस्कार केंद्र{% else %}Gurukul, schools and sanskar centers{% endif %}</small>
+      <strong>शिक्षा एवं संस्कार</strong>
+      <small>गुरुकुल, विद्यालय, छात्रावास एवं संस्कार केंद्र</small>
     </a>
     <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
       <span class="landing-service-icon landing-icon-health" aria-hidden="true"></span>
-      <strong>{% if current_lang == "hi" %}स्वास्थ्य सेवा{% else %}Health Seva{% endif %}</strong>
-      <small>{% if current_lang == "hi" %}चिकित्सा शिविर, रक्तदान, और स्वास्थ्य सहायता{% else %}Medical camps, blood donation and aid{% endif %}</small>
+      <strong>स्वास्थ्य सेवा</strong>
+      <small>चिकित्सा शिविर, रक्तदान, और स्वास्थ्य सहायता</small>
     </a>
     <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
       <span class="landing-service-icon landing-icon-environment" aria-hidden="true"></span>
-      <strong>{% if current_lang == "hi" %}पर्यावरण संरक्षण{% else %}Environment Protection{% endif %}</strong>
-      <small>{% if current_lang == "hi" %}वृक्षारोपण, जल संरक्षण, और स्वच्छता अभियान{% else %}Plantation, water conservation and cleanliness{% endif %}</small>
+      <strong>पर्यावरण संरक्षण</strong>
+      <small>वृक्षारोपण, जल संरक्षण, और स्वच्छता अभियान</small>
     </a>
     <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
       <span class="landing-service-icon landing-icon-women" aria-hidden="true"></span>
-      <strong>{% if current_lang == "hi" %}महिला सशक्तिकरण{% else %}Women Empowerment{% endif %}</strong>
-      <small>{% if current_lang == "hi" %}महिला सुरक्षा, प्रशिक्षण, और आत्मनिर्भरता{% else %}Safety, training and self-reliance{% endif %}</small>
+      <strong>महिला सशक्तिकरण</strong>
+      <small>महिला सुरक्षा, प्रशिक्षण, और आत्मनिर्भरता</small>
     </a>
     <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
       <span class="landing-service-icon landing-icon-relief" aria-hidden="true"></span>
-      <strong>{% if current_lang == "hi" %}आपदा राहत{% else %}Disaster Relief{% endif %}</strong>
-      <small>{% if current_lang == "hi" %}आपदा के समय राहत, सहायता एवं पुनर्वास{% else %}Relief, support and rehabilitation{% endif %}</small>
+      <strong>आपदा राहत</strong>
+      <small>आपदा के समय राहत, सहायता एवं पुनर्वास</small>
     </a>
   </section>
 
@@ -62,7 +62,7 @@
     <section class="landing-section landing-prakalp-section">
       <div class="landing-section-heading">
         <p class="eyebrow">{{ ui.our_work }}</p>
-        <h2>{% if current_lang == "hi" %}हमारे सेवा प्रकल्प{% else %}Our Seva Prakalp{% endif %}</h2>
+        <h2>हमारे सेवा प्रकल्प</h2>
         <a class="section-link" href="{% url 'seva_prakalp:index' %}">{{ ui.view_all }}</a>
       </div>
       <div class="landing-prakalp-grid">
@@ -77,7 +77,7 @@
             </a>
             <div class="landing-prakalp-body">
               <h3><a href="{{ prakalp.get_absolute_url }}">{{ prakalp.name }}</a></h3>
-              <a class="text-link landing-prakalp-link" href="{{ prakalp.get_absolute_url }}">{% if current_lang == "hi" %}और जानें{% else %}Learn more{% endif %}</a>
+              <a class="text-link landing-prakalp-link" href="{{ prakalp.get_absolute_url }}">और जानें</a>
             </div>
           </article>
         {% endfor %}
@@ -88,7 +88,7 @@
   <section class="landing-dashboard">
     <div class="landing-events-panel">
       <div class="landing-panel-heading">
-        <h2>{% if current_lang == "hi" %}आगामी कार्यक्रम{% else %}Upcoming Events{% endif %}</h2>
+        <h2>आगामी कार्यक्रम</h2>
         <a href="{% url 'events:index' %}">{{ ui.view_all }}</a>
       </div>
       <div class="landing-event-list">
@@ -106,7 +106,7 @@
 
     <div class="landing-news-panel">
       <div class="landing-panel-heading">
-        <h2>{% if current_lang == "hi" %}ताजा समाचार{% else %}Latest Updates{% endif %}</h2>
+        <h2>ताजा समाचार</h2>
         <a href="{% url 'events:index' %}">{{ ui.view_all }}</a>
       </div>
       {% if featured_patrika %}
@@ -138,7 +138,7 @@
             <span>{{ featured_stambh.name|slice:":1" }}</span>
           {% endif %}
         </div>
-        <p class="eyebrow">{% if current_lang == "hi" %}राष्ट्रीय अध्यक्ष का संदेश{% else %}Message{% endif %}</p>
+        <p class="eyebrow">राष्ट्रीय अध्यक्ष का संदेश</p>
         <h2>{{ featured_stambh.name }}</h2>
         {% if featured_stambh.designation %}
           <strong>{{ featured_stambh.designation }}</strong>
@@ -154,7 +154,7 @@
     </aside>
   </section>
 
-  <section class="landing-stats" aria-label="{% if current_lang == 'hi' %}संस्था के आंकड़े{% else %}Organization stats{% endif %}">
+  <section class="landing-stats" aria-label="संस्था के आंकड़े">
     <div><strong>{{ stats.prakalp }}+</strong><span>{{ ui.seva_prakalp }}</span></div>
     <div><strong>{{ stats.events }}+</strong><span>{{ ui.events }}</span></div>
     <div><strong>{{ stats.members }}+</strong><span>{{ ui.membership }}</span></div>
@@ -165,8 +165,8 @@
   <section class="landing-final-cta">
     <div>
       <p class="eyebrow">{{ ui.cta_title }}</p>
-      <h2>{% if current_lang == "hi" %}आइए, धर्म रक्षा के इस महायज्ञ में सहभागी बनें।{% else %}Join this shared mission of service and culture.{% endif %}</h2>
-      <p>{% if current_lang == "hi" %}सेवा ही साधना है, समर्पण ही पूजा है।{% else %}Service is practice; dedication is worship.{% endif %}</p>
+      <h2>आइए, धर्म रक्षा के इस महायज्ञ में सहभागी बनें।</h2>
+      <p>सेवा ही साधना है, समर्पण ही पूजा है।</p>
     </div>
     <div class="landing-actions">
       <a class="primary-action" href="{% url 'subscriptions:plans' %}">{{ ui.join }}</a>

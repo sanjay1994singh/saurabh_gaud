@@ -14,7 +14,7 @@
         <div class="detail-meta">
           <span>{{ event.date_label }}</span>
           {% if event.end_date %}
-            <span>{% if current_lang == "hi" %}से{% else %}to{% endif %} {{ event.end_date|date:"d M Y" }}</span>
+            <span>से {{ event.end_date|date:"d M Y" }}</span>
           {% endif %}
           {% if event.start_time %}
             <span>{{ event.start_time|time:"g:i A" }}</span>

@@ -43,6 +43,8 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, blank=True)
     address = models.TextField(blank=True)
     city = models.CharField(max_length=100, blank=True)
+    district = models.CharField(max_length=100, blank=True)
+    pin_code = models.CharField(max_length=10, blank=True)
     country = models.ForeignKey(Country, blank=True, null=True, on_delete=models.SET_NULL)
     state = models.CharField(max_length=100, blank=True)
     state_obj = models.ForeignKey(State, blank=True, null=True, on_delete=models.SET_NULL)

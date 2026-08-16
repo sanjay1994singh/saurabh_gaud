@@ -4,7 +4,7 @@
 {% block title %}{{ patrika.title }}{% endblock %}
 
 {% block content %}
-  <article class="patrika-reader-page" data-patrika-reader data-patrika-id="{{ patrika.pk }}" data-reader-lang="{{ current_lang }}">
+  <article class="patrika-reader-page" data-patrika-reader data-patrika-id="{{ patrika.pk }}" data-reader-lang="hi">
     {% if initial_page %}
       <header class="patrika-toolbar" aria-label="{{ ui.patrika_epaper }}">
         <div class="patrika-toolbar-title">
@@ -12,9 +12,9 @@
         </div>
         <div class="patrika-toolbar-actions" aria-label="{{ ui.patrika }}">
           <label class="patrika-year-picker">
-            <span>{% if current_lang == "hi" %}वर्ष{% else %}Year{% endif %}</span>
+            <span>वर्ष</span>
             {% if year_options %}
-              <select id="patrikaYearPicker" aria-label="{% if current_lang == 'hi' %}पत्रिका वर्ष{% else %}Patrika year{% endif %}">
+              <select id="patrikaYearPicker" aria-label="पत्रिका वर्ष">
                 {% for option in year_options %}
                   <option value="{{ option.year }}" {% if option.year == current_year|stringformat:"s" %}selected{% endif %}>
                     {{ option.year }}
@@ -22,7 +22,7 @@
                 {% endfor %}
               </select>
             {% else %}
-              <span class="patrika-year-empty">{% if current_lang == "hi" %}उपलब्ध नहीं{% else %}Not available{% endif %}</span>
+              <span class="patrika-year-empty">उपलब्ध नहीं</span>
             {% endif %}
           </label>
           <button class="patrika-icon-tool" type="button" data-patrika-action="reload" aria-label="{{ ui.reload }}">{{ ui.reload }}</button>
@@ -39,10 +39,10 @@
       </header>
 
       <div class="patrika-reader-shell">
-        <button class="patrika-side-nav patrika-side-nav-prev" type="button" data-patrika-action="previous" aria-label="{% if current_lang == 'hi' %}पिछला पेज{% else %}Previous page{% endif %}">
+        <button class="patrika-side-nav patrika-side-nav-prev" type="button" data-patrika-action="previous" aria-label="पिछला पेज">
           <span aria-hidden="true"></span>
         </button>
-        <button class="patrika-side-nav patrika-side-nav-next" type="button" data-patrika-action="next" aria-label="{% if current_lang == 'hi' %}अगला पेज{% else %}Next page{% endif %}">
+        <button class="patrika-side-nav patrika-side-nav-next" type="button" data-patrika-action="next" aria-label="अगला पेज">
           <span aria-hidden="true"></span>
         </button>
 
@@ -55,8 +55,8 @@
 
         <nav class="patrika-bottom-pager" aria-label="{{ ui.pages }}">
           <button type="button" class="patrika-pager-command" data-patrika-action="pages">{{ ui.pages }}</button>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="first" aria-label="{% if current_lang == 'hi' %}पहला पेज{% else %}First page{% endif %}">|<</button>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="previous" aria-label="{% if current_lang == 'hi' %}पिछला पेज{% else %}Previous page{% endif %}"><</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="first" aria-label="पहला पेज">|<</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="previous" aria-label="पिछला पेज"><</button>
           <label class="patrika-page-select">
             <span>{{ ui.page }}</span>
             <select id="patrikaPageSelect">
@@ -66,8 +66,8 @@
             </select>
             <span>{{ ui.total }} {{ pages|length }}</span>
           </label>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="next" aria-label="{% if current_lang == 'hi' %}अगला पेज{% else %}Next page{% endif %}">></button>
-          <button type="button" class="patrika-pager-icon" data-patrika-action="last" aria-label="{% if current_lang == 'hi' %}अंतिम पेज{% else %}Last page{% endif %}">>|</button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="next" aria-label="अगला पेज">></button>
+          <button type="button" class="patrika-pager-icon" data-patrika-action="last" aria-label="अंतिम पेज">>|</button>
           <button type="button" class="patrika-pager-command" data-patrika-action="clip">{{ ui.crop }}</button>
         </nav>
       </div>
@@ -75,7 +75,7 @@
       <aside class="patrika-pages-drawer" id="patrikaPagesDrawer" aria-label="{{ ui.all_pages }}" hidden>
         <div class="drawer-header">
           <h2>{{ ui.all_pages }}</h2>
-          <button type="button" class="patrika-icon-tool" data-patrika-action="close-pages" aria-label="{% if current_lang == 'hi' %}बंद करें{% else %}Close{% endif %}">x</button>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-pages" aria-label="बंद करें">x</button>
         </div>
         <div class="patrika-thumbnail-grid">
           {% for page in pages %}
@@ -90,7 +90,7 @@
       <aside class="patrika-menu-drawer" id="patrikaMenuDrawer" aria-label="{{ ui.epaper_menu }}" hidden>
         <div class="drawer-header">
           <h2>{{ ui.epaper_menu }}</h2>
-          <button type="button" class="patrika-icon-tool" data-patrika-action="close-menu" aria-label="{% if current_lang == 'hi' %}बंद करें{% else %}Close{% endif %}">x</button>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-menu" aria-label="बंद करें">x</button>
         </div>
         <div class="patrika-menu-title">
           <p class="eyebrow">{{ ui.patrika_epaper }}</p>
@@ -131,7 +131,7 @@
       <aside class="patrika-crop-result" id="patrikaCropResult" aria-label="{{ ui.cropped_page }}" hidden>
         <div class="drawer-header">
           <h2>{{ ui.cropped_page }}</h2>
-          <button type="button" class="patrika-icon-tool" data-patrika-action="close-crop" aria-label="{% if current_lang == 'hi' %}बंद करें{% else %}Close{% endif %}">x</button>
+          <button type="button" class="patrika-icon-tool" data-patrika-action="close-crop" aria-label="बंद करें">x</button>
         </div>
         <img id="patrikaCropPreview" alt="{{ ui.cropped_page }}">
         <div class="patrika-crop-actions">

@@ -9,11 +9,7 @@
       <h1>{{ ui.login_account }}</h1>
       {% if request.GET.error %}
         <div class="message message-error">
-          {% if current_lang == "hi" %}
-            Google login failed. कृपया OAuth client ID, secret और redirect URI जांचें.
-          {% else %}
-            Google login failed. Please check the OAuth client ID, secret, and redirect URI.
-          {% endif %}
+          Google login failed. कृपया OAuth client ID, secret और redirect URI जांचें.
         </div>
       {% endif %}
       <form method="post" action="{% url 'social:begin' 'google-oauth2' %}" class="social-auth-form">

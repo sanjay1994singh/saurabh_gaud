@@ -1,10 +1,10 @@
 <!doctype html>
 {% load static %}
-<html lang="{{ current_lang|default:'hi' }}">
+<html lang="hi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{{ ui.site_name|default:"Dharm Raksha Sangh" }}{% endblock %}</title>
+  <title>{% block title %}{{ ui.site_name|default:"धर्म रक्षा संघ" }}{% endblock %}</title>
   <link rel="icon" type="image/png" href="{% static 'brand/favicon.png' %}">
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
 </head>
@@ -31,12 +31,6 @@
         <a href="{% url 'patrika:index' %}">{{ ui.patrika }}</a>
         <a href="{% url 'subscriptions:plans' %}">{{ ui.membership }}</a>
         <a class="donate-nav" href="/donate/">{{ ui.donate }}</a>
-        <form class="language-switcher" method="post" action="{% url 'home:set_language' %}" aria-label="{{ ui.language }}">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.get_full_path }}">
-          <button type="submit" name="language" value="hi" class="{% if current_lang == 'hi' %}is-active{% endif %}">हिन्दी</button>
-          <button type="submit" name="language" value="en" class="{% if current_lang == 'en' %}is-active{% endif %}">English</button>
-        </form>
         {% if user.is_authenticated %}
           <details class="account-menu">
             <summary>
@@ -86,7 +80,7 @@
         </div>
       </div>
       <div class="footer-links">
-        <h2>{% if current_lang == "hi" %}त्वरित लिंक{% else %}Quick Links{% endif %}</h2>
+        <h2>त्वरित लिंक</h2>
         <div>
           <a href="{% url 'home:index' %}">{{ ui.home }}</a>
           <a href="{% url 'home:about' %}">{{ ui.about }}</a>
@@ -97,15 +91,15 @@
           <a href="{% url 'patrika:index' %}">{{ ui.patrika }}</a>
           <a href="{% url 'subscriptions:plans' %}">{{ ui.membership }}</a>
           <a href="/donate/">{{ ui.donate }}</a>
-          <a href="{% url 'home:terms' %}">{% if current_lang == "hi" %}नियम एवं शर्तें{% else %}Terms{% endif %}</a>
-          <a href="{% url 'home:privacy' %}">{% if current_lang == "hi" %}गोपनीयता नीति{% else %}Privacy{% endif %}</a>
-          <a href="{% url 'home:refunds' %}">{% if current_lang == "hi" %}रद्दीकरण एवं रिफंड{% else %}Cancellation & Refunds{% endif %}</a>
-          <a href="{% url 'home:shipping' %}">{% if current_lang == "hi" %}डिलीवरी नीति{% else %}Delivery Policy{% endif %}</a>
+          <a href="{% url 'home:terms' %}">नियम एवं शर्तें</a>
+          <a href="{% url 'home:privacy' %}">गोपनीयता नीति</a>
+          <a href="{% url 'home:refunds' %}">रद्दीकरण एवं रिफंड</a>
+          <a href="{% url 'home:shipping' %}">डिलीवरी नीति</a>
         </div>
       </div>
       <div class="footer-contact">
         <h2>{{ ui.site_name }}</h2>
-        <p><span>⌖</span>{% if current_lang == "hi" %}श्रीधाम वृंदावन, मथुरा, उत्तर प्रदेश, भारत{% else %}Shri Dham Vrindavan, Mathura, Uttar Pradesh, India{% endif %}</p>
+        <p><span>⌖</span>श्रीधाम वृंदावन, मथुरा, उत्तर प्रदेश, भारत</p>
         <p><span>☎</span>+91 98371 647 90</p>
         <p><span>✉</span>info@dharmrakshasangh.com</p>
         <div class="footer-actions">
@@ -115,8 +109,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>{% if current_lang == "hi" %}सेवा • संस्कार • समर्पण{% else %}Seva • Sanskar • Samarpan{% endif %}</span>
-      <strong>{% if current_lang == "hi" %}जय श्री राम{% else %}Jai Shri Ram{% endif %}</strong>
+      <span>सेवा • संस्कार • समर्पण</span>
+      <strong>जय श्री राम</strong>
     </div>
   </footer>
   {% block scripts %}{% endblock %}

@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.shortcuts import render
 from django.utils import timezone
 
 from events.models import Event
@@ -10,8 +9,6 @@ from hamare_stambh.models import HamareStambh
 from patrika.models import Patrika
 from seva_prakalp.models import SevaPrakalp
 from subscriptions.models import MembershipSubscription
-
-from .language import LANGUAGE_COOKIE_NAME, LANGUAGE_SESSION_KEY, SUPPORTED_LANGUAGES
 
 
 SERVICE_ICON_ORDER = ("cow", "education", "health", "environment", "women", "relief")
@@ -128,13 +125,3 @@ def refunds(request):
 
 def shipping(request):
     return render(request, "home/shipping.html")
-
-
-def set_language(request):
-    language = request.POST.get("language") or request.GET.get("language")
-    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or reverse("home:index")
-    response = redirect(next_url)
-    if language in SUPPORTED_LANGUAGES:
-        request.session[LANGUAGE_SESSION_KEY] = language
-        response.set_cookie(LANGUAGE_COOKIE_NAME, language, max_age=60 * 60 * 24 * 365, samesite="Lax")
-    return response

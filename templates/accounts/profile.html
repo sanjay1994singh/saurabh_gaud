@@ -50,7 +50,7 @@
           {% endfor %}
         </div>
 
-        <h2>{% if current_lang == "hi" %}भुगतान रसीद / इनवॉइस{% else %}Payment Invoices{% endif %}</h2>
+        <h2>भुगतान रसीद / इनवॉइस</h2>
         <div class="membership-list">
           {% for invoice in invoices %}
             <div class="membership-row">
@@ -65,7 +65,7 @@
               </div>
             </div>
           {% empty %}
-            <p class="empty-state">{% if current_lang == "hi" %}अभी कोई भुगतान इनवॉइस उपलब्ध नहीं है।{% else %}No payment invoice is available yet.{% endif %}</p>
+            <p class="empty-state">अभी कोई भुगतान इनवॉइस उपलब्ध नहीं है।</p>
           {% endfor %}
         </div>
       </div>
