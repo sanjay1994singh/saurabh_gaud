@@ -54,24 +54,19 @@
           allowfullscreen>
         </iframe>
       </div>
-      {% if featured_patrika %}
-        <a class="landing-news-feature" href="{{ featured_patrika.get_absolute_url }}">
-          {% if featured_patrika.cover_image %}
-            <img src="{{ featured_patrika.cover_image.url }}" alt="{{ featured_patrika.title }}">
-          {% else %}
-            <span>{{ ui.patrika }}</span>
-          {% endif %}
-          <strong>{{ featured_patrika.title }}</strong>
-          <small>{{ featured_patrika.date_label }}</small>
-        </a>
-      {% endif %}
-      <div class="landing-news-list">
-        {% for event in latest_updates|slice:":3" %}
-          <a href="{{ event.get_absolute_url }}">{{ event.title }} <span>{{ event.date_label }}</span></a>
-        {% empty %}
-          <p class="empty-state">{{ ui.no_events }}</p>
-        {% endfor %}
+      <div class="landing-youtube-actions">
+        <span>नवीनतम वीडियो</span>
+        <div class="landing-news-video landing-news-video-secondary">
+          <iframe
+            src="https://www.youtube.com/embed/BuXux6pZzvY?rel=0&modestbranding=1&playsinline=1"
+            title="नवीनतम धर्म रक्षा संघ वीडियो"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>
       </div>
+      <a class="landing-channel-join" href="https://www.youtube.com/@dharmrakshasangh" target="_blank" rel="noopener">YouTube चैनल से जुड़ें</a>
     </div>
 
     <aside class="landing-message-panel">
