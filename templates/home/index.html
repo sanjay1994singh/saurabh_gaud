@@ -23,37 +23,24 @@
     </div>
   </section>
 
-  <section class="landing-service-strip" aria-label="{{ ui.core_values }}">
-    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
-      <span class="landing-service-icon landing-icon-cow" aria-hidden="true"></span>
-      <strong>गौ सेवा</strong>
-      <small>गौ संरक्षण, संवर्धन एवं गौ आधारित सेवा</small>
-    </a>
-    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
-      <span class="landing-service-icon landing-icon-education" aria-hidden="true"></span>
-      <strong>शिक्षा एवं संस्कार</strong>
-      <small>गुरुकुल, विद्यालय, छात्रावास एवं संस्कार केंद्र</small>
-    </a>
-    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
-      <span class="landing-service-icon landing-icon-health" aria-hidden="true"></span>
-      <strong>स्वास्थ्य सेवा</strong>
-      <small>चिकित्सा शिविर, रक्तदान, और स्वास्थ्य सहायता</small>
-    </a>
-    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
-      <span class="landing-service-icon landing-icon-environment" aria-hidden="true"></span>
-      <strong>पर्यावरण संरक्षण</strong>
-      <small>वृक्षारोपण, जल संरक्षण, और स्वच्छता अभियान</small>
-    </a>
-    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
-      <span class="landing-service-icon landing-icon-women" aria-hidden="true"></span>
-      <strong>महिला सशक्तिकरण</strong>
-      <small>महिला सुरक्षा, प्रशिक्षण, और आत्मनिर्भरता</small>
-    </a>
-    <a class="landing-service-item" href="{% url 'seva_prakalp:index' %}">
-      <span class="landing-service-icon landing-icon-relief" aria-hidden="true"></span>
-      <strong>आपदा राहत</strong>
-      <small>आपदा के समय राहत, सहायता एवं पुनर्वास</small>
-    </a>
+  <section class="home-mantra-panel" aria-label="धर्म रक्षा मंत्र">
+    <div class="home-mantra-inner">
+      <div class="home-mantra-column">
+        <p class="home-mantra-sanskrit">
+          हिन्दवः सोदराः सर्वे, न हिंदुः पतितो भवेत्।<br>
+          मम दीक्षा धर्म रक्षा, मम मन्त्रः समानता॥
+        </p>
+        <div class="home-mantra-divider" aria-hidden="true"></div>
+        <p class="home-mantra-meaning">
+          <strong>अर्थात् -</strong> सब हिन्दू भारत माँ की सन्तान होने से सहोदर हैं, भाई हैं। इसलिए कोई हिन्दू अछूत नहीं हो सकता। हमने ‘समानता’ का मन्त्र लेकर “धर्म-रक्षा” की दीक्षा ली है।
+        </p>
+      </div>
+      <div class="home-mantra-column">
+        <p class="home-mantra-message">
+          समाज को धर्म पूर्वक जोड़कर सनातन-संस्कारों का संरक्षण करना आज की महती आवश्यकता है। हमारा राष्ट्र 'भारतवर्ष' अखंड हिंदू राष्ट्र बन कर पुनः विश्व गुरु के रूप में स्थापित हो एवं श्रीरामजन्मभूमि की भांति श्रीकृष्ण जन्मभूमि भी अपने गौरवशाली रूप में स्थापित हो। धर्म रक्षा संघ के इस पावन प्रयास में आइए, हम सब एकजुट होकर तन-मन-धन से संकल्प पूर्वक प्रस्तुत हों।
+        </p>
+      </div>
+    </div>
   </section>
 
   {% if seva_prakalps %}
@@ -106,6 +93,15 @@
       <div class="landing-panel-heading">
         <h2>ताजा समाचार</h2>
         <a href="{% url 'events:index' %}">{{ ui.view_all }}</a>
+      </div>
+      <div class="landing-news-video">
+        <iframe
+          src="https://www.youtube.com/embed/BuXux6pZzvY?rel=0&modestbranding=1&playsinline=1"
+          title="धर्म रक्षा संघ वीडियो"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
       </div>
       {% if featured_patrika %}
         <a class="landing-news-feature" href="{{ featured_patrika.get_absolute_url }}">
