@@ -1501,6 +1501,29 @@ p {
   font-weight: 900;
 }
 
+.landing-hero-banner {
+  height: min(720px, calc(100vh - 84px));
+  min-height: 0;
+  place-items: center;
+  background: #d58a30;
+}
+
+.landing-hero-banner .landing-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: #d58a30;
+}
+
+.landing-hero-banner .landing-hero-bg img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.landing-hero-banner::before,
+.landing-hero-banner .landing-hero-content {
+  display: none;
+}
+
 .landing-action-icon {
   position: relative;
   display: inline-grid;
@@ -3842,6 +3865,18 @@ p {
     width: clamp(12px, 3.8vw, 22px);
     height: clamp(12px, 3.8vw, 22px);
     transform: scale(0.68);
+  }
+
+  .landing-hero-banner {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1792 / 1024;
+    background: #d58a30;
+  }
+
+  .landing-hero-banner .landing-hero-bg img {
+    object-fit: contain;
+    object-position: center;
   }
 
   /* Uploaded content can have fixed intrinsic sizes. These rules keep every

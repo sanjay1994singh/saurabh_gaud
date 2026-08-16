@@ -4,12 +4,10 @@
 {% block title %}{{ ui.site_name }}{% endblock %}
 
 {% block content %}
-  <section class="landing-hero">
+  <section class="landing-hero landing-hero-banner">
     <div class="landing-hero-bg">
       <picture>
-        <source media="(max-width: 640px)" srcset="{% static 'banners/landing_hero_drs_desktop.jpg' %}">
-        <source media="(max-width: 1024px)" srcset="{% static 'banners/landing_hero_drs_tablet.jpg' %}">
-        <img src="{% static 'banners/landing_hero_drs_desktop.jpg' %}" alt="{{ ui.site_name }}">
+        <img src="{% static 'banners/home_main_banner.png' %}" alt="{{ ui.site_name }}">
       </picture>
     </div>
     <div class="landing-hero-content">
