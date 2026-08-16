@@ -1009,6 +1009,11 @@ p {
   white-space: nowrap;
 }
 
+.form-stack .photo-camera-control {
+  color: #fff;
+  font-weight: 900;
+}
+
 .photo-camera-input {
   position: absolute;
   width: 1px;
