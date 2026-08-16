@@ -74,7 +74,7 @@ UI_TEXT = {
     'issued': 'जारी',
     'download': 'डाउनलोड',
     'no_certificates': 'सक्रिय सदस्यता के बाद प्रमाणपत्र यहां दिखेगा.',
-    'create_account': 'अपना अकाउंट बनाएं',
+    'create_account': 'सदस्य बनें',
     'continue_google': 'Google से जारी रखें',
     'or': 'या',
     'already_registered': 'पहले से रजिस्टर हैं?',
