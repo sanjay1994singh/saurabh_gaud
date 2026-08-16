@@ -43,52 +43,7 @@
     </div>
   </section>
 
-  {% if seva_prakalps %}
-    <section class="landing-section landing-prakalp-section">
-      <div class="landing-section-heading">
-        <p class="eyebrow">{{ ui.our_work }}</p>
-        <h2>हमारे सेवा प्रकल्प</h2>
-        <a class="section-link" href="{% url 'seva_prakalp:index' %}">{{ ui.view_all }}</a>
-      </div>
-      <div class="landing-prakalp-grid">
-        {% for prakalp in seva_prakalps|slice:":6" %}
-          <article class="landing-prakalp-card">
-            <a class="landing-prakalp-media" href="{{ prakalp.get_absolute_url }}">
-              {% if prakalp.image %}
-                <img src="{{ prakalp.image.url }}" alt="{{ prakalp.name }}">
-              {% else %}
-                <span>{{ prakalp.name|slice:":1" }}</span>
-              {% endif %}
-            </a>
-            <div class="landing-prakalp-body">
-              <h3><a href="{{ prakalp.get_absolute_url }}">{{ prakalp.name }}</a></h3>
-              <a class="text-link landing-prakalp-link" href="{{ prakalp.get_absolute_url }}">और जानें</a>
-            </div>
-          </article>
-        {% endfor %}
-      </div>
-    </section>
-  {% endif %}
-
   <section class="landing-dashboard">
-    <div class="landing-events-panel">
-      <div class="landing-panel-heading">
-        <h2>आगामी कार्यक्रम</h2>
-        <a href="{% url 'events:index' %}">{{ ui.view_all }}</a>
-      </div>
-      <div class="landing-event-list">
-        {% for event in latest_updates|slice:":3" %}
-          <a class="landing-event-row" href="{{ event.get_absolute_url }}">
-            <span>{{ event.start_date|date:"d"|default:event.recurring_day|default:"--" }}<small>{{ event.start_date|date:"M"|default:event.get_recurring_month_display|default:"" }}</small></span>
-            <strong>{{ event.title }}</strong>
-            <em>{{ event.venue|default:event.date_label }}</em>
-          </a>
-        {% empty %}
-          <p class="empty-state">{{ ui.no_events }}</p>
-        {% endfor %}
-      </div>
-    </div>
-
     <div class="landing-news-panel">
       <div class="landing-news-video">
         <iframe
@@ -142,7 +97,52 @@
         <a class="primary-action" href="{% url 'subscriptions:plans' %}">{{ ui.join }}</a>
       {% endif %}
     </aside>
+
+    <div class="landing-events-panel">
+      <div class="landing-panel-heading">
+        <h2>आगामी कार्यक्रम</h2>
+        <a href="{% url 'events:index' %}">{{ ui.view_all }}</a>
+      </div>
+      <div class="landing-event-list">
+        {% for event in latest_updates|slice:":3" %}
+          <a class="landing-event-row" href="{{ event.get_absolute_url }}">
+            <span>{{ event.start_date|date:"d"|default:event.recurring_day|default:"--" }}<small>{{ event.start_date|date:"M"|default:event.get_recurring_month_display|default:"" }}</small></span>
+            <strong>{{ event.title }}</strong>
+            <em>{{ event.venue|default:event.date_label }}</em>
+          </a>
+        {% empty %}
+          <p class="empty-state">{{ ui.no_events }}</p>
+        {% endfor %}
+      </div>
+    </div>
   </section>
+
+  {% if seva_prakalps %}
+    <section class="landing-section landing-prakalp-section">
+      <div class="landing-section-heading">
+        <p class="eyebrow">{{ ui.our_work }}</p>
+        <h2>हमारे सेवा प्रकल्प</h2>
+        <a class="section-link" href="{% url 'seva_prakalp:index' %}">{{ ui.view_all }}</a>
+      </div>
+      <div class="landing-prakalp-grid">
+        {% for prakalp in seva_prakalps|slice:":6" %}
+          <article class="landing-prakalp-card">
+            <a class="landing-prakalp-media" href="{{ prakalp.get_absolute_url }}">
+              {% if prakalp.image %}
+                <img src="{{ prakalp.image.url }}" alt="{{ prakalp.name }}">
+              {% else %}
+                <span>{{ prakalp.name|slice:":1" }}</span>
+              {% endif %}
+            </a>
+            <div class="landing-prakalp-body">
+              <h3><a href="{{ prakalp.get_absolute_url }}">{{ prakalp.name }}</a></h3>
+              <a class="text-link landing-prakalp-link" href="{{ prakalp.get_absolute_url }}">और जानें</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
 
   <section class="landing-stats" aria-label="संस्था के आंकड़े">
     <div><strong>{{ stats.prakalp }}+</strong><span>{{ ui.seva_prakalp }}</span></div>
