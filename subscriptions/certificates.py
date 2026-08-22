@@ -11,8 +11,8 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 
-DESIGN_WIDTH = 2208
-DESIGN_HEIGHT = 2989
+DESIGN_WIDTH = 1135
+DESIGN_HEIGHT = 1600
 
 
 def _font_path():
@@ -50,7 +50,7 @@ def _member_address(user):
     state_name = user.state_obj.name if user.state_obj_id else user.state
     country_name = user.country.name if user.country_id else ""
     parts = []
-    for part in (user.address, user.city, state_name, country_name):
+    for part in (user.address, user.city, user.district, state_name, user.pin_code, country_name):
         value = str(part).strip() if part else ""
         if value and value not in parts:
             parts.append(value)
@@ -78,21 +78,21 @@ def _photo_image(user):
         with user.photo.open("rb") as source:
             image = Image.open(source)
             image = ImageOps.exif_transpose(image).convert("RGB")
-            return ImageOps.fit(image, (352, 388), method=Image.Resampling.LANCZOS)
+            return ImageOps.fit(image, (210, 230), method=Image.Resampling.LANCZOS)
     except (OSError, ValueError):
         return None
 
 
-def _framed_photo_image(image, radius=22, y_offset=20):
-    framed = Image.new("RGBA", (352, 388), (255, 255, 255, 0))
-    framed.paste(image.convert("RGBA"), (0, y_offset))
+def _framed_photo_image(image, radius=10):
+    framed = Image.new("RGBA", (210, 230), (255, 255, 255, 0))
+    framed.paste(image.convert("RGBA"), (0, 0))
     mask = Image.new("L", framed.size, 0)
     ImageDraw.Draw(mask).rounded_rectangle((0, 0, framed.width, framed.height), radius=radius, fill=255)
     framed.putalpha(mask)
     return framed
 
 
-def _insert_centered_html(page, text, y, width, height, size, color="#5b1f0d", weight=700):
+def _insert_html(page, text, rect, size, color="#5b1f0d", weight=700, align="center"):
     font_dir = _font_path().parent
     css = f"""
 @font-face {{
@@ -109,13 +109,28 @@ body {{
   font-size: {size}px;
   font-weight: {weight};
   line-height: 1.15;
-  text-align: center;
+  text-align: {align};
 }}
 """
-    rect = fitz.Rect((DESIGN_WIDTH - width) / 2, y, (DESIGN_WIDTH + width) / 2, y + height)
     html = f'<div class="text">{escape(str(text))}</div>'
     archive = fitz.Archive(str(font_dir))
     page.insert_htmlbox(rect, html, css=css, archive=archive)
+
+
+def _insert_centered_html(page, text, y, width, height, size, color="#5b1f0d", weight=700):
+    rect = fitz.Rect((DESIGN_WIDTH - width) / 2, y, (DESIGN_WIDTH + width) / 2, y + height)
+    _insert_html(page, text, rect, size, color, weight)
+
+
+def _issue_date(certificate):
+    issued_at = certificate.issued_at
+    if hasattr(issued_at, "day"):
+        return f"{issued_at.day}-{issued_at.month}-{issued_at.year}"
+    return ""
+
+
+def _member_number(certificate):
+    return str(certificate.pk or certificate.user_id or "")
 
 
 def _certificate_page_pixmap(certificate):
@@ -128,22 +143,24 @@ def _certificate_page_pixmap(certificate):
     page = document.new_page(width=DESIGN_WIDTH, height=DESIGN_HEIGHT)
     page.insert_image(page.rect, stream=_background_bytes())
 
+    _insert_html(page, _member_number(certificate), fitz.Rect(64, 503, 190, 545), 27, "#5b1f0d", 600)
+    _insert_html(page, _issue_date(certificate), fitz.Rect(918, 503, 1078, 545), 27, "#5b1f0d", 600)
+
     photo = _photo_image(user)
     if photo:
-        page.insert_image(fitz.Rect(914, 998, 1266, 1386), stream=_png_bytes(_framed_photo_image(photo)))
+        page.insert_image(fitz.Rect(463, 497, 673, 727), stream=_png_bytes(_framed_photo_image(photo)))
     else:
-        page.draw_rect(fitz.Rect(914, 998, 1266, 1386), color=(1, 1, 1), fill=(1, 1, 1))
-        _insert_centered_html(page, (full_name[:1] or "M").upper(), 1160, 352, 180, 150, "#7b2435")
+        _insert_centered_html(page, (full_name[:1] or "M").upper(), 575, 200, 90, 72, "#7b2435")
 
-    _insert_centered_html(page, full_name, 1490, 1500, 80, 58)
+    _insert_centered_html(page, full_name, 760, 780, 60, 40, "#111111", 700)
 
     address_lines = _wrap(_member_address(user))
-    address_size = 34 if len(address_lines) == 1 else 28
-    start_y = 1570 - ((len(address_lines) - 1) * 38 // 2)
+    address_size = 30 if len(address_lines) <= 2 else 26
+    start_y = 823 - ((len(address_lines) - 1) * 34 // 2)
     for index, line in enumerate(address_lines):
-        _insert_centered_html(page, line, start_y + index * 38, 1600, 54, address_size, weight=500)
+        _insert_centered_html(page, line, start_y + index * 34, 790, 42, address_size, "#111111", 650)
 
-    _insert_centered_html(page, member_type, 1998, 1300, 95, 74)
+    _insert_centered_html(page, member_type, 1052, 650, 58, 34, "#111111", 700)
     return page.get_pixmap(alpha=False)
 
 
