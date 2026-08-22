@@ -155,8 +155,8 @@ def _certificate_page_pixmap(certificate):
     else:
         _insert_centered_html(page, (full_name[:1] or "M").upper(), 575, PHOTO_WIDTH, 90, 72, "#7b2435")
 
-    name_size = 32 if len(full_name) <= 34 else 27
-    _insert_centered_html(page, full_name, 785, 820, 58, name_size, "#111111", 700)
+    name_size = 37 if len(full_name) <= 34 else 31
+    _insert_centered_html(page, full_name, 780, 820, 64, name_size, "#2f160d", 800)
 
     address_lines = _wrap(_member_address(user))
     address_size = 27 if len(address_lines) <= 2 else 23
