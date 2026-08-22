@@ -1197,7 +1197,8 @@ p {
   box-shadow: var(--shadow);
 }
 
-.certificate-preview svg {
+.certificate-preview img {
+  display: block;
   width: 100%;
   min-width: 760px;
   height: auto;
@@ -4605,7 +4606,7 @@ p {
     -webkit-overflow-scrolling: touch;
   }
 
-  .certificate-preview svg {
+  .certificate-preview img {
     display: block;
     width: 100%;
     min-width: 0;

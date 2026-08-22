@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
 from .invoices import build_invoice_pdf
-from .certificates import build_certificate_pdf
+from .certificates import build_certificate_pdf, build_certificate_png
 from .models import Certificate, Invoice, MembershipSubscription, PaymentTransaction, SubscriptionPlan
 from .notifications import send_membership_payment_email, send_payment_failed_email
 from .services import (
@@ -367,6 +367,11 @@ def get_member_photo_data_uri(user):
     return f"data:{mime_type};base64,{encoded}"
 
 
+def get_certificate_preview_data_uri(certificate):
+    encoded = base64.b64encode(build_certificate_png(certificate)).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
+
+
 def get_certificate_background_data_uri():
     background_path = finders.find("certificate_background/Certificate.jpg")
     if not background_path:
@@ -474,7 +479,7 @@ def certificate_detail(request, pk):
         {
             "certificate": certificate,
             "subscription": subscription,
-            "certificate_svg": build_certificate_svg(certificate, get_member_photo_data_uri(request.user)),
+            "certificate_preview_data_uri": get_certificate_preview_data_uri(certificate),
         },
     )
 

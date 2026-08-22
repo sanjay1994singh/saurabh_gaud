@@ -190,3 +190,7 @@ def build_certificate_pdf(certificate):
     pdf.showPage()
     pdf.save()
     return output.getvalue()
+
+
+def build_certificate_png(certificate):
+    return _certificate_page_pixmap(certificate).tobytes("png")
