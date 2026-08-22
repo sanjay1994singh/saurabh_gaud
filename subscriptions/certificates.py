@@ -13,6 +13,9 @@ from reportlab.pdfgen import canvas
 
 DESIGN_WIDTH = 1135
 DESIGN_HEIGHT = 1600
+PHOTO_WIDTH = 184
+PHOTO_HEIGHT = 218
+PHOTO_RECT = fitz.Rect(476, 504, 660, 722)
 
 
 def _font_path():
@@ -57,7 +60,7 @@ def _member_address(user):
     return ", ".join(parts) or "N/A"
 
 
-def _wrap(text, limit=72):
+def _wrap(text, limit=46):
     words, lines, current = str(text).split(), [], ""
     for word in words:
         candidate = f"{current} {word}".strip()
@@ -78,13 +81,13 @@ def _photo_image(user):
         with user.photo.open("rb") as source:
             image = Image.open(source)
             image = ImageOps.exif_transpose(image).convert("RGB")
-            return ImageOps.fit(image, (210, 230), method=Image.Resampling.LANCZOS)
+            return ImageOps.fit(image, (PHOTO_WIDTH, PHOTO_HEIGHT), method=Image.Resampling.LANCZOS, centering=(0.5, 0.36))
     except (OSError, ValueError):
         return None
 
 
 def _framed_photo_image(image, radius=10):
-    framed = Image.new("RGBA", (210, 230), (255, 255, 255, 0))
+    framed = Image.new("RGBA", (PHOTO_WIDTH, PHOTO_HEIGHT), (255, 255, 255, 0))
     framed.paste(image.convert("RGBA"), (0, 0))
     mask = Image.new("L", framed.size, 0)
     ImageDraw.Draw(mask).rounded_rectangle((0, 0, framed.width, framed.height), radius=radius, fill=255)
@@ -148,19 +151,21 @@ def _certificate_page_pixmap(certificate):
 
     photo = _photo_image(user)
     if photo:
-        page.insert_image(fitz.Rect(463, 497, 673, 727), stream=_png_bytes(_framed_photo_image(photo)))
+        page.insert_image(PHOTO_RECT, stream=_png_bytes(_framed_photo_image(photo)))
     else:
-        _insert_centered_html(page, (full_name[:1] or "M").upper(), 575, 200, 90, 72, "#7b2435")
+        _insert_centered_html(page, (full_name[:1] or "M").upper(), 575, PHOTO_WIDTH, 90, 72, "#7b2435")
 
-    _insert_centered_html(page, full_name, 760, 780, 60, 40, "#111111", 700)
+    name_size = 32 if len(full_name) <= 34 else 27
+    _insert_centered_html(page, full_name, 785, 820, 58, name_size, "#111111", 700)
 
     address_lines = _wrap(_member_address(user))
-    address_size = 30 if len(address_lines) <= 2 else 26
-    start_y = 823 - ((len(address_lines) - 1) * 34 // 2)
+    address_size = 27 if len(address_lines) <= 2 else 23
+    start_y = 840 - ((len(address_lines) - 1) * 30 // 2)
     for index, line in enumerate(address_lines):
-        _insert_centered_html(page, line, start_y + index * 34, 790, 42, address_size, "#111111", 650)
+        _insert_centered_html(page, line, start_y + index * 30, 820, 38, address_size, "#111111", 650)
 
-    _insert_centered_html(page, member_type, 1052, 650, 58, 34, "#111111", 700)
+    member_type_size = 36 if len(member_type) <= 18 else 30
+    _insert_centered_html(page, member_type, 1062, 650, 58, member_type_size, "#111111", 700)
     return page.get_pixmap(alpha=False)
 
 
