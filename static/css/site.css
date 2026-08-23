@@ -4587,7 +4587,8 @@ p {
 
   .register-panel {
     width: 100%;
-    max-height: calc(100vh - 94px);
+    max-height: none;
+    overflow: visible;
     padding: 18px;
   }
 
@@ -4808,17 +4809,24 @@ p {
   .certificate-actions,
   .footer-actions,
   .landing-actions,
-  .patrika-card-actions,
-  .plan-join-row {
+  .patrika-card-actions {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
     width: 100%;
   }
 
+  .plan-join-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+
   .plan-click-hint {
-    text-align: center;
-    white-space: normal;
+    text-align: left;
+    white-space: nowrap;
   }
 
   .auth-panel,
