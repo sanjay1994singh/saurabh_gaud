@@ -4997,6 +4997,7 @@ p {
   body {
     width: 100%;
     min-width: 0;
+    overscroll-behavior-x: none;
   }
 
   .site-header,
@@ -5037,6 +5038,9 @@ p {
   .auth-page {
     display: block;
     padding: 34px 0 54px;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+    touch-action: pan-y;
   }
 
   .auth-panel,
@@ -5063,6 +5067,8 @@ p {
 
   .register-panel {
     padding: 18px 16px;
+    overflow-x: hidden;
+    touch-action: pan-y;
   }
 
   .form-stack,
