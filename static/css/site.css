@@ -4991,3 +4991,93 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  html,
+  body {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .site-header,
+  .site-main,
+  .site-footer {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  .site-nav,
+  .values-strip,
+  .cta-band,
+  .section,
+  .page-intro,
+  .membership-banner,
+  .banner-slot,
+  .detail-page,
+  .certificate-page,
+  .footer-inner,
+  .messages,
+  .auth-page,
+  .profile-page,
+  .landing-section,
+  .landing-hero,
+  .landing-counters,
+  .contact-grid,
+  .donation-layout,
+  .profile-layout,
+  .plan-grid {
+    width: min(100%, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .auth-page {
+    display: block;
+    padding: 34px 0 54px;
+  }
+
+  .auth-panel,
+  .register-panel,
+  .profile-panel,
+  .plan-card,
+  .about-panel,
+  .contact-panel,
+  .donation-panel,
+  .tax-note,
+  .detail-content,
+  .event-card,
+  .prakalp-card,
+  .patrika-card,
+  .landing-events-panel,
+  .landing-news-panel,
+  .landing-message-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .register-panel {
+    padding: 18px 16px;
+  }
+
+  .form-stack,
+  .form-stack label,
+  .photo-field,
+  .photo-field-actions,
+  .form-stack input,
+  .form-stack textarea,
+  .form-stack select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .form-stack textarea {
+    resize: vertical;
+  }
+}
