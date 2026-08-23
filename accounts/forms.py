@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.text import slugify
 
+from .location_data import hindi_state_name
 from .models import Country, State, User
 
 
@@ -18,6 +19,7 @@ def _configure_location_fields(form, selected_country=None):
     form.fields["state_obj"].queryset = State.objects.none()
     form.fields["state_obj"].required = False
     form.fields["state_obj"].widget.attrs["data-state-select"] = "true"
+    form.fields["state_obj"].label_from_instance = lambda state: hindi_state_name(state.name)
 
     if not selected_country:
         selected_country = _india_country()
@@ -89,7 +91,7 @@ class RegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = self._make_username()
-        user.state = user.state_obj.name if user.state_obj else ""
+        user.state = hindi_state_name(user.state_obj.name) if user.state_obj else ""
         if commit:
             user.save()
         return user
@@ -144,7 +146,7 @@ class ProfileForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.state = user.state_obj.name if user.state_obj else ""
+        user.state = hindi_state_name(user.state_obj.name) if user.state_obj else ""
         if commit:
             user.save()
         return user
