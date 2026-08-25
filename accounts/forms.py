@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
-from .location_data import hindi_country_name, hindi_state_name
+from .location_data import bilingual_country_name, bilingual_state_name
 from .models import Country, State, User
 
 
@@ -15,11 +15,14 @@ def _india_country():
 
 def _configure_location_fields(form, selected_country=None):
     form.fields["country"].queryset = Country.objects.filter(is_active=True)
-    form.fields["country"].label_from_instance = lambda country: hindi_country_name(country.name)
+    form.fields["country"].label_from_instance = lambda country: bilingual_country_name(country.name)
+    form.fields["country"].widget.attrs["data-searchable-select"] = "true"
+    form.fields["country"].widget.attrs["data-search-placeholder"] = "देश खोजें / Search country"
+    form.fields["country"].widget.attrs["data-empty-text"] = "देश नहीं मिला / No country found"
     form.fields["state_obj"].queryset = State.objects.none()
     form.fields["state_obj"].required = False
     form.fields["state_obj"].widget.attrs["data-state-select"] = "true"
-    form.fields["state_obj"].label_from_instance = lambda state: hindi_state_name(state.name)
+    form.fields["state_obj"].label_from_instance = lambda state: bilingual_state_name(state.name)
 
     if not selected_country:
         selected_country = _india_country()
@@ -96,7 +99,7 @@ class RegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = self._make_username()
-        user.state = hindi_state_name(user.state_obj.name) if user.state_obj else ""
+        user.state = user.state_obj.name if user.state_obj else ""
         if commit:
             user.save()
         return user
@@ -168,7 +171,7 @@ class ProfileForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = (self.cleaned_data.get("phone") or user.username)[:150]
-        user.state = hindi_state_name(user.state_obj.name) if user.state_obj else ""
+        user.state = user.state_obj.name if user.state_obj else ""
         if commit:
             user.save()
         return user

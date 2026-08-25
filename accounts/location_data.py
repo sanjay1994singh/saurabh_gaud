@@ -307,3 +307,17 @@ def hindi_country_name(country_name):
 
 def hindi_state_name(state_name):
     return INDIA_STATE_HINDI_NAMES.get(state_name, state_name)
+
+
+def bilingual_country_name(country_name):
+    hindi_name = hindi_country_name(country_name)
+    if hindi_name == country_name:
+        return country_name
+    return f"{country_name} ({hindi_name})"
+
+
+def bilingual_state_name(state_name):
+    hindi_name = hindi_state_name(state_name)
+    if hindi_name == state_name:
+        return state_name
+    return f"{state_name} ({hindi_name})"

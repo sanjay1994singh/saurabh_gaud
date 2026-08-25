@@ -10,7 +10,7 @@ from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from .forms import ProfileForm, RegisterForm
-from .location_data import hindi_state_name
+from .location_data import bilingual_state_name
 from .models import State
 from subscriptions.models import Invoice, MembershipSubscription
 from subscriptions.notifications import (
@@ -92,7 +92,7 @@ def states_for_country(request):
     states = State.objects.filter(country_id=country_id, is_active=True).order_by("name")
     return JsonResponse({
         "states": [
-            {"id": state.id, "name": hindi_state_name(state.name)}
+            {"id": state.id, "name": bilingual_state_name(state.name)}
             for state in states
         ]
     })
