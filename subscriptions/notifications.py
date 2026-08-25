@@ -27,8 +27,19 @@ def _digits_only(value):
     return "".join(char for char in str(value or "") if char.isdigit())
 
 
+def _whatsapp_number(value):
+    phone = _digits_only(value)
+    if len(phone) == 10:
+        return f"91{phone}"
+    if len(phone) == 11 and phone.startswith("0"):
+        return f"91{phone[1:]}"
+    if len(phone) == 12 and phone.startswith("91"):
+        return phone
+    return phone
+
+
 def _send_whatsapp_document(phone, document_url, filename):
-    phone = _digits_only(phone)
+    phone = _whatsapp_number(phone)
     if (
         not phone
         or not document_url
@@ -67,7 +78,7 @@ def get_configured_certificate_template():
 
 
 def _send_whatsapp_template(phone, template_name, body_values, *, header_document_url="", header_filename=""):
-    phone = _digits_only(phone)
+    phone = _whatsapp_number(phone)
     if not phone or not template_name or not settings.WHATSAPP_API_KEY or not settings.WHATSAPP_PHONE_NUMBER_ID:
         return 0
 
@@ -111,6 +122,35 @@ def _send_whatsapp_template(phone, template_name, body_values, *, header_documen
             "Content-Type": "application/json",
         },
         method="POST",
+    )
+    try:
+        with urlrequest.urlopen(request, timeout=20) as response:
+            return 1 if 200 <= response.status < 300 else 0
+    except (OSError, URLError, ValueError):
+        return 0
+
+
+def _send_fast2sms_template(phone, message_id, variables_values="", *, media_url="", document_filename=""):
+    phone = _whatsapp_number(phone)
+    if not phone or not message_id or not settings.WHATSAPP_API_KEY or not settings.WHATSAPP_PHONE_NUMBER_ID:
+        return 0
+
+    query = {
+        "message_id": message_id,
+        "phone_number_id": settings.WHATSAPP_PHONE_NUMBER_ID,
+        "numbers": phone,
+    }
+    if variables_values:
+        query["variables_values"] = variables_values
+    if media_url:
+        query["media_url"] = media_url
+    if document_filename:
+        query["document_filename"] = document_filename
+
+    request = urlrequest.Request(
+        f"https://www.fast2sms.com/dev/whatsapp?{urlencode(query)}",
+        headers={"Authorization": settings.WHATSAPP_API_KEY},
+        method="GET",
     )
     try:
         with urlrequest.urlopen(request, timeout=20) as response:
@@ -247,12 +287,12 @@ def send_certificate_whatsapp(certificate, initial_password=None, invoice=None):
     user = certificate.user
     certificate_url = _signed_certificate_pdf_url(certificate)
     name = user.get_full_name() or user.get_username()
-    sent = _send_whatsapp_template(
+    sent = _send_fast2sms_template(
         user.phone,
-        settings.WHATSAPP_TEMPLATE_CERTIFICATE_GENERATED,
-        [name],
-        header_document_url=certificate_url,
-        header_filename=f"{certificate.certificate_number}.pdf",
+        settings.WHATSAPP_TEMPLATE_CERTIFICATE_MESSAGE_ID,
+        name,
+        media_url=certificate_url,
+        document_filename=f"{certificate.certificate_number}.pdf",
     )
     if invoice:
         sent += _send_whatsapp_document(
