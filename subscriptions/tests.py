@@ -8,6 +8,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .models import Invoice, MembershipSubscription, PaymentTransaction, SubscriptionPlan
+from .notifications import _whatsapp_number
 
 
 class SubscriptionPlanSlugTests(TestCase):
@@ -20,6 +21,13 @@ class SubscriptionPlanSlugTests(TestCase):
         second = SubscriptionPlan.objects.create(name="Codex Annual Member")
         self.assertEqual(first.slug, "codex-annual-member")
         self.assertEqual(second.slug, "codex-annual-member-2")
+
+
+class WhatsAppNumberTests(TestCase):
+    def test_india_phone_numbers_are_normalized_for_whatsapp(self):
+        self.assertEqual(_whatsapp_number("9876543210"), "919876543210")
+        self.assertEqual(_whatsapp_number("09876543210"), "919876543210")
+        self.assertEqual(_whatsapp_number("+91 98765 43210"), "919876543210")
 
 
 @override_settings(

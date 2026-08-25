@@ -1,10 +1,17 @@
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
+from django.contrib.admin.sites import AdminSite
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.test import RequestFactory
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from subscriptions.models import MembershipSubscription, SubscriptionPlan
+
+from .admin import CustomUserAdmin
 from .forms import RegisterForm
+from .models import User
 from .views import _generate_initial_password
 
 
@@ -47,6 +54,52 @@ class GeneratedPasswordRegistrationTests(TestCase):
         send_welcome.assert_called_once()
         initial_password = send_welcome.call_args.kwargs["initial_password"]
         self.assertTrue(user.check_password(initial_password))
+
+    def test_register_form_normalizes_india_phone_to_ten_digits(self):
+        form = RegisterForm(data={
+            "first_name": "Test",
+            "last_name": "Member",
+            "phone": "+91 98765-43210",
+            "address": "Vrindavan",
+            "city": "Mathura",
+            "pin_code": "281121",
+            "district": "Mathura",
+        })
+
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data["phone"], "9876543210")
+
+    def test_register_form_rejects_short_phone(self):
+        form = RegisterForm(data={
+            "first_name": "Test",
+            "last_name": "Member",
+            "phone": "12345",
+            "address": "Vrindavan",
+            "city": "Mathura",
+            "pin_code": "281121",
+            "district": "Mathura",
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("phone", form.errors)
+
+
+class UserAdminWhatsAppActionTests(TestCase):
+    @patch("accounts.admin.send_certificate_whatsapp")
+    def test_user_admin_action_sends_active_certificates(self, send_certificate):
+        user = get_user_model().objects.create_user(username="9876543210", phone="9876543210")
+        plan = SubscriptionPlan.objects.create(name="हितचिंतक-सदस्य")
+        membership = MembershipSubscription.objects.create(user=user, plan=plan)
+        membership.activate()
+        send_certificate.return_value = 1
+
+        request = RequestFactory().post("/admin/accounts/user/")
+        request.session = {}
+        setattr(request, "_messages", FallbackStorage(request))
+        admin_obj = CustomUserAdmin(User, AdminSite())
+        admin_obj.send_active_certificates_whatsapp(request, get_user_model().objects.filter(pk=user.pk))
+
+        send_certificate.assert_called_once_with(membership.certificate)
 
 
 @override_settings(

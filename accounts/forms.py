@@ -5,6 +5,9 @@ from .location_data import bilingual_country_name, bilingual_state_name
 from .models import Country, State, User
 
 
+PHONE_DIGIT_ERROR = "कृपया 10 अंकों का मोबाइल नंबर दर्ज करें."
+
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="ईमेल / मोबाइल / यूजरनेम")
 
@@ -33,10 +36,33 @@ def _configure_location_fields(form, selected_country=None):
         form.fields["state_obj"].queryset = State.objects.filter(country=selected_country, is_active=True)
 
 
+def _configure_phone_field(form):
+    form.fields["phone"].widget.attrs.update({
+        "autocomplete": "tel-national",
+        "data-phone-input": "true",
+        "inputmode": "numeric",
+        "maxlength": "10",
+        "minlength": "10",
+        "pattern": "[0-9]{10}",
+    })
+
+
 def _configure_required_fields(form):
     for field_name, field in form.fields.items():
         field.required = field_name != "email"
     form.fields["email"].required = False
+    _configure_phone_field(form)
+
+
+def _clean_ten_digit_phone(phone):
+    phone = "".join(char for char in str(phone or "") if char.isdigit())
+    if len(phone) == 11 and phone.startswith("0"):
+        phone = phone[1:]
+    if len(phone) == 12 and phone.startswith("91"):
+        phone = phone[2:]
+    if len(phone) != 10:
+        raise forms.ValidationError(PHONE_DIGIT_ERROR)
+    return phone
 
 
 class RegisterForm(forms.ModelForm):
@@ -85,9 +111,7 @@ class RegisterForm(forms.ModelForm):
         _configure_location_fields(self, selected_country)
 
     def clean_phone(self):
-        phone = (self.cleaned_data.get("phone") or "").strip()
-        if not phone:
-            raise forms.ValidationError("मोबाइल नंबर आवश्यक है.")
+        phone = _clean_ten_digit_phone(self.cleaned_data.get("phone"))
         if User.objects.filter(username=phone).exists() or User.objects.filter(phone=phone).exists():
             raise forms.ValidationError("इस मोबाइल नंबर से अकाउंट पहले से बना है.")
         return phone
@@ -159,9 +183,7 @@ class ProfileForm(forms.ModelForm):
         _configure_location_fields(self, selected_country)
 
     def clean_phone(self):
-        phone = (self.cleaned_data.get("phone") or "").strip()
-        if not phone:
-            raise forms.ValidationError("मोबाइल नंबर आवश्यक है.")
+        phone = _clean_ten_digit_phone(self.cleaned_data.get("phone"))
         existing = User.objects.filter(phone=phone).exclude(pk=self.instance.pk)
         username_owner = User.objects.filter(username=phone).exclude(pk=self.instance.pk)
         if existing.exists() or username_owner.exists():

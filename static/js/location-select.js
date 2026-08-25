@@ -5,6 +5,25 @@
     return;
   }
 
+  document.querySelectorAll("[data-phone-input]").forEach(function (input) {
+    function normalizePhone() {
+      let value = input.value.replace(/\D/g, "");
+      if (value.length === 11 && value.startsWith("0")) {
+        value = value.slice(1);
+      }
+      if (value.length === 12 && value.startsWith("91")) {
+        value = value.slice(2);
+      }
+      input.value = value.slice(0, 10);
+    }
+
+    input.addEventListener("input", normalizePhone);
+    input.addEventListener("paste", function () {
+      window.setTimeout(normalizePhone, 0);
+    });
+    normalizePhone();
+  });
+
   function enhanceSearchableSelect(select) {
     if (!select.matches("[data-searchable-select]") || select.dataset.enhancedSearch === "true") {
       return;

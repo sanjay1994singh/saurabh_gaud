@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import Certificate, Invoice, InvoiceSequence, MembershipSubscription, PaymentTransaction, SubscriptionPlan
+from .notifications import send_certificate_whatsapp
 
 
 @admin.register(SubscriptionPlan)
@@ -31,6 +32,19 @@ class MembershipSubscriptionAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
+    actions = ("send_certificate_whatsapp_action",)
+
+    @admin.action(description="Selected active memberships के certificate WhatsApp पर भेजें")
+    def send_certificate_whatsapp_action(self, request, queryset):
+        sent = 0
+        skipped = 0
+        for membership in queryset.select_related("user"):
+            certificate = getattr(membership, "certificate", None)
+            if membership.status != MembershipSubscription.ACTIVE or not certificate:
+                skipped += 1
+                continue
+            sent += send_certificate_whatsapp(certificate)
+        self.message_user(request, f"WhatsApp certificate send: {sent}. Skipped: {skipped}.")
 
 
 @admin.register(Certificate)
@@ -38,6 +52,14 @@ class CertificateAdmin(admin.ModelAdmin):
     list_display = ("certificate_number", "user", "subscription", "issued_at")
     search_fields = ("certificate_number", "user__username", "user__email")
     readonly_fields = ("certificate_number", "issued_at")
+    actions = ("send_certificate_whatsapp_action",)
+
+    @admin.action(description="Selected certificates WhatsApp पर भेजें")
+    def send_certificate_whatsapp_action(self, request, queryset):
+        sent = 0
+        for certificate in queryset.select_related("user", "subscription"):
+            sent += send_certificate_whatsapp(certificate)
+        self.message_user(request, f"WhatsApp certificate send: {sent}.")
 
 
 @admin.register(PaymentTransaction)
