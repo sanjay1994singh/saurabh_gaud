@@ -14,4 +14,6 @@ urlpatterns = [
     path("invoice/<int:pk>/download/", views.invoice_download, name="invoice_download"),
     path("certificate/<int:pk>/", views.certificate_detail, name="certificate"),
     path("certificate/<int:pk>/download/", views.certificate_download, name="certificate_download"),
+    path("certificate-whatsapp/<path:token>/", views.certificate_whatsapp_download, name="certificate_whatsapp_download"),
+    path("invoice-whatsapp/<path:token>/", views.invoice_whatsapp_download, name="invoice_whatsapp_download"),
 ]

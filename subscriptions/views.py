@@ -5,6 +5,7 @@ import mimetypes
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core import signing
 from django.contrib.staticfiles import finders
 from django.db import transaction
 from django.db.models import Q
@@ -18,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .invoices import build_invoice_pdf
 from .certificates import build_certificate_pdf, build_certificate_png
 from .models import Certificate, Invoice, MembershipSubscription, PaymentTransaction, SubscriptionPlan
-from .notifications import send_membership_payment_email, send_payment_failed_email
+from .notifications import send_certificate_whatsapp, send_membership_payment_email, send_payment_failed_email
 from .services import (
     RazorpayConfigurationError,
     RazorpayOrderError,
@@ -82,6 +83,9 @@ def join(request, slug):
             status=MembershipSubscription.PENDING,
         )
         subscription.activate()
+        certificate = subscription.certificate
+        initial_password = request.session.pop("initial_membership_password", "")
+        transaction.on_commit(lambda: send_certificate_whatsapp(certificate, initial_password=initial_password))
         messages.success(request, "आपकी निशुल्क सदस्यता सक्रिय हो गई है. प्रमाणपत्र बन गया है.")
         return redirect("accounts:profile")
 
@@ -232,7 +236,10 @@ def payment_success(request):
         payment_record.failure_reason = ""
         payment_record.save()
         invoice = Invoice.issue_for_payment(payment_record)
+        certificate = subscription.certificate
+        initial_password = request.session.pop("initial_membership_password", "")
         transaction.on_commit(lambda: send_membership_payment_email(invoice))
+        transaction.on_commit(lambda: send_certificate_whatsapp(certificate, initial_password=initial_password, invoice=invoice))
 
     delete_duplicate_active_plan_certificates(request.user, subscription.plan)
     messages.success(request, "Payment successful. Your membership and certificate are ready.")
@@ -328,6 +335,7 @@ def razorpay_webhook(request):
         payment_record.save()
         invoice = Invoice.issue_for_payment(payment_record)
         transaction.on_commit(lambda: send_membership_payment_email(invoice))
+        transaction.on_commit(lambda: send_certificate_whatsapp(subscription.certificate, invoice=invoice))
     return HttpResponse(status=204)
 
 
@@ -495,4 +503,48 @@ def certificate_download(request, pk):
     response["Content-Disposition"] = f'inline; filename="{certificate.certificate_number}.pdf"'
     response["X-Content-Type-Options"] = "nosniff"
     response["Cache-Control"] = "private, no-store"
+    return response
+
+
+def certificate_whatsapp_download(request, token):
+    try:
+        data = signing.loads(
+            token,
+            salt="certificate-whatsapp-document",
+            max_age=60 * 60 * 24 * 30,
+        )
+    except signing.BadSignature:
+        raise Http404("Certificate link is invalid.")
+    except signing.SignatureExpired:
+        raise Http404("Certificate link has expired.")
+
+    certificate = get_object_or_404(Certificate, pk=data.get("certificate_id"))
+    subscription = certificate.subscription
+    if not subscription.is_active:
+        raise Http404("प्रमाणपत्र केवल सक्रिय सदस्यता के लिए उपलब्ध है.")
+
+    response = HttpResponse(build_certificate_pdf(certificate), content_type="application/pdf")
+    response["Content-Disposition"] = f'inline; filename="{certificate.certificate_number}.pdf"'
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Cache-Control"] = "private, max-age=2592000"
+    return response
+
+
+def invoice_whatsapp_download(request, token):
+    try:
+        data = signing.loads(
+            token,
+            salt="invoice-whatsapp-document",
+            max_age=60 * 60 * 24 * 30,
+        )
+    except signing.BadSignature:
+        raise Http404("Invoice link is invalid.")
+    except signing.SignatureExpired:
+        raise Http404("Invoice link has expired.")
+
+    invoice = get_object_or_404(Invoice, pk=data.get("invoice_id"))
+    response = HttpResponse(build_invoice_pdf(invoice), content_type="application/pdf")
+    response["Content-Disposition"] = f'inline; filename="Dharm-Raksha-Sangh-{invoice.invoice_number}.pdf"'
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Cache-Control"] = "private, max-age=2592000"
     return response

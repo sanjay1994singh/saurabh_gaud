@@ -1,8 +1,14 @@
 from django.conf import settings
+from django.core import signing
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import escape
+import json
+from urllib.parse import urlencode
+from urllib import request as urlrequest
+from urllib.error import URLError
 
 from .invoices import build_invoice_pdf
+from .whatsapp import find_template
 
 
 def _send(subject, text, recipients, *, html=None, attachments=None):
@@ -15,6 +21,102 @@ def _send(subject, text, recipients, *, html=None, attachments=None):
     for filename, content, mimetype in attachments or []:
         message.attach(filename, content, mimetype)
     return message.send(fail_silently=True)
+
+
+def _digits_only(value):
+    return "".join(char for char in str(value or "") if char.isdigit())
+
+
+def _send_whatsapp_document(phone, document_url, filename):
+    phone = _digits_only(phone)
+    if (
+        not phone
+        or not document_url
+        or not settings.WHATSAPP_API_URL
+        or not settings.WHATSAPP_API_KEY
+        or not settings.WHATSAPP_PHONE_NUMBER_ID
+    ):
+        return 0
+
+    query = urlencode({
+        "authorization": settings.WHATSAPP_API_KEY,
+        "phone_number_id": settings.WHATSAPP_PHONE_NUMBER_ID,
+        "to": phone,
+        "type": "document",
+        "url": document_url,
+        "document_filename": filename,
+    })
+    separator = "&" if "?" in settings.WHATSAPP_API_URL else "?"
+    request = urlrequest.Request(f"{settings.WHATSAPP_API_URL}{separator}{query}", method="GET")
+    try:
+        with urlrequest.urlopen(request, timeout=20) as response:
+            return 1 if 200 <= response.status < 300 else 0
+    except (OSError, URLError, ValueError):
+        return 0
+
+
+def _whatsapp_template_url():
+    return (
+        f"https://www.fast2sms.com/dev/whatsapp/"
+        f"{settings.WHATSAPP_API_VERSION}/{settings.WHATSAPP_PHONE_NUMBER_ID}/messages"
+    )
+
+
+def get_configured_certificate_template():
+    return find_template(settings.WHATSAPP_TEMPLATE_CERTIFICATE_GENERATED)
+
+
+def _send_whatsapp_template(phone, template_name, body_values, *, header_document_url="", header_filename=""):
+    phone = _digits_only(phone)
+    if not phone or not template_name or not settings.WHATSAPP_API_KEY or not settings.WHATSAPP_PHONE_NUMBER_ID:
+        return 0
+
+    components = []
+    if header_document_url:
+        components.append({
+            "type": "header",
+            "parameters": [{
+                "type": "document",
+                "document": {
+                    "link": header_document_url,
+                    "filename": header_filename or "certificate.pdf",
+                },
+            }],
+        })
+    if body_values:
+        components.append({
+            "type": "body",
+            "parameters": [
+                {"type": "text", "text": str(value or "")}
+                for value in body_values
+            ],
+        })
+
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": phone,
+        "type": "template",
+        "template": {
+            "name": template_name,
+            "language": {"code": settings.WHATSAPP_LANGUAGE_CODE},
+            "components": components,
+        },
+    }
+    request = urlrequest.Request(
+        _whatsapp_template_url(),
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": settings.WHATSAPP_API_KEY,
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urlrequest.urlopen(request, timeout=20) as response:
+            return 1 if 200 <= response.status < 300 else 0
+    except (OSError, URLError, ValueError):
+        return 0
 
 
 def _email_shell(title, intro, content, *, alert="", actions=""):
@@ -113,6 +215,52 @@ def send_account_welcome_email(user, initial_password=None):
         actions=_button(profile_url, "प्रोफाइल खोलें / Open Profile"),
     )
     return _send(subject, text, [user.email], html=html)
+
+
+def send_account_welcome_whatsapp(user, initial_password=None):
+    name = user.get_full_name() or user.get_username()
+    login_id = user.phone or user.username
+    return _send_whatsapp_template(
+        user.phone,
+        settings.WHATSAPP_TEMPLATE_ACCOUNT_CREATED,
+        [name, login_id, initial_password or ""],
+    )
+
+
+def _signed_certificate_pdf_url(certificate):
+    token = signing.dumps(
+        {"certificate_id": certificate.pk},
+        salt="certificate-whatsapp-document",
+    )
+    return f"{settings.SITE_URL}/subscriptions/certificate-whatsapp/{token}/"
+
+
+def _signed_invoice_pdf_url(invoice):
+    token = signing.dumps(
+        {"invoice_id": invoice.pk},
+        salt="invoice-whatsapp-document",
+    )
+    return f"{settings.SITE_URL}/subscriptions/invoice-whatsapp/{token}/"
+
+
+def send_certificate_whatsapp(certificate, initial_password=None, invoice=None):
+    user = certificate.user
+    certificate_url = _signed_certificate_pdf_url(certificate)
+    name = user.get_full_name() or user.get_username()
+    sent = _send_whatsapp_template(
+        user.phone,
+        settings.WHATSAPP_TEMPLATE_CERTIFICATE_GENERATED,
+        [name],
+        header_document_url=certificate_url,
+        header_filename=f"{certificate.certificate_number}.pdf",
+    )
+    if invoice:
+        sent += _send_whatsapp_document(
+            user.phone,
+            _signed_invoice_pdf_url(invoice),
+            f"Dharm-Raksha-Sangh-{invoice.invoice_number}.pdf",
+        )
+    return sent
 
 
 def send_profile_updated_email(user):

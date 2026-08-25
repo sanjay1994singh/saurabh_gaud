@@ -190,6 +190,15 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "we
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 EMAIL_TIMEOUT = 20
 
+WHATSAPP_API_URL = os.environ.get("WHATSAPP_API_URL", "https://www.fast2sms.com/dev/whatsapp-session")
+WHATSAPP_DLT_MANAGER_URL = os.environ.get("WHATSAPP_DLT_MANAGER_URL", "https://www.fast2sms.com/dev/dlt_manager/whatsapp")
+WHATSAPP_API_KEY = os.environ.get("WHATSAPP_API_KEY", "")
+WHATSAPP_PHONE_NUMBER_ID = os.environ.get("WHATSAPP_PHONE_NUMBER_ID", "")
+WHATSAPP_API_VERSION = os.environ.get("WHATSAPP_API_VERSION", "v26.0")
+WHATSAPP_TEMPLATE_ACCOUNT_CREATED = os.environ.get("WHATSAPP_TEMPLATE_ACCOUNT_CREATED", "membership_account_created")
+WHATSAPP_TEMPLATE_CERTIFICATE_GENERATED = os.environ.get("WHATSAPP_TEMPLATE_CERTIFICATE_GENERATED", "certificate_download")
+WHATSAPP_LANGUAGE_CODE = os.environ.get("WHATSAPP_LANGUAGE_CODE", "hi")
+
 
 # HTTPS/security defaults are enabled whenever DEBUG=False. If TLS terminates
 # at a reverse proxy, it must forward X-Forwarded-Proto correctly.

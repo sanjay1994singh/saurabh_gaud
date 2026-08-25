@@ -41,6 +41,7 @@ class User(AbstractUser):
     """
 
     phone = models.CharField(max_length=20, blank=True)
+    father_spouse_name = models.CharField(max_length=150, blank=True)
     address = models.TextField(blank=True)
     city = models.CharField(max_length=100, blank=True)
     district = models.CharField(max_length=100, blank=True)

@@ -23,7 +23,7 @@ class StateAdmin(admin.ModelAdmin):
 class CustomUserAdmin(UserAdmin):
     model = User
     fieldsets = UserAdmin.fieldsets + (
-        ("सदस्य विवरण", {"fields": ("phone", "photo", "address", "city", "district", "pin_code", "country", "state_obj")}),
+        ("सदस्य विवरण", {"fields": ("phone", "father_spouse_name", "photo", "address", "city", "district", "pin_code", "country", "state_obj")}),
     )
-    list_display = UserAdmin.list_display + ("phone", "city", "district", "pin_code", "country", "state_obj")
+    list_display = UserAdmin.list_display + ("phone", "father_spouse_name", "city", "district", "pin_code", "country", "state_obj")
     autocomplete_fields = ("country", "state_obj")

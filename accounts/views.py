@@ -13,7 +13,11 @@ from .forms import ProfileForm, RegisterForm
 from .location_data import hindi_state_name
 from .models import State
 from subscriptions.models import Invoice, MembershipSubscription
-from subscriptions.notifications import send_account_welcome_email, send_profile_updated_email
+from subscriptions.notifications import (
+    send_account_welcome_email,
+    send_account_welcome_whatsapp,
+    send_profile_updated_email,
+)
 from subscriptions.views import delete_duplicate_active_plan_certificates
 
 def _safe_next_url(request):
@@ -58,8 +62,12 @@ def register(request):
             user.set_password(initial_password)
             user.save()
             login(request, user, backend="accounts.backends.EmailPhoneUsernameBackend")
+            request.session["initial_membership_password"] = initial_password
             transaction.on_commit(
-                lambda: send_account_welcome_email(user, initial_password=initial_password)
+                lambda: (
+                    send_account_welcome_email(user, initial_password=initial_password),
+                    send_account_welcome_whatsapp(user, initial_password=initial_password),
+                )
             )
             messages.success(request, "अकाउंट बन गया है. कृपया सदस्यता चुनें.")
             if next_url:
