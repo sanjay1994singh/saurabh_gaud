@@ -31,6 +31,19 @@ from .services import (
 )
 
 
+def _queue_certificate_whatsapp_notice(request, user):
+    phone = "".join(char for char in str(user.phone or "") if char.isdigit())
+    if len(phone) == 10:
+        phone = f"+91 {phone[:5]} {phone[5:]}"
+    elif len(phone) == 11 and phone.startswith("0"):
+        phone = f"+91 {phone[1:6]} {phone[6:]}"
+    elif len(phone) == 12 and phone.startswith("91"):
+        phone = f"+91 {phone[2:7]} {phone[7:]}"
+    else:
+        phone = user.phone or ""
+    request.session["certificate_whatsapp_notice_phone"] = phone
+
+
 def plans(request):
     plan_list = SubscriptionPlan.objects.filter(is_active=True)
     return render(request, "subscriptions/plans.html", {"plan_list": plan_list})
@@ -86,6 +99,7 @@ def join(request, slug):
         certificate = subscription.certificate
         initial_password = request.session.pop("initial_membership_password", "")
         transaction.on_commit(lambda: send_certificate_whatsapp(certificate, initial_password=initial_password))
+        _queue_certificate_whatsapp_notice(request, request.user)
         messages.success(request, "आपकी निशुल्क सदस्यता सक्रिय हो गई है. प्रमाणपत्र बन गया है.")
         return redirect("accounts:profile")
 
@@ -242,6 +256,7 @@ def payment_success(request):
         transaction.on_commit(lambda: send_certificate_whatsapp(certificate, initial_password=initial_password, invoice=invoice))
 
     delete_duplicate_active_plan_certificates(request.user, subscription.plan)
+    _queue_certificate_whatsapp_notice(request, request.user)
     messages.success(request, "Payment successful. Your membership and certificate are ready.")
     return redirect("accounts:profile")
 

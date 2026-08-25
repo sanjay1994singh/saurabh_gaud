@@ -100,6 +100,7 @@ def states_for_country(request):
 
 @login_required
 def profile(request):
+    certificate_whatsapp_notice_phone = request.session.pop("certificate_whatsapp_notice_phone", "")
     active_plan_ids = (
         request.user.memberships.filter(status=MembershipSubscription.ACTIVE)
         .values_list("plan_id", flat=True)
@@ -131,5 +132,6 @@ def profile(request):
             "memberships": memberships,
             "certificates": certificates,
             "invoices": invoices,
+            "certificate_whatsapp_notice_phone": certificate_whatsapp_notice_phone,
         },
     )

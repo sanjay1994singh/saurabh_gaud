@@ -103,9 +103,32 @@
       </div>
     </div>
   </section>
+  {% if certificate_whatsapp_notice_phone %}
+    <div class="sweet-alert-overlay" data-certificate-whatsapp-alert>
+      <div class="sweet-alert-box" role="dialog" aria-modal="true" aria-labelledby="certificateWhatsAppTitle">
+        <div class="sweet-alert-icon" aria-hidden="true">✓</div>
+        <h2 id="certificateWhatsAppTitle">प्रमाणपत्र भेजा जा रहा है</h2>
+        <p>आपके मोबाइल नंबर <strong>{{ certificate_whatsapp_notice_phone }}</strong> पर WhatsApp द्वारा प्रमाणपत्र भेजा जा रहा है.</p>
+        <button class="primary-action" type="button" data-certificate-whatsapp-ok>OK</button>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block scripts %}
   {% load static %}
   <script src="{% static 'js/location-select.js' %}"></script>
+  <script>
+    (function () {
+      const alertBox = document.querySelector("[data-certificate-whatsapp-alert]");
+      const okButton = document.querySelector("[data-certificate-whatsapp-ok]");
+      if (!alertBox || !okButton) {
+        return;
+      }
+      okButton.focus();
+      okButton.addEventListener("click", function () {
+        alertBox.remove();
+      });
+    })();
+  </script>
 {% endblock %}
