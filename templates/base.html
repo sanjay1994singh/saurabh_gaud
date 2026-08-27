@@ -15,13 +15,12 @@
         <span class="brand-mark"><img src="{% static 'brand/drs-logo-small.png' %}" alt=""></span>
         <span>{{ ui.site_name }}</span>
       </a>
-      <input class="nav-toggle" id="siteNavToggle" type="checkbox" aria-label="{{ ui.nav_toggle }}">
-      <label class="nav-toggle-button" for="siteNavToggle" aria-hidden="true">
+      <button class="nav-toggle-button" id="siteNavToggle" type="button" aria-expanded="false" aria-controls="siteNavLinks" aria-label="{{ ui.nav_toggle }}">
         <span></span>
         <span></span>
         <span></span>
-      </label>
-      <div class="nav-links">
+      </button>
+      <div class="nav-links" id="siteNavLinks">
         <a href="{% url 'home:index' %}">{{ ui.home }}</a>
         <a href="{% url 'home:about' %}">{{ ui.about }}</a>
         <a href="/contact/">{{ ui.contact }}</a>
@@ -113,6 +112,44 @@
       <strong>जय श्री राम</strong>
     </div>
   </footer>
+  <script>
+    (() => {
+      const navToggle = document.getElementById("siteNavToggle");
+      const navLinks = document.getElementById("siteNavLinks");
+      if (!navToggle || !navLinks) {
+        return;
+      }
+
+      const setMenuOpen = (isOpen) => {
+        navToggle.classList.toggle("is-open", isOpen);
+        navLinks.classList.toggle("is-open", isOpen);
+        navToggle.setAttribute("aria-expanded", String(isOpen));
+      };
+
+      navToggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setMenuOpen(!navLinks.classList.contains("is-open"));
+      });
+
+      navLinks.addEventListener("click", (event) => {
+        if (event.target.closest("a")) {
+          setMenuOpen(false);
+        }
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".site-nav")) {
+          setMenuOpen(false);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          setMenuOpen(false);
+        }
+      });
+    })();
+  </script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

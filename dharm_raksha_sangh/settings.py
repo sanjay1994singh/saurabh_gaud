@@ -123,6 +123,7 @@ STORAGES = {
         "BACKEND": "dharm_raksha_sangh.staticfiles.VersionedStaticFilesStorage",
     },
 }
+STATICFILES_STORAGE = "dharm_raksha_sangh.staticfiles.VersionedStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
