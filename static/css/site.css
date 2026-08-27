@@ -5144,6 +5144,11 @@ p {
     touch-action: pan-y;
   }
 
+  .site-header,
+  .site-nav {
+    overflow: visible;
+  }
+
   .auth-panel,
   .register-panel,
   .profile-panel,
