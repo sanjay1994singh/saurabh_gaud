@@ -243,7 +243,7 @@ def send_account_welcome_email(user, initial_password=None):
     credentials_text = ""
     credentials_html = ""
     if initial_password:
-        login_id = user.email or user.username
+        login_id = user.phone or user.username or user.email
         credentials_text = f"\nLogin ID: {login_id}\nInitial password: {initial_password}\nपहली login के बाद password बदलें / Change after first login: {change_url}\n"
         credentials_html = f"<div style='padding:16px;background:#fff8ed;border:1px solid #ead8c5;border-radius:8px;line-height:1.8'><strong>Login ID:</strong> {escape(login_id)}<br><strong>Initial password:</strong> {escape(initial_password)}<br><a href='{escape(change_url)}'>पहली login के बाद password बदलें / Change after first login</a></div>"
     subject = f"धर्म रक्षा संघ में आपका स्वागत है | Welcome to {settings.ORGANIZATION_NAME}"

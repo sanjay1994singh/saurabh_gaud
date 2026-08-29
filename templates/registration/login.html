@@ -18,7 +18,7 @@
         <button class="social-button" type="submit">{{ ui.continue_google }}</button>
       </form>
       <div class="auth-divider"><span>{{ ui.or }}</span></div>
-      <form method="post" class="form-stack">
+      <form method="post" class="form-stack" autocomplete="off">
         {% csrf_token %}
         {{ form.non_field_errors }}
         {% for field in form %}

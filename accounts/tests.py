@@ -10,27 +10,26 @@ from django.urls import reverse
 from subscriptions.models import MembershipSubscription, SubscriptionPlan
 
 from .admin import CustomUserAdmin
-from .forms import RegisterForm
+from .forms import LoginForm, RegisterForm
 from .models import User
-from .views import _generate_initial_password
 
 
-class GeneratedPasswordRegistrationTests(TestCase):
+class MobilePasswordRegistrationTests(TestCase):
     def test_registration_form_has_no_password_fields(self):
         form = RegisterForm()
 
         self.assertNotIn("password1", form.fields)
         self.assertNotIn("password2", form.fields)
         self.assertNotIn("password", form.fields)
+        self.assertFalse(form.fields["email"].required)
+        self.assertEqual(form.fields["email"].widget.attrs.get("autocomplete"), "off")
+        self.assertEqual(form.fields["phone"].widget.attrs.get("autocomplete"), "off")
 
-    def test_generated_password_is_long_and_mixed(self):
-        password = _generate_initial_password()
+    def test_login_form_disables_browser_autofill(self):
+        form = LoginForm()
 
-        self.assertEqual(len(password), 20)
-        self.assertTrue(any(char.islower() for char in password))
-        self.assertTrue(any(char.isupper() for char in password))
-        self.assertTrue(any(char.isdigit() for char in password))
-        self.assertTrue(any(char in "@#$%*-_!" for char in password))
+        self.assertEqual(form.fields["username"].widget.attrs.get("autocomplete"), "off")
+        self.assertEqual(form.fields["password"].widget.attrs.get("autocomplete"), "new-password")
 
     @patch("accounts.views.send_account_welcome_email")
     def test_registration_creates_hashed_password_and_queues_credentials_email(self, send_welcome):
@@ -53,7 +52,10 @@ class GeneratedPasswordRegistrationTests(TestCase):
         self.assertNotIn("new.member@example.com", user.password)
         send_welcome.assert_called_once()
         initial_password = send_welcome.call_args.kwargs["initial_password"]
-        self.assertTrue(user.check_password(initial_password))
+        self.assertEqual(initial_password, "9876543210")
+        self.assertTrue(user.check_password("9876543210"))
+        response_messages = list(response.wsgi_request._messages)
+        self.assertTrue(any("account-password-notice" in message.tags for message in response_messages))
 
     def test_register_form_normalizes_india_phone_to_ten_digits(self):
         form = RegisterForm(data={
@@ -68,6 +70,37 @@ class GeneratedPasswordRegistrationTests(TestCase):
 
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.cleaned_data["phone"], "9876543210")
+
+    def test_registration_allows_member_without_email(self):
+        response = self.client.post(
+            reverse("accounts:register"),
+            {
+                "first_name": "Test",
+                "last_name": "Member",
+                "phone": "9876543210",
+                "address": "Vrindavan",
+                "city": "Mathura",
+                "pin_code": "281121",
+                "district": "Mathura",
+            },
+        )
+
+        self.assertRedirects(response, reverse("subscriptions:plans"))
+        user = get_user_model().objects.get(phone="9876543210")
+        self.assertEqual(user.email, "")
+        self.assertTrue(user.check_password("9876543210"))
+
+    def test_member_can_login_with_mobile_or_email_using_mobile_password(self):
+        user = get_user_model().objects.create_user(
+            username="9876543210",
+            email="member@example.com",
+            phone="9876543210",
+            password="9876543210",
+        )
+
+        self.assertTrue(self.client.login(username=user.phone, password=user.phone))
+        self.client.logout()
+        self.assertTrue(self.client.login(username=user.email, password=user.phone))
 
     def test_register_form_rejects_short_phone(self):
         form = RegisterForm(data={

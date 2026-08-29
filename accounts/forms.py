@@ -11,6 +11,17 @@ PHONE_DIGIT_ERROR = "कृपया 10 अंकों का मोबाइ�
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="ईमेल / मोबाइल / यूजरनेम")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs.update({
+            "autocomplete": "off",
+            "data-no-autofill": "true",
+        })
+        self.fields["password"].widget.attrs.update({
+            "autocomplete": "new-password",
+            "data-no-autofill": "true",
+        })
+
 
 def _india_country():
     return Country.objects.filter(code="IN", is_active=True).first()
@@ -38,7 +49,7 @@ def _configure_location_fields(form, selected_country=None):
 
 def _configure_phone_field(form):
     form.fields["phone"].widget.attrs.update({
-        "autocomplete": "tel-national",
+        "autocomplete": "off",
         "data-phone-input": "true",
         "inputmode": "numeric",
         "maxlength": "10",
@@ -50,6 +61,9 @@ def _configure_phone_field(form):
 def _configure_required_fields(form):
     for field_name, field in form.fields.items():
         field.required = field_name != "email"
+        if not isinstance(field.widget, (forms.ClearableFileInput, forms.FileInput)):
+            field.widget.attrs["autocomplete"] = "off"
+            field.widget.attrs["data-no-autofill"] = "true"
     form.fields["email"].required = False
     _configure_phone_field(form)
 
@@ -70,7 +84,6 @@ class RegisterForm(forms.ModelForm):
         model = User
         fields = (
             "first_name",
-            "last_name",
             "father_spouse_name",
             "email",
             "phone",
@@ -83,8 +96,7 @@ class RegisterForm(forms.ModelForm):
             "photo",
         )
         labels = {
-            "first_name": "नाम",
-            "last_name": "उपनाम",
+            "first_name": "पूरा नाम",
             "father_spouse_name": "पिता / पति का नाम",
             "email": "ईमेल",
             "phone": "मोबाइल",
@@ -137,7 +149,6 @@ class ProfileForm(forms.ModelForm):
         fields = (
             "username",
             "first_name",
-            "last_name",
             "father_spouse_name",
             "email",
             "phone",
@@ -150,8 +161,7 @@ class ProfileForm(forms.ModelForm):
             "photo",
         )
         labels = {
-            "first_name": "नाम",
-            "last_name": "उपनाम",
+            "first_name": "पूरा नाम",
             "father_spouse_name": "पिता / पति का नाम",
             "email": "ईमेल",
             "phone": "मोबाइल",

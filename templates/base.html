@@ -56,9 +56,23 @@
     {% if messages %}
       <div class="messages">
         {% for message in messages %}
-          <div class="message message-{{ message.tags }}">{{ message }}</div>
+          {% if "account-password-notice" not in message.tags %}
+            <div class="message message-{{ message.tags }}">{{ message }}</div>
+          {% endif %}
         {% endfor %}
       </div>
+      {% for message in messages %}
+        {% if "account-password-notice" in message.tags %}
+          <div class="sweet-alert-overlay" data-account-password-alert>
+            <div class="sweet-alert-box" role="dialog" aria-modal="true" aria-labelledby="accountPasswordAlertTitle">
+              <div class="sweet-alert-icon" aria-hidden="true">✓</div>
+              <h2 id="accountPasswordAlertTitle">अकाउंट बन गया है</h2>
+              <p>{{ message }}</p>
+              <button class="primary-action" type="button" data-account-password-alert-ok>OK</button>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
     {% endif %}
     {% block content %}{% endblock %}
   </main>
@@ -109,6 +123,18 @@
     </div>
   </footer>
   <script>
+    (() => {
+      const alertBox = document.querySelector("[data-account-password-alert]");
+      const okButton = document.querySelector("[data-account-password-alert-ok]");
+      if (!alertBox || !okButton) {
+        return;
+      }
+      okButton.focus();
+      okButton.addEventListener("click", () => {
+        alertBox.remove();
+      });
+    })();
+
     (() => {
       const navToggle = document.getElementById("siteNavToggle");
       const navLinks = document.getElementById("siteNavLinks");

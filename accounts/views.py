@@ -1,6 +1,3 @@
-import secrets
-import string
-
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -31,18 +28,9 @@ def _is_membership_join_url(next_url):
     return next_url.startswith("/subscriptions/join/")
 
 
-def _generate_initial_password(length=20):
-    """Return a cryptographically strong password with mixed character classes."""
-    alphabet = string.ascii_letters + string.digits + "@#$%*-_!"
-    while True:
-        password = "".join(secrets.choice(alphabet) for _ in range(length))
-        if (
-            any(char.islower() for char in password)
-            and any(char.isupper() for char in password)
-            and any(char.isdigit() for char in password)
-            and any(char in "@#$%*-_!" for char in password)
-        ):
-            return password
+def _initial_password_from_user_phone(user):
+    """Use the member's normalized mobile number as the initial password."""
+    return "".join(char for char in str(user.phone or user.username or "") if char.isdigit())
 
 
 def register(request):
@@ -57,8 +45,8 @@ def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            initial_password = _generate_initial_password()
             user = form.save(commit=False)
+            initial_password = _initial_password_from_user_phone(user)
             user.set_password(initial_password)
             user.save()
             login(request, user, backend="accounts.backends.EmailPhoneUsernameBackend")
@@ -69,7 +57,11 @@ def register(request):
                     send_account_welcome_whatsapp(user, initial_password=initial_password),
                 )
             )
-            messages.success(request, "अकाउंट बन गया है. कृपया सदस्यता चुनें.")
+            messages.success(
+                request,
+                "आपका अकाउंट बन गया है. आपका मोबाइल नंबर ही आपके अकाउंट का पासवर्ड है. कृपया इसे किसी के साथ साझा न करें और सुरक्षा के लिए सुरक्षित रखें.",
+                extra_tags="account-password-notice",
+            )
             if next_url:
                 return redirect(next_url)
             return redirect("subscriptions:plans")

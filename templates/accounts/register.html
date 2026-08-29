@@ -7,7 +7,7 @@
     <div class="auth-panel register-panel">
       <p class="eyebrow">{{ ui.membership }}</p>
       <h1>{{ ui.create_account }}</h1>
-      <form method="post" enctype="multipart/form-data" class="form-stack">
+      <form method="post" enctype="multipart/form-data" class="form-stack" autocomplete="off" data-no-autofill-form>
         {% csrf_token %}
         {% if next_url %}
           <input type="hidden" name="next" value="{{ next_url }}">
@@ -40,7 +40,7 @@
         <button class="primary-action" type="submit">{{ ui.create_account }}</button>
       </form>
       <p class="form-note">अकाउंट बनाकर आप हमारी <a class="text-link" href="{% url 'home:terms' %}">नियम एवं शर्तें</a> और <a class="text-link" href="{% url 'home:privacy' %}">गोपनीयता नीति</a> स्वीकार करते हैं.</p>
-      <p class="form-note">सुरक्षित प्रारंभिक पासवर्ड बनाकर आपके रजिस्टर्ड मोबाइल पर भेजा जाएगा. ईमेल दिया गया हो तो ईमेल पर भी सूचना मिलेगी. पहले लॉगिन के बाद कृपया इसे बदल लें.</p>
+      <p class="form-note">आपका मोबाइल नंबर ही प्रारंभिक पासवर्ड रहेगा. ईमेल दिया गया हो तो लॉगिन ID और पासवर्ड ईमेल पर भी भेजे जाएंगे. पहले लॉगिन के बाद कृपया पासवर्ड बदल लें.</p>
       <p class="form-note">{{ ui.already_registered }} <a class="text-link" href="{% url 'login' %}">{{ ui.login }}</a></p>
       <div class="social-auth-section">
         <div class="auth-divider"><span>{{ ui.or }}</span></div>
@@ -61,4 +61,33 @@
 {% block scripts %}
   {% load static %}
   <script src="{% static 'js/location-select.js' %}"></script>
+  {% if request.method != "POST" %}
+  <script>
+    (function () {
+      const form = document.querySelector("[data-no-autofill-form]");
+      if (!form || form.dataset.boundNoAutofill) {
+        return;
+      }
+      form.dataset.boundNoAutofill = "true";
+      const clearAutofill = function () {
+        if (form.dataset.submitted === "true") {
+          return;
+        }
+        form.querySelectorAll("input[data-no-autofill], textarea[data-no-autofill]").forEach(function (field) {
+          if (field.type === "file" || field.type === "hidden") {
+            return;
+          }
+          if (!field.matches(":focus")) {
+            field.value = "";
+          }
+        });
+      };
+      form.addEventListener("submit", function () {
+        form.dataset.submitted = "true";
+      });
+      window.addEventListener("pageshow", clearAutofill);
+      setTimeout(clearAutofill, 250);
+    })();
+  </script>
+  {% endif %}
 {% endblock %}
