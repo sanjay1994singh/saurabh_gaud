@@ -21,6 +21,8 @@ class MobilePasswordRegistrationTests(TestCase):
         self.assertNotIn("password1", form.fields)
         self.assertNotIn("password2", form.fields)
         self.assertNotIn("password", form.fields)
+        self.assertNotIn("last_name", form.fields)
+        self.assertEqual(form.fields["first_name"].label, "पूरा नाम")
         self.assertFalse(form.fields["email"].required)
         self.assertEqual(form.fields["email"].widget.attrs.get("autocomplete"), "off")
         self.assertEqual(form.fields["phone"].widget.attrs.get("autocomplete"), "off")
@@ -38,7 +40,6 @@ class MobilePasswordRegistrationTests(TestCase):
                 reverse("accounts:register"),
                 {
                     "first_name": "Test",
-                    "last_name": "Member",
                     "email": "new.member@example.com",
                     "phone": "9876543210",
                     "address": "Vrindavan",
@@ -60,7 +61,6 @@ class MobilePasswordRegistrationTests(TestCase):
     def test_register_form_normalizes_india_phone_to_ten_digits(self):
         form = RegisterForm(data={
             "first_name": "Test",
-            "last_name": "Member",
             "phone": "+91 98765-43210",
             "address": "Vrindavan",
             "city": "Mathura",
@@ -76,7 +76,6 @@ class MobilePasswordRegistrationTests(TestCase):
             reverse("accounts:register"),
             {
                 "first_name": "Test",
-                "last_name": "Member",
                 "phone": "9876543210",
                 "address": "Vrindavan",
                 "city": "Mathura",
@@ -105,7 +104,6 @@ class MobilePasswordRegistrationTests(TestCase):
     def test_register_form_rejects_short_phone(self):
         form = RegisterForm(data={
             "first_name": "Test",
-            "last_name": "Member",
             "phone": "12345",
             "address": "Vrindavan",
             "city": "Mathura",
