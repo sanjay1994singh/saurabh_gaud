@@ -7,6 +7,7 @@ from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from .services import RazorpayOrderError, create_razorpay_order
 from .models import Invoice, MembershipSubscription, PaymentTransaction, SubscriptionPlan
 from .notifications import _whatsapp_number
 
@@ -28,6 +29,16 @@ class WhatsAppNumberTests(TestCase):
         self.assertEqual(_whatsapp_number("9876543210"), "919876543210")
         self.assertEqual(_whatsapp_number("09876543210"), "919876543210")
         self.assertEqual(_whatsapp_number("+91 98765 43210"), "919876543210")
+
+
+@override_settings(RAZORPAY_KEY_ID="rzp_test_example", RAZORPAY_KEY_SECRET="test_secret")
+class RazorpayServiceTests(TestCase):
+    def test_order_response_must_match_requested_payment_details(self):
+        with patch("subscriptions.services.razorpay_request") as razorpay_request:
+            razorpay_request.return_value = {"id": "order_test123", "amount": 100, "currency": "INR"}
+
+            with self.assertRaises(RazorpayOrderError):
+                create_razorpay_order(amount_paise=25100, receipt="sub-1")
 
 
 @override_settings(
@@ -152,3 +163,8 @@ class PaidMembershipTests(TestCase):
         self.payment.refresh_from_db()
         self.assertEqual(self.subscription.status, MembershipSubscription.FAILED)
         self.assertEqual(self.payment.status, PaymentTransaction.FAILED)
+
+    def test_failed_callback_requires_order_id(self):
+        response = self.client.post(reverse("subscriptions:payment_failed"), {})
+
+        self.assertEqual(response.status_code, 400)

@@ -64,9 +64,10 @@
       const checkout = new Razorpay(options);
       checkout.on("payment.failed", function (response) {
         const failureForm = new FormData();
+        const error = response.error || {};
         failureForm.append("csrfmiddlewaretoken", paymentForm.querySelector('[name="csrfmiddlewaretoken"]').value);
         failureForm.append("razorpay_order_id", "{{ razorpay_order_id|escapejs }}");
-        failureForm.append("error_description", response.error.description || "भुगतान असफल रहा");
+        failureForm.append("error_description", error.description || error.reason || "भुगतान असफल रहा");
         fetch("{% url 'subscriptions:payment_failed' %}", {
           method: "POST",
           body: failureForm,

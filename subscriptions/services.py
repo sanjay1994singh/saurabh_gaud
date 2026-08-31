@@ -49,6 +49,11 @@ def razorpay_request(path, *, method="GET", payload=None):
 
 
 def create_razorpay_order(*, amount_paise, receipt, notes=None):
+    if amount_paise <= 0:
+        raise RazorpayOrderError("Razorpay order amount must be greater than zero.")
+    if not receipt:
+        raise RazorpayOrderError("Razorpay order receipt is required.")
+
     payload = {
         "amount": amount_paise,
         "currency": "INR",
@@ -57,9 +62,13 @@ def create_razorpay_order(*, amount_paise, receipt, notes=None):
         "notes": notes or {},
     }
     try:
-        return razorpay_request("orders", method="POST", payload=payload)
+        order = razorpay_request("orders", method="POST", payload=payload)
     except RazorpayPaymentError as exc:
         raise RazorpayOrderError(str(exc)) from exc
+
+    if not order.get("id") or order.get("amount") != amount_paise or order.get("currency") != "INR":
+        raise RazorpayOrderError("Razorpay returned an invalid order response.")
+    return order
 
 
 def fetch_razorpay_payment(payment_id):

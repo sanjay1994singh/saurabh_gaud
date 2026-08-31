@@ -201,7 +201,8 @@ def payment_success(request):
             messages.success(request, "Payment was already verified and your membership is active.")
             return redirect("accounts:profile")
 
-        if not verify_payment_signature(order_id=order_id, payment_id=payment_id, signature=signature):
+        server_order_id = subscription.razorpay_order_id
+        if not verify_payment_signature(order_id=server_order_id, payment_id=payment_id, signature=signature):
             subscription.status = MembershipSubscription.FAILED
             subscription.save(update_fields=("status", "updated_at"))
             payment_record.status = PaymentTransaction.FAILED
@@ -265,6 +266,9 @@ def payment_success(request):
 @login_required
 def payment_failed(request):
     order_id = request.POST.get("razorpay_order_id", "")
+    if not order_id:
+        return HttpResponseBadRequest("Missing Razorpay order ID")
+
     subscription = get_object_or_404(
         MembershipSubscription,
         user=request.user,
