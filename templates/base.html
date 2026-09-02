@@ -1,12 +1,12 @@
 <!doctype html>
-{% load static %}
+{% load static static_version %}
 <html lang="hi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ ui.site_name|default:"धर्म रक्षा संघ" }}{% endblock %}</title>
   <link rel="icon" type="image/png" href="{% static 'brand/favicon.png' %}">
-  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <link rel="stylesheet" href="{% static_v 'css/site.css' %}">
 </head>
 <body>
   <header class="site-header">

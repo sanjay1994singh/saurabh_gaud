@@ -170,5 +170,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{% static 'js/patrika-reader.js' %}"></script>
+  {% load static_version %}
+  <script src="{% static_v 'js/patrika-reader.js' %}"></script>
 {% endblock %}

@@ -60,8 +60,8 @@
 {% endblock %}
 
 {% block scripts %}
-  {% load static %}
-  <script src="{% static 'js/location-select.js' %}"></script>
+  {% load static_version %}
+  <script src="{% static_v 'js/location-select.js' %}"></script>
   <script>
     (function () {
       const form = document.querySelector("[data-no-autofill-form]");
