@@ -104,9 +104,11 @@
       };
 
       galleryInput.addEventListener("change", function () {
+        form.dataset.userEdited = "true";
         activateInput(galleryInput);
       });
       cameraInput.addEventListener("change", function () {
+        form.dataset.userEdited = "true";
         activateInput(cameraInput);
       });
       form.addEventListener("submit", function () {
@@ -121,33 +123,4 @@
       updatePhotoTitle(activeInput);
     })();
   </script>
-  {% if request.method != "POST" %}
-  <script>
-    (function () {
-      const form = document.querySelector("[data-no-autofill-form]");
-      if (!form || form.dataset.boundNoAutofill) {
-        return;
-      }
-      form.dataset.boundNoAutofill = "true";
-      const clearAutofill = function () {
-        if (form.dataset.submitted === "true") {
-          return;
-        }
-        form.querySelectorAll("input[data-no-autofill], textarea[data-no-autofill]").forEach(function (field) {
-          if (field.type === "file" || field.type === "hidden") {
-            return;
-          }
-          if (!field.matches(":focus")) {
-            field.value = "";
-          }
-        });
-      };
-      form.addEventListener("submit", function () {
-        form.dataset.submitted = "true";
-      });
-      window.addEventListener("pageshow", clearAutofill);
-      setTimeout(clearAutofill, 250);
-    })();
-  </script>
-  {% endif %}
 {% endblock %}
