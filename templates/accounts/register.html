@@ -27,6 +27,7 @@
                 </label>
                 <input class="photo-camera-input" id="{{ field.id_for_label }}_camera" name="{{ field.html_name }}" type="file" accept="image/*" capture="user">
               </div>
+              <span class="photo-file-title" data-photo-file-title aria-live="polite"></span>
               {{ field.errors }}
             </div>
           {% else %}
@@ -61,6 +62,61 @@
 {% block scripts %}
   {% load static %}
   <script src="{% static 'js/location-select.js' %}"></script>
+  <script>
+    (function () {
+      const form = document.querySelector("[data-no-autofill-form]");
+      if (!form || form.dataset.boundPhotoInputs) {
+        return;
+      }
+
+      const galleryInput = form.querySelector(".photo-gallery-control input[type='file']");
+      const cameraInput = form.querySelector(".photo-camera-input");
+      const title = form.querySelector("[data-photo-file-title]");
+      if (!galleryInput || !cameraInput || !title) {
+        return;
+      }
+
+      form.dataset.boundPhotoInputs = "true";
+      let activeInput = galleryInput.files.length ? galleryInput : (cameraInput.files.length ? cameraInput : null);
+
+      const updatePhotoTitle = function (input) {
+        const file = input && input.files && input.files[0];
+        title.textContent = file ? file.name : "";
+      };
+
+      const activateInput = function (input) {
+        if (!input || !input.files || !input.files.length) {
+          activeInput = null;
+          updatePhotoTitle(null);
+          return;
+        }
+        activeInput = input;
+        if (input === galleryInput) {
+          cameraInput.value = "";
+        } else {
+          galleryInput.value = "";
+        }
+        updatePhotoTitle(input);
+      };
+
+      galleryInput.addEventListener("change", function () {
+        activateInput(galleryInput);
+      });
+      cameraInput.addEventListener("change", function () {
+        activateInput(cameraInput);
+      });
+      form.addEventListener("submit", function () {
+        if (activeInput === galleryInput) {
+          cameraInput.disabled = true;
+          galleryInput.disabled = false;
+        } else if (activeInput === cameraInput) {
+          galleryInput.disabled = true;
+          cameraInput.disabled = false;
+        }
+      });
+      updatePhotoTitle(activeInput);
+    })();
+  </script>
   {% if request.method != "POST" %}
   <script>
     (function () {

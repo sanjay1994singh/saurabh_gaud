@@ -1124,6 +1124,15 @@ p {
   pointer-events: none;
 }
 
+.photo-file-title {
+  display: block;
+  min-height: 18px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
 .register-panel .form-stack input,
 .register-panel .form-stack textarea,
 .register-panel .form-stack select {
