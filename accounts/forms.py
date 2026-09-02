@@ -117,10 +117,17 @@ class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         _configure_required_fields(self)
+        self.fields["photo"].required = False
         selected_country = None
         if self.is_bound:
             selected_country = Country.objects.filter(pk=self.data.get("country")).first()
         _configure_location_fields(self, selected_country)
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get("photo")
+        if not photo:
+            raise forms.ValidationError("कृपया गैलरी से फोटो चुनें या कैमरा से सेल्फी लें.")
+        return photo
 
     def clean_phone(self):
         phone = _clean_ten_digit_phone(self.cleaned_data.get("phone"))

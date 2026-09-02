@@ -54,13 +54,6 @@
 
   <main class="site-main">
     {% if messages %}
-      <div class="messages">
-        {% for message in messages %}
-          {% if "account-password-notice" not in message.tags %}
-            <div class="message message-{{ message.tags }}">{{ message }}</div>
-          {% endif %}
-        {% endfor %}
-      </div>
       {% for message in messages %}
         {% if "account-password-notice" in message.tags %}
           <div class="sweet-alert-overlay" data-account-password-alert>
@@ -71,11 +64,27 @@
               <button class="primary-action" type="button" data-account-password-alert-ok>OK</button>
             </div>
           </div>
+        {% else %}
+          <div class="sweet-alert-overlay" data-message-alert>
+            <div class="sweet-alert-box {% if 'error' in message.tags %}sweet-alert-error{% endif %}" role="dialog" aria-modal="true" aria-labelledby="messageAlertTitle{{ forloop.counter }}">
+              <div class="sweet-alert-icon" aria-hidden="true">{% if 'error' in message.tags %}!{% else %}✓{% endif %}</div>
+              <h2 id="messageAlertTitle{{ forloop.counter }}">{% if 'error' in message.tags %}फॉर्म सेव नहीं हुआ{% else %}सफल{% endif %}</h2>
+              <p>{{ message }}</p>
+              <button class="primary-action" type="button" data-message-alert-ok>OK</button>
+            </div>
+          </div>
         {% endif %}
       {% endfor %}
     {% endif %}
     {% block content %}{% endblock %}
   </main>
+
+  <div class="form-loading-overlay" data-form-loading-overlay hidden>
+    <div class="form-loading-box" role="status" aria-live="polite">
+      <span class="form-loading-spinner" aria-hidden="true"></span>
+      <strong>फॉर्म सेव हो रहा है...</strong>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -124,15 +133,44 @@
   </footer>
   <script>
     (() => {
-      const alertBox = document.querySelector("[data-account-password-alert]");
-      const okButton = document.querySelector("[data-account-password-alert-ok]");
-      if (!alertBox || !okButton) {
+      const alertBoxes = document.querySelectorAll("[data-account-password-alert], [data-message-alert]");
+      alertBoxes.forEach((alertBox, index) => {
+        const okButton = alertBox.querySelector("[data-account-password-alert-ok], [data-message-alert-ok]");
+        if (!okButton) {
+          return;
+        }
+        if (index === 0) {
+          okButton.focus();
+        }
+        okButton.addEventListener("click", () => {
+          alertBox.remove();
+        });
+      });
+    })();
+
+    (() => {
+      const loadingOverlay = document.querySelector("[data-form-loading-overlay]");
+      if (!loadingOverlay) {
         return;
       }
-      okButton.focus();
-      okButton.addEventListener("click", () => {
-        alertBox.remove();
+
+      const showLoading = () => {
+        loadingOverlay.hidden = false;
+      };
+      const hideLoading = () => {
+        loadingOverlay.hidden = true;
+      };
+
+      document.querySelectorAll("form[data-loading-form]").forEach((form) => {
+        form.addEventListener("submit", () => {
+          const submitter = form.querySelector("button[type='submit'], input[type='submit']");
+          if (submitter) {
+            submitter.disabled = true;
+          }
+          showLoading();
+        });
       });
+      window.addEventListener("pageshow", hideLoading);
     })();
 
     (() => {

@@ -72,7 +72,7 @@
 
       <div class="profile-panel profile-details-panel">
         <h2>{{ ui.update_details }}</h2>
-        <form method="post" enctype="multipart/form-data" class="form-stack" autocomplete="off">
+        <form method="post" enctype="multipart/form-data" class="form-stack" autocomplete="off" data-loading-form>
           {% csrf_token %}
           {{ form.non_field_errors }}
           <div class="profile-identity-row">

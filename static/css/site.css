@@ -1028,6 +1028,11 @@ p {
   font-weight: 900;
 }
 
+.sweet-alert-error .sweet-alert-icon {
+  border-color: #c94432;
+  color: #c94432;
+}
+
 .sweet-alert-box h2 {
   margin: 0 0 10px;
   color: var(--deep);
@@ -1044,6 +1049,48 @@ p {
   min-width: 120px;
   border: 0;
   cursor: pointer;
+}
+
+.form-loading-overlay {
+  position: fixed;
+  z-index: 1100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(45, 20, 11, 0.32);
+}
+
+.form-loading-overlay[hidden] {
+  display: none;
+}
+
+.form-loading-box {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  width: min(100%, 300px);
+  border-radius: 8px;
+  background: #fff;
+  padding: 28px 24px;
+  color: var(--deep);
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(45, 20, 11, 0.28);
+}
+
+.form-loading-spinner {
+  width: 52px;
+  height: 52px;
+  border: 5px solid #f2dac0;
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: form-loading-spin 0.8s linear infinite;
+}
+
+@keyframes form-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .form-stack input:disabled,

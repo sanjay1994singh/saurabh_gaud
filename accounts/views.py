@@ -65,6 +65,7 @@ def register(request):
             if next_url:
                 return redirect(next_url)
             return redirect("subscriptions:plans")
+        messages.error(request, "कृपया फॉर्म में दिख रही गलतियों को ठीक करें.")
     else:
         form = RegisterForm()
 
@@ -110,6 +111,7 @@ def profile(request):
             transaction.on_commit(lambda: send_profile_updated_email(user))
             messages.success(request, "प्रोफाइल अपडेट हो गई.")
             return redirect("accounts:profile")
+        messages.error(request, "कृपया फॉर्म में दिख रही गलतियों को ठीक करें.")
     else:
         form = ProfileForm(instance=request.user)
 

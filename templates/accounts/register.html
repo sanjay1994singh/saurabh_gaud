@@ -7,7 +7,7 @@
     <div class="auth-panel register-panel">
       <p class="eyebrow">{{ ui.membership }}</p>
       <h1>{{ ui.create_account }}</h1>
-      <form method="post" enctype="multipart/form-data" class="form-stack" autocomplete="off" data-no-autofill-form>
+      <form method="post" enctype="multipart/form-data" class="form-stack" autocomplete="off" data-no-autofill-form data-loading-form>
         {% csrf_token %}
         {% if next_url %}
           <input type="hidden" name="next" value="{{ next_url }}">
@@ -77,6 +77,10 @@
       }
 
       form.dataset.boundPhotoInputs = "true";
+      galleryInput.required = false;
+      cameraInput.required = false;
+      galleryInput.removeAttribute("required");
+      cameraInput.removeAttribute("required");
       let activeInput = galleryInput.files.length ? galleryInput : (cameraInput.files.length ? cameraInput : null);
 
       const updatePhotoTitle = function (input) {
